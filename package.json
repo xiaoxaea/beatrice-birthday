@@ -1,0 +1,12 @@
+{
+  "name": "beatrice-19th-birthday",
+  "version": "1.0.0",
+  "description": "A private birthday website for Beatrice's 19th birthday, front end + back end.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For Beatrice — 19</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Lora:ital,wght@0,400;0,500;0,600&family=Nunito+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<!-- ================= GATE / INVITATION ================= -->
+<section id="gate" aria-label="Invitation">
+  <div class="gate-bg" aria-hidden="true">
+    <svg class="corner corner-tl" viewBox="0 0 200 200" aria-hidden="true"><path d="M2 2c40 0 60 20 60 60M2 2c0 40 20 60 60 60M20 20c25 0 38 12 38 38" /></svg>
+    <svg class="corner corner-br" viewBox="0 0 200 200" aria-hidden="true"><path d="M198 198c-40 0-60-20-60-60M198 198c0-40-20-60-60-60M180 180c-25 0-38-12-38-38" /></svg>
+  </div>
+
+  <div class="gate-card" id="gateCard">
+    <p class="eyebrow">a small invitation</p>
+    <h1 class="headline">Happy birthday,<br><span>Beatrice!</span></h1>
+    <p class="gate-copy">
+      Before anything else — please read the whole way through. Every part of this
+      little page was put together for you, and it only really works if you see all of it.
+    </p>
+    <p class="gate-question">I have prepared a secret inside. Do you want to see it personally?</p>
+
+    <div class="gate-actions" id="gateActions">
+      <button type="button" class="btn btn-yes" id="yesBtn">Yes</button>
+      <button type="button" class="btn btn-no" id="noBtn">No</button>
+    </div>
+    <p class="gate-hint" id="gateHint" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- ================= INSIDE SITE ================= -->
+<main id="site" hidden>
+
+  <header class="site-header">
+    <p class="eyebrow">you're in</p>
+    <h2>Welcome inside, Beatrice</h2>
+    <p class="site-intro">There's a letter waiting below — click the seal to open it. After that, one more small thing.</p>
+  </header>
+
+  <!-- Letter -->
+  <section class="letter-section" aria-label="Birthday letter">
+    <button type="button" class="envelope" id="envelope" aria-haspopup="dialog">
+      <span class="envelope-back"></span>
+      <span class="envelope-flap"></span>
+      <span class="envelope-seal">B</span>
+      <span class="envelope-label">tap the seal to open</span>
+    </button>
+  </section>
+
+  <!-- Dino game -->
+  <section class="game-section" aria-label="A small game">
+    <p class="eyebrow center">one more thing</p>
+    <h3 class="game-title">Get to 100, if you can</h3>
+    <p class="game-sub">Tap, click, or press space to jump.</p>
+
+    <div class="game-stage" id="gameStage">
+      <div class="game-hud">
+        <span>SCORE <b id="scoreDisplay">0</b></span>
+        <span>BEST <b id="bestDisplay">0</b></span>
+      </div>
+      <canvas id="dinoCanvas" width="640" height="180"></canvas>
+      <p class="game-instructions" id="gameInstructions">press space / tap the game to start</p>
+    </div>
+
+    <div class="after-game" id="afterGame" hidden>
+      <p class="after-game-copy">You made it. Pick one.</p>
+      <div class="after-game-buttons">
+        <button type="button" class="btn btn-outline" data-content="poem">Poem</button>
+        <button type="button" class="btn btn-outline" data-content="prose">Proses</button>
+        <button type="button" class="btn btn-outline" data-content="mystery">...</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>made with a very reasonable amount of effort, for a person worth it &nbsp;·&nbsp; 19</p>
+  </footer>
+</main>
+
+<!-- ================= MODAL ================= -->
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button type="button" class="modal-close" id="modalClose" aria-label="Close">×</button>
+    <p class="eyebrow" id="modalEyebrow">for you</p>
+    <h3 id="modalTitle"></h3>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script src="/js/dino.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>
