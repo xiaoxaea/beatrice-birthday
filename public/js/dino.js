@@ -168,3 +168,86 @@
     // obstacles
     ctx.fillStyle = COLORS.cactus;
     obstacles.forEach((o) => {
+      roundRect(ctx, o.x, o.y, o.w, o.h, 3);
+      ctx.fill();
+    });
+
+    if (state === "ready") {
+      ctx.fillStyle = COLORS.text;
+      ctx.font = "14px 'Nunito Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("press space or tap to start", W / 2, H / 2);
+    }
+    if (state === "gameover") {
+      ctx.fillStyle = COLORS.text;
+      ctx.font = "14px 'Nunito Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("game over — press space or tap to try again", W / 2, H / 2);
+    }
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function gameOver() {
+    state = "gameover";
+    saveHighscore(score);
+    draw();
+  }
+
+  function finish() {
+    state = "finished";
+    finished = true;
+    saveHighscore(Math.max(score, 100));
+    window.dispatchEvent(new CustomEvent("dino:finished"));
+  }
+
+  function saveHighscore(value) {
+    if (value > best) {
+      best = value;
+      bestEl.textContent = best;
+    }
+    fetch("/api/highscore", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ score: value }),
+    }).catch(() => {});
+  }
+
+  function loop(t) {
+    if (state !== "running") return;
+    if (lastTime === null) lastTime = t;
+    const dt = Math.min(0.033, (t - lastTime) / 1000);
+    lastTime = t;
+    update(dt);
+    draw();
+    if (state === "running") requestAnimationFrame(loop);
+    else draw();
+  }
+
+  // input
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space" && document.getElementById("site") && !document.getElementById("site").hidden) {
+      e.preventDefault();
+      jump();
+    }
+  });
+  canvas.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    jump();
+  });
+  stageEl.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    jump();
+  }, { passive: false });
+
+  reset();
+  draw();
+})();
