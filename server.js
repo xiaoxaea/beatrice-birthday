@@ -73,7 +73,8 @@ I would choose you rusted, like you with the patience of rain learning the shape
 
 You don't need to be healed to be loved. You don't need to be strong to be chosen. You don't need to shine to be worthy of staying. What matters is the way you breathe next to me, the way you exist without asking permission, the way you exist and remain yourself even when the world teaches you to disappear. I am not devoted to your potential, or your better days, or the idea of who you could become. I am devoted to you — here, now, exactly as you are, even when you don't believe me, that's enough. I will always love you, always, for who you are:)
 
-again, thank you for being born, for being here, for being the bea that everyone loves, including me. I may not know your very exact circumstances as of this moment, but I can assure you that when everyone becomes your enemy, I will always stand by your side, ea^^
+again, thank you for being born, for being here, for being the bea that everyone loves, including me. I may not know your very exact circumstances as of this moment, but I can assure you that when everyone becomes your enemy, I will always stand by your side, ea^^ `
+
 const MYSTERY_TEXT = `Okay. Since you clicked it anyway.
 
 Here's the actual secret: there isn't a dramatic one. I just wanted an excuse to spend a few evenings building you something instead of buying you something. The poem took longer than it should have. I rewrote the letter three times. The dinosaur game has a bug I never fixed because you'll probably beat it before you notice.
