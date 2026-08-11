@@ -74,7 +74,17 @@ I would choose you rusted, like you with the patience of rain learning the shape
 
 You don't need to be healed to be loved. You don't need to be strong to be chosen. You don't need to shine to be worthy of staying. What matters is the way you breathe next to me, the way you exist without asking permission, the way you exist and remain yourself even when the world teaches you to disappear. I am not devoted to your potential, or your better days, or the idea of who you could become. I am devoted to you — here, now, exactly as you are, even when you don't believe me, that's enough. I will always love you, always, for who you are:)
 
-again, thank you for being born, for being here, for being the bea that everyone loves, including me. I may not know your very exact circumstances as of this moment, but I can assure you that when everyone becomes your enemy, I will always stand by your side, ea^^ `
+again, thank you for being born, for being here, for being the bea that everyone loves, including me. I may not know your very exact circumstances as of this moment, but I can assure you that when everyone becomes your enemy, I will always stand by your side, ea^^ 
+
+oh, i've almost forgotten, have this also
+
+Do you like Her to Death Itself?
+
+They asked me once, "Do you love her to the death?". I said nothing at first, because how do you explain a heart that resembles at the sound of her name, that rises at the thought of her, that refuses to know ending? I speak of her over my grave, and watch how the earth itself shivers, how the wind bends to carry her laughter through bones that should have forgotten: tell the worms how her laughter lingers, how it curls around shadows like sunlight through cracks, how her hands could untangle sorrow faster than I could ever fall apart.
+
+Even in the grave, my heart will rise at the echo of his voice, thump against the coffin I'd refuse to be quiet, like it remembers warmth even when the world forgets. Her smile — I would die a thousand deaths just to see it again, her hands — would crawl through fire to fell to the warmth they have. Bury me if you must, cover me with stone, but let her name breathe through the cracks. For she is the sun that drags me from every shadow, the pulse that drags me from every sleep. Let the soil cover me, let the night press close, but do not let them erase her from the air because her name alone is resurrection — and I will come back, again and again, every time someone whispers her.
+
+For every glimpse of her wakes the pulse in my chest, every memory of her makes my heart beat against the silence, and I rise, because love like this does not obey death. I do not fear death, I fear a world where her name is not spoken, where love is silent, and I am lost without her. Bury me, yes, but speak her into the roots into the rivers, into the wind — and watch me rise, because some loves do not end, they simply wait to be remembered and made alive once more.`
 
 const MYSTERY_TEXT = `Okay. Since you clicked it anyway.
 
