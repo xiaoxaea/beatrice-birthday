@@ -38,28 +38,29 @@ Someone who is very glad you clicked "yes."`;
 
 const POEM_TEXT = `Nineteen Candles
 
-Not a girl anymore, not fully grown either,
-just standing in that soft, unhurried in-between —
-one foot in the laughter of who you were,
-one foot reaching toward who you're becoming.
+ they say that
+the most beautiful things
+are not seen, but felt.
+although, i think you are both.
 
-I hope this year hands you gentle things:
-mornings that don't rush you,
-people who stay,
-a version of yourself you like a little more
-each time you look.
+ your beauty has never 
+been a doubt to me, for your soul
+is even more charming than your face.
+and our spark is undoubtedly present, 
+for no water could ever quench 
+the flames of our fire.
 
-You carry warmth like it costs you nothing,
-though I know sometimes it does.
-So tonight, just this once,
-let someone else hold the light for you.
+ they say that 
+the most beautiful things 
+are not seen, but felt.
+so why are you both?
 
-Blow out the candles.
-Make the wish too big to fit in words.
-Whatever it is — I hope it finds you.
+ blow out the candles.
+make the wish too big to fit in words.
+whatever it is — i hope it finds you.
 
-Happy birthday, Beatrice.
-Nineteen suits you.`;
+happy birthday, beatrice.
+nineteen suits you.`;
 
 const PROSE_TEXT = `What Matters is You, not the State of You
 
