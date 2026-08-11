@@ -255,27 +255,31 @@ button{ font-family: inherit; cursor: pointer; }
   color: var(--ink-soft);
 }
 
-/* Music player */
+/* Music player — fixed floating widget, top-left */
 .music-section{
-  text-align: center;
-  margin-bottom: 4.5rem;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 40;
+  width: 300px;
+  max-width: 78vw;
+  text-align: left;
 }
 .music-title{
   font-family: var(--display);
   font-weight: 600;
-  font-size: 1.5rem;
-  margin: 0 0 1.3rem;
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
   font-style: italic;
   color: var(--ink);
+  text-align: left;
 }
 .music-card{
-  max-width: 420px;
-  margin: 0 auto;
   background: #fff;
   border: 1px solid rgba(58,46,42,0.1);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 1rem;
+  padding: 0.6rem;
 }
 
 /* Game */
@@ -494,4 +498,5 @@ button{ font-family: inherit; cursor: pointer; }
   .gate-card{ padding: 2.4rem 1.6rem 2rem; }
   .gate-actions{ flex-wrap: wrap; }
   .after-game-buttons{ flex-direction: column; }
+  .music-section{ top: 14px; left: 14px; width: 240px; }
 }
