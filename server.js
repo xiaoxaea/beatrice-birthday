@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "public")));
    mystery note are all fetched from the server at runtime.
 --------------------------------------------------------- */
 
-const LETTER_TEXT = `My dearest Beatrice,
+const LETTER_TEXT = `My dearest Bea,
 
 Nineteen looks wonderful on you. If you're reading this, it means you chose "yes" — and honestly, I never doubted you would, even if I made the "no" button work a little for its living.
 
