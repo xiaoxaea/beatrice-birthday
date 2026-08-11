@@ -17,26 +17,28 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const LETTER_TEXT = `My dearest Bea,
 
-Nineteen looks wonderful on you. If you're reading this, it means you chose "yes" — and honestly, I never doubted you would, even if I made the "no" button work a little for its living.
+First of all, I wanna say Happy Birthday to you!! If you're reading this letter, that means you chose the "yes" button, right? Well yea, you don't have much of a choice here, you can't touch no e :p
 
-I wanted to build you something instead of just saying it, because some things deserve more than a text message and a cake emoji. So here it is: a small, slightly ridiculous, entirely sincere corner of the internet, made for exactly one person. You.
+This is a little gift, more like a digital gift because I cannot really do much since I'm always at the hospital doing this kiosk- I mean, this very much website of yours, I had fun doing this even though this is my first time doing this for someone, so uhm you're kinda lucky that you were my first here ble. With that being said, I really na sana ma-enjoy mo this, I know it's not much and siguro it may take some time for reading, pero if you did, I'll be really glad.
 
-Nineteen is a strange age to try to describe, because it isn't the neat milestone that eighteen was, or the one twenty will be. It's quieter than that. It's the year in between — where you're no longer new at being an adult, but you're also not pretending to have it all figured out anymore, and there's something wonderful about that honesty. You get to keep growing without an audience watching for the big dramatic moment. You just get to become more yourself, a little at a time, on your own schedule. I hope this year gives you exactly that kind of room.
+Maybe this is medyo weird, as someone who re-entered your life for like 3 months ago? I can't really remember the exact date, pero alam ko na it's there lang. Going back, siguro medyo weird nga na as a nobody who re-entered your life to be doing this for you, pero i can make sure that I did this because I want to, and I want you to be happy on your blessed day:)
 
-I want you to know that the version of you I've gotten to know is the kind of person other people quietly hope to be. You listen like it matters. You laugh with your whole self, not just your mouth. You care about people even when it's inconvenient, and you notice the small things — the things most people walk straight past — and you make them feel seen. That is not a small talent. That is one of the rarest ones there is, and I don't think you give yourself enough credit for it.
+I want you to know that the version of you I've gotten to know is the kind of person that really matters, you are the sole embodiment of the kind of image most people wanted to be. You listen like it matters. You laugh with your whole self, not just your mouth. You care about people even when it's inconvenient, sometimes nga you tend to sacrifice yourself pa e for the benefits of others , and also you notice the small things — the things most people walk straight past, the type of things na hindi na napapansin ng ibang tao, lalo na deep inside of a person — and you make them feel seen, you make them feel loved, like what you did to me for the past months, so I'm really thankful na nakilala kita, you're the best. That is one of the rarest ones there is, and I don't think you give yourself enough credit for it.
 
-I also want you to know that it's okay to be unfinished. Nineteen doesn't come with a manual, and anyone who tells you they had it all sorted out at your age is either lying or has forgotten what it actually felt like. You are allowed to change your mind. You are allowed to want different things at twenty-five than you want right now. You are allowed to rest without earning it first. Growth isn't a straight line, and you don't owe anyone a tidy story about how you got from here to there.
+ALSO, aside from my lots and lots of messages here for you lang, just below this text are messages from other peeps, too. They chose to not identify themselves pero they left an initial, you know para hindi naman totally anonymous hehe. TAKE ALL YOUR TIME TO READ ALL OF IT!
+
+I also want you to know that it's okay to be unfinished. Being an early adult doesn't come with a manual, and anyone who tells you they had it all sorted out at your age is either lying or has forgotten what it actually felt like. You are allowed to change your mind. You are allowed to want different things at twenty-five than you want right now. You are allowed to rest without earning it first. Growth isn't a straight line, and you don't owe anyone a tidy story about how you got from here to there.
 
 So here is what I hope for you this year: I hope you get a little braver about the things you actually want, and a little kinder to yourself about the things you don't get right the first time. I hope you find at least one new thing that makes you lose track of time in a good way. I hope the people around you keep showing up the way you show up for them, because you deserve that kind of reciprocity, not just the version where you're always the one holding things together. I hope you laugh so hard at least once this year that it becomes a story you tell for the rest of your life. And I hope that whenever nineteen gets loud or confusing or heavy, you remember that you don't have to carry it alone.
 
 I built this whole strange little website because I wanted your birthday to feel like an event, not just a date on a calendar. There's a game hiding further down, and a couple of other small surprises after that, because I think birthdays should have layers, like a very poorly disguised treasure hunt. Take your time with it. There's no rush.
 
-Happy nineteenth birthday, Beatrice. Thank you for being exactly who you are, unapologetically and completely. Here's to this next year being kind to you, and here's to you being just as kind to yourself.
+Happy birthday, Beatrice. Thank you for being exactly who you are, unapologetically and completely. Here's to this next year being kind to you, and here's to you being just as kind to yourself.
 
 With more warmth than this letter can really hold,
-Someone who is very glad you clicked "yes."`;
+—eu`;
 
-const POEM_TEXT = `Nineteen Candles
+const POEM_TEXT = `The Most Beautiful Things
 
  they say that
 the most beautiful things
