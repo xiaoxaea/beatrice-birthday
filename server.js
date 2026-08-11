@@ -86,11 +86,21 @@ Even in the grave, my heart will rise at the echo of his voice, thump against th
 
 For every glimpse of her wakes the pulse in my chest, every memory of her makes my heart beat against the silence, and I rise, because love like this does not obey death. I do not fear death, I fear a world where her name is not spoken, where love is silent, and I am lost without her. Bury me, yes, but speak her into the roots into the rivers, into the wind — and watch me rise, because some loves do not end, they simply wait to be remembered and made alive once more.`
 
-const MYSTERY_TEXT = `Okay. Since you clicked it anyway.
+const MYSTERY_TEXT = `oh no:(
 
-Here's the actual secret: there isn't a dramatic one. I just wanted an excuse to spend a few evenings building you something instead of buying you something. The poem took longer than it should have. I rewrote the letter three times. The dinosaur game has a bug I never fixed because you'll probably beat it before you notice.
+you've found the little secret stash, fine come with me and stroll down.
 
-That's it. That's the whole secret.
+Here's the actual secret: i don't really know if this can still be a secret, but i think it can be still considered one, as this lacks clarity all the time. i like you, bea. but it's not like the normal ones, "i like you because you're pretty, because you're smart, because you're my type".
+
+no, it's way way more deeper than that. i like whole you, completely. i like the way you talk, the way you walk, the way you write, the way you grit your teeth and charges at every obstacle that comes in your way. i like you, and by that, even in the bad ones, even in the most flawed version of yourself, there's this me who adores you very much. In the way that you redirect questions and avoids them, the way that you isolate yourself to the outside world when things get heavy for you to carry, the way that you constantly sacrifices yourself for the benefits of others, i like them all.
+
+if someone tells me to write 100 things that i like about you? i will consume the whole paper pad just to satisfy and solve my curiosity on how i got these feelings for you, but even with all that, it will not suffice, because you are the word itself, you are the very existence where the people learns how to write proses and poems just to celebrate your existence.
+
+i like the way you act like an avoidant, somewhere inside me, it blooms a thought that i should be there always by your side, the one who wants to understand you, the one who wants to show that someone out there really cares for you. you were never the problem, you're always the solution, that maybe needs a push sometimes and all will work out in your favor.
+
+i know, we're in the phase when we are both struggling in life, especially you the way i see it. pero let me show you that even with all of the struggles combined, there will always be someone who'll make time for you, who'll prioritizes you no matter what the situation is, who will make sure you're okay and you're fine despite of the problem at hand, the one who will care for you and will make up for all of the years that care was taken away from you, let me be that one for you, i'll work hard to be that specific person in you. i may not know what hardships you have experienced, but by you just existing, it tells me that there's a bea that survived them all, no matter the circumstance is. 
+
+i like how you like love, how you twist it with things that associate to your likings, then if something went missing, or something goes haywire, you can appreciate my presence and lean on me, lean on someone like me who'll do the world for you, to satisfy your hunger and your wants, everything that your existence needs in order to feel satied. 
 
 ...okay, maybe one more thing: I'm really glad you exist. Happy birthday, Beatrice. 🤍`;
 
