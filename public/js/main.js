@@ -8,6 +8,21 @@
   const gateHint = document.getElementById("gateHint");
   const site = document.getElementById("site");
 
+  /* ---------------- Notification bell ---------------- */
+  const notifBell = document.getElementById("notifBell");
+  if (notifBell) {
+    notifBell.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      notifBell.classList.toggle("active");
+    });
+    document.addEventListener("click", (e) => {
+      if (!notifBell.contains(e.target)) {
+        notifBell.classList.remove("active");
+      }
+    });
+  }
+
   const hints = [
     "hm, it moved.",
     "it seems to be avoiding you.",
