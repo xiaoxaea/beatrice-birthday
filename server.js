@@ -61,18 +61,19 @@ Whatever it is — I hope it finds you.
 Happy birthday, Beatrice.
 Nineteen suits you.`;
 
-const PROSE_TEXT = `On Turning Nineteen
+const PROSE_TEXT = `What Matters is You, not the State of You
 
-There's a particular kind of birthday that doesn't announce itself. Eighteen shouts. Twenty-one will shout too, eventually, if traditions hold. But nineteen just quietly arrives, and you're expected to keep going as if nothing happened, when really, a whole year of becoming has just been folded shut and a new one has opened blank in front of you.
+I don't like you for the way you are on good days, when your voice is steady and your smile knows where to land, when liking you feels easy and explainable, when you look like someone the world knows to keep.
 
-I think that's why nineteen deserves more attention than it gets, not less. It's the age of unglamorous, unwitnessed growth — the kind that doesn't make it into anyone's highlight reel but adds up to something enormous anyway. The late-night conversations that changed how you see a person. The mistake you made and actually learned from, instead of just surviving. The small, private moment you chose kindness when it would have been easier not to. Nobody throws a party for those things. But they're the reason the person blowing out candles tonight is more remarkable than the person who blew them out last year.
+I like you when you are unremarkable, when nothing about you glows or ascends, when you sit across from me holding yourself together with habits and quiet apologies, when you are just human—unfinished, unsure, yet still trying.
 
-So this is me, quietly noticing. Not the big things — those you already know about — but the small, constant ones. The way you make ordinary days feel less ordinary just by being in them. The way you ask good questions and actually wait for the answers. The way your kindness never seems to run out, even on the days you probably need some of it back.
+I would choose you tired, eyes dull from carrying yesterday too long, hands empty because you gave everything away again, heart heavy with things you never say out loud because you're afraid they'll make you smaller.
 
-Nineteen won't be perfect. No year is. There will be days that feel too big and days that feel too small, and both of those are allowed to just be days, without needing to mean anything. But I hope, more than anything, that this year you let yourself take up exactly as much space as you deserve — no more apologizing for it, no more shrinking to make things easier for everyone else.
+I would choose you rusted, like you with the patience of rain learning the shape of a wound, stay even when staying feels like hunger. If you lose your way, I won't rush you back. If you change, I won't ask for the version I met. If you fall apart, I won't call it failure — I'll call it proof that you're real.
 
-Happy birthday. Here's to the year of being quietly, unmistakably more yourself.`;
+You don't need to be healed to be loved. You don't need to be strong to be chosen. You don't need to shine to be worthy of staying. What matters is the way you breathe next to me, the way you exist without asking permission, the way you exist and remain yourself even when the world teaches you to disappear. I am not devoted to your potential, or your better days, or the idea of who you could become. I am devoted to you — here, now, exactly as you are, even when you don't believe me, that's enough. I will always love you, always, for who you are:)
 
+again, thank you for being born, for being here, for being the bea that everyone loves, including me. I may not know your very exact circumstances as of this moment, but I can assure you that when everyone becomes your enemy, I will always stand by your side, ea^^
 const MYSTERY_TEXT = `Okay. Since you clicked it anyway.
 
 Here's the actual secret: there isn't a dramatic one. I just wanted an excuse to spend a few evenings building you something instead of buying you something. The poem took longer than it should have. I rewrote the letter three times. The dinosaur game has a bug I never fixed because you'll probably beat it before you notice.
