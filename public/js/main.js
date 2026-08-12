@@ -1,12 +1,10 @@
 (function () {
   "use strict";
 
-  /* ---------------- Gate: dodging "No" button ---------------- */
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const gate = document.getElementById("gate");
   const gateHint = document.getElementById("gateHint");
-  /* ---------------- Spidey corner ---------------- */
   const spideyCorner = document.getElementById("spideyCorner");
   const spideyBubble = document.getElementById("spideyBubble");
   const spideyMessages = ["Thwip!", "Hi, Bea!", "Nice catch!", "Web-slinging by~", "You found me!", "Keep reading!"];
@@ -14,7 +12,7 @@
 
   function pokeSpidey() {
     spideyCorner.classList.remove("popped");
-    void spideyCorner.offsetWidth; // restart the animation
+    void spideyCorner.offsetWidth;
     spideyCorner.classList.add("popped");
     spideyBubble.textContent = spideyMessages[spideyMsgIndex % spideyMessages.length];
     spideyMsgIndex += 1;
@@ -35,7 +33,6 @@
 
   const site = document.getElementById("site");
 
-  /* ---------------- Notification bell ---------------- */
   const notifBell = document.getElementById("notifBell");
   if (notifBell) {
     notifBell.addEventListener("click", (e) => {
@@ -96,7 +93,6 @@
     e.preventDefault();
     evade();
   }, { passive: false });
-  // Just in case a fast pointer still lands a click, don't let it "work".
   noBtn.addEventListener("click", (e) => {
     e.preventDefault();
     evade();
@@ -112,7 +108,6 @@
     }, 600);
   });
 
-  /* ---------------- Modal ---------------- */
   const modalOverlay = document.getElementById("modalOverlay");
   const modalTitle = document.getElementById("modalTitle");
   const modalBody = document.getElementById("modalBody");
@@ -143,7 +138,6 @@
     });
   }
 
-  /* ---------------- Envelope / letter ---------------- */
   const envelope = document.getElementById("envelope");
   envelope.addEventListener("click", () => {
     fetchContent("letter")
@@ -153,7 +147,6 @@
       );
   });
 
-  /* ---------------- Post-game buttons ---------------- */
   document.querySelectorAll(".after-game-buttons .btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const type = btn.getAttribute("data-content");
@@ -165,7 +158,6 @@
     });
   });
 
-  /* ---------------- Dino game finish -> reveal buttons ---------------- */
   const gameStage = document.getElementById("gameStage");
   const afterGame = document.getElementById("afterGame");
 
