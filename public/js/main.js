@@ -6,6 +6,33 @@
   const yesBtn = document.getElementById("yesBtn");
   const gate = document.getElementById("gate");
   const gateHint = document.getElementById("gateHint");
+  /* ---------------- Spidey corner ---------------- */
+  const spideyCorner = document.getElementById("spideyCorner");
+  const spideyBubble = document.getElementById("spideyBubble");
+  const spideyMessages = ["Thwip!", "Hi, Bea!", "Nice catch!", "Web-slinging by~", "You found me!", "Keep reading!"];
+  let spideyMsgIndex = 0;
+
+  function pokeSpidey() {
+    spideyCorner.classList.remove("popped");
+    void spideyCorner.offsetWidth; // restart the animation
+    spideyCorner.classList.add("popped");
+    spideyBubble.textContent = spideyMessages[spideyMsgIndex % spideyMessages.length];
+    spideyMsgIndex += 1;
+    spideyBubble.classList.add("show");
+    setTimeout(() => spideyBubble.classList.remove("show"), 1400);
+    setTimeout(() => spideyCorner.classList.remove("popped"), 650);
+  }
+
+  if (spideyCorner) {
+    spideyCorner.addEventListener("click", pokeSpidey);
+    spideyCorner.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        pokeSpidey();
+      }
+    });
+  }
+
   const site = document.getElementById("site");
 
   /* ---------------- Notification bell ---------------- */
