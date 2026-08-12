@@ -3,7 +3,7 @@
 
   const layer = document.getElementById("planesLayer");
   if (!layer) return;
-
+  
   const PLANE_IDS = ["plane-1", "plane-2", "plane-3", "plane-4", "plane-5", "plane-6"];
 
   const MIN_GAP_MS = 3500;
