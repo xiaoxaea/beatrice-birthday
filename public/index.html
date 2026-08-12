@@ -139,6 +139,70 @@
   </div>
 </div>
 
+<!-- ================= FLYING PLANES LAYER ================= -->
+<div class="planes-layer" id="planesLayer" aria-hidden="true">
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="plane-1" viewBox="-90 -40 220 80">
+        <polygon points="0,18 90,10 130,16 90,24 0,26" fill="#ED1D24" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="35,10 70,-22 78,-20 55,12" fill="#B0141A" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="35,24 70,52 78,50 55,22" fill="#B0141A" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="4,20 -16,10 -16,30 4,24" fill="#33404F" stroke="#0B0E13" stroke-width="2"/>
+        <circle cx="95" cy="17" r="5" fill="#FFC72C" stroke="#0B0E13" stroke-width="1.5"/>
+        <line x1="-16" y1="20" x2="-70" y2="20" stroke="#33404F" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round"/>
+      </symbol>
+
+      <symbol id="plane-2" viewBox="-90 -40 180 80">
+        <polygon points="-60,0 60,10 60,-4" fill="#F4EFE1" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="-60,0 20,10 60,10" fill="#E8E1CB" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="-10,-2 10,-2 4,-14 -4,-14" fill="#1E5FC2" stroke="#0B0E13" stroke-width="1.5"/>
+        <line x1="60" y1="4" x2="105" y2="-6" stroke="#33404F" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round"/>
+      </symbol>
+
+      <symbol id="plane-3" viewBox="-90 -50 190 100">
+        <ellipse cx="0" cy="0" rx="55" ry="15" fill="#FFC72C" stroke="#0B0E13" stroke-width="2"/>
+        <rect x="-8" y="-13" width="16" height="26" fill="#B0141A" stroke="#0B0E13" stroke-width="1.5"/>
+        <polygon points="-45,-3 -68,-16 -68,10 -45,3" fill="#0D3B78" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="35,-13 55,-30 60,-28 44,-11" fill="#B0141A" stroke="#0B0E13" stroke-width="1.5"/>
+        <circle cx="15" cy="0" r="5" fill="#F4EFE1" stroke="#0B0E13" stroke-width="1.5"/>
+        <circle cx="52" cy="0" r="9" fill="#33404F" stroke="#0B0E13" stroke-width="2"/>
+        <line x1="61" y1="-4" x2="80" y2="-9" stroke="#0B0E13" stroke-width="2" stroke-linecap="round"/>
+        <line x1="61" y1="4" x2="80" y2="9" stroke="#0B0E13" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
+
+      <symbol id="plane-4" viewBox="-140 -50 230 100">
+        <polygon points="-60,6 55,-2 55,10 -60,18" fill="#0D3B78" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="55,-2 78,-2 55,10" fill="#1E5FC2" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="-10,4 20,-30 30,-30 6,6" fill="#0D3B78" stroke="#0B0E13" stroke-width="1.5"/>
+        <polygon points="-10,14 20,44 30,44 6,14" fill="#0D3B78" stroke="#0B0E13" stroke-width="1.5"/>
+        <circle cx="30" cy="4" r="4" fill="#F4EFE1" stroke="#0B0E13" stroke-width="1.5"/>
+        <path d="M-60,10 C-90,10 -110,-6 -130,-16" fill="none" stroke="#ED1D24" stroke-width="3" stroke-linecap="round"/>
+        <path d="M-60,14 C-90,20 -115,26 -140,14" fill="none" stroke="#ED1D24" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+      </symbol>
+
+      <symbol id="plane-5" viewBox="-90 -40 170 80">
+        <polygon points="-50,10 60,4 60,16 -50,20" fill="#E8E1CB" stroke="#0B0E13" stroke-width="2"/>
+        <rect x="-10" y="-24" width="60" height="8" rx="3" fill="#F4EFE1" stroke="#0B0E13" stroke-width="2"/>
+        <rect x="0" y="24" width="50" height="8" rx="3" fill="#F4EFE1" stroke="#0B0E13" stroke-width="2"/>
+        <line x1="5" y1="-16" x2="0" y2="12" stroke="#0B0E13" stroke-width="2"/>
+        <line x1="40" y1="-16" x2="35" y2="12" stroke="#0B0E13" stroke-width="2"/>
+        <line x1="20" y1="24" x2="15" y2="14" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="-50,12 -70,4 -70,22 -50,18" fill="#33404F" stroke="#0B0E13" stroke-width="2"/>
+        <circle cx="15" cy="12" r="5" fill="#FFC72C" stroke="#0B0E13" stroke-width="1.5"/>
+      </symbol>
+
+      <symbol id="plane-6" viewBox="-100 -40 180 80">
+        <polygon points="-45,10 60,0 65,10 60,20 -45,14" fill="#33404F" stroke="#0B0E13" stroke-width="2"/>
+        <polygon points="10,8 40,-24 48,-22 24,10" fill="#0B0E13" stroke="#0B0E13" stroke-width="1.5"/>
+        <polygon points="10,14 40,44 48,42 24,12" fill="#0B0E13" stroke="#0B0E13" stroke-width="1.5"/>
+        <line x1="-15" y1="12" x2="55" y2="10" stroke="#ED1D24" stroke-width="2.5"/>
+        <circle cx="45" cy="10" r="4" fill="#ED1D24" stroke="#0B0E13" stroke-width="1"/>
+        <line x1="-45" y1="12" x2="-90" y2="16" stroke="#33404F" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+</div>
+
 <!-- ================= SPIDEY CORNER ================= -->
 <div class="spidey-corner" id="spideyCorner" role="button" tabindex="0" aria-label="Poke the little hero">
   <div class="spidey-bubble" id="spideyBubble"></div>
@@ -156,5 +220,6 @@
 
 <script src="/js/dino.js"></script>
 <script src="/js/main.js"></script>
+<script src="/js/planes.js"></script>
 </body>
 </html>
