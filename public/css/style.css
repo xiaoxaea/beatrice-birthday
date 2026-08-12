@@ -333,8 +333,8 @@ button{ font-family: inherit; cursor: pointer; }
   top: 20px;
   left: 20px;
   z-index: 40;
-  width: 300px;
-  max-width: 78vw;
+  width: 340px;
+  max-width: 82vw;
   text-align: left;
 }
 .music-title{
@@ -589,5 +589,5 @@ button{ font-family: inherit; cursor: pointer; }
   .gate-card{ padding: 2.4rem 1.6rem 2rem; }
   .gate-actions{ flex-wrap: wrap; }
   .after-game-buttons{ flex-direction: column; }
-  .music-section{ top: 14px; left: 14px; width: 240px; }
+  .music-section{ top: 14px; left: 14px; width: 260px; }
 }
