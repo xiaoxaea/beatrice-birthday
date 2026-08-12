@@ -11,6 +11,7 @@
   const MIN_FLIGHT_MS = 6000;
   const MAX_FLIGHT_MS = 11000;
   const MAX_CONCURRENT = 3;
+  const ARC_SAMPLES = 24;
 
   let activeCount = 0;
   let styleTagCounter = 0;
@@ -18,11 +19,9 @@
   function rand(min, max) {
     return Math.random() * (max - min) + min;
   }
-
   function pick(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
   }
-
   function vw() {
     return window.innerWidth;
   }
@@ -32,7 +31,7 @@
 
   function edgePoint() {
     const side = pick(["top", "bottom", "left", "right"]);
-    const pad = 120;
+    const pad = 140;
     switch (side) {
       case "top":
         return { x: rand(0, vw()), y: -pad, side };
@@ -46,7 +45,7 @@
   }
 
   function oppositeBias(side) {
-    const pad = 120;
+    const pad = 140;
     switch (side) {
       case "top":
         return { x: rand(0, vw()), y: vh() + pad };
@@ -59,27 +58,33 @@
     }
   }
 
-  function buildPath() {
+  function quadPoint(p0, p1, p2, t) {
+    const mt = 1 - t;
+    return {
+      x: mt * mt * p0.x + 2 * mt * t * p1.x + t * t * p2.x,
+      y: mt * mt * p0.y + 2 * mt * t * p1.y + t * t * p2.y,
+    };
+  }
+
+  function buildArcPoints() {
     const start = edgePoint();
     const end = oppositeBias(start.side);
 
-    const midX = (start.x + end.x) / 2 + rand(-220, 220);
-    const midY = (start.y + end.y) / 2 + rand(-180, 180);
+    const bowAmount = rand(-260, 260);
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const len = Math.max(1, Math.hypot(dx, dy));
+    const nx = -dy / len;
+    const ny = dx / len;
+    const midX = (start.x + end.x) / 2 + nx * bowAmount;
+    const midY = (start.y + end.y) / 2 + ny * bowAmount;
+    const control = { x: midX, y: midY };
 
-    const points = [
-      { x: start.x, y: start.y },
-      { x: midX, y: midY },
-      { x: end.x, y: end.y },
-    ];
-
-    if (Math.random() > 0.45) {
-      points.splice(2, 0, {
-        x: (midX + end.x) / 2 + rand(-140, 140),
-        y: (midY + end.y) / 2 + rand(-140, 140),
-      });
+    const arc = [];
+    for (let i = 0; i <= ARC_SAMPLES; i++) {
+      arc.push(quadPoint(start, control, end, i / ARC_SAMPLES));
     }
-
-    return points;
+    return arc;
   }
 
   function angleBetween(a, b) {
@@ -93,7 +98,7 @@
     }
 
     const planeId = pick(PLANE_IDS);
-    const points = buildPath();
+    const arc = buildArcPoints();
     const duration = rand(MIN_FLIGHT_MS, MAX_FLIGHT_MS);
     const scale = rand(0.7, 1.25);
     const flip = Math.random() > 0.5 ? -1 : 1;
@@ -111,20 +116,61 @@
     svg.style.width = "100%";
     svg.style.height = "auto";
     svg.style.display = "block";
+    svg.style.overflow = "visible";
+
+    const trailBack = document.createElementNS(svgNS, "line");
+    trailBack.setAttribute("x1", "-16");
+    trailBack.setAttribute("y1", "18");
+    trailBack.setAttribute("x2", "-260");
+    trailBack.setAttribute("y2", "18");
+    trailBack.setAttribute("stroke", "#0B0E13");
+    trailBack.setAttribute("stroke-width", "6");
+    trailBack.setAttribute("stroke-dasharray", "14 12");
+    trailBack.setAttribute("stroke-linecap", "round");
+    trailBack.setAttribute("opacity", "0.55");
+    svg.appendChild(trailBack);
+
+    const trailFront = document.createElementNS(svgNS, "line");
+    trailFront.setAttribute("x1", "-16");
+    trailFront.setAttribute("y1", "18");
+    trailFront.setAttribute("x2", "-260");
+    trailFront.setAttribute("y2", "18");
+    trailFront.setAttribute("stroke", "#FFFFFF");
+    trailFront.setAttribute("stroke-width", "3");
+    trailFront.setAttribute("stroke-dasharray", "14 12");
+    trailFront.setAttribute("stroke-linecap", "round");
+    svg.appendChild(trailFront);
+
     const use = document.createElementNS(svgNS, "use");
     use.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#" + planeId);
     use.setAttribute("href", "#" + planeId);
     svg.appendChild(use);
+
     wrapper.appendChild(svg);
 
     let keyframeBody = "";
-    points.forEach((pt, i) => {
-      const pct = (i / (points.length - 1)) * 100;
-      const next = points[i + 1];
-      const heading = next ? angleBetween(pt, next) : angleBetween(points[i - 1], pt);
+    arc.forEach((pt, i) => {
+      const pct = (i / (arc.length - 1)) * 100;
+      const next = arc[i + 1];
+      const prev = arc[i - 1];
+      const heading = next
+        ? angleBetween(pt, next)
+        : angleBetween(prev, pt);
       const rot = heading * flip;
       const scaleX = flip < 0 ? -scale : scale;
-      keyframeBody += pct + "% { transform: translate(" + pt.x + "px, " + pt.y + "px) rotate(" + rot + "deg) scale(" + scaleX + ", " + scale + "); }\n";
+      keyframeBody +=
+        pct +
+        "% { transform: translate(" +
+        pt.x +
+        "px, " +
+        pt.y +
+        "px) rotate(" +
+        rot +
+        "deg) scale(" +
+        scaleX +
+        ", " +
+        scale +
+        "); }\n";
     });
 
     const styleEl = document.createElement("style");
