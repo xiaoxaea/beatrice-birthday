@@ -639,6 +639,50 @@ button{ font-family: inherit; cursor: pointer; }
 }
 
 /* =========================================================
+   Flying planes layer
+========================================================= */
+.planes-layer{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 15;
+  overflow: hidden;
+}
+
+.plane{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: auto;
+  opacity: 0;
+  filter: drop-shadow(2px 3px 0 rgba(11,14,19,0.18));
+  will-change: transform, opacity;
+}
+
+.plane.flying{
+  animation-timing-function: linear, ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes plane-fade{
+  0%{ opacity: 0; }
+  8%{ opacity: 1; }
+  88%{ opacity: 1; }
+  100%{ opacity: 0; }
+}
+
+@media (max-width: 640px){
+  .plane{ width: 62px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .planes-layer{ display: none; }
+}
+
+/* =========================================================
    Responsive
 ========================================================= */
 @media (max-width: 480px){
