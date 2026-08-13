@@ -1,6 +1,62 @@
 (function () {
   "use strict";
 
+  // ---- Boot loader ----
+  const bootLoader = document.getElementById("bootLoader");
+  const bootBarFill = document.getElementById("bootBarFill");
+  const bootPercent = document.getElementById("bootPercent");
+  const bootSub = document.getElementById("bootSub");
+
+  if (bootLoader) {
+    const bootLines = [
+      "INITIALIZING WEB-SHOOTERS",
+      "CALIBRATING SPIDEY-SENSE",
+      "LOADING BEA-VERSE ASSETS",
+      "SYNCING WITH THE MULTIVERSE",
+    ];
+    let lineIndex = 0;
+    let progress = 0;
+    const minDuration = 2200;
+    const start = performance.now();
+    let pageLoaded = document.readyState === "complete";
+    window.addEventListener("load", () => { pageLoaded = true; });
+
+    function tick(now) {
+      const elapsed = now - start;
+      const timeRatio = Math.min(elapsed / minDuration, 1);
+      const target = pageLoaded ? 100 : Math.min(90, timeRatio * 90);
+      progress += (target - progress) * 0.18;
+      if (target - progress < 0.3) progress = target;
+
+      const shown = Math.floor(progress);
+      bootBarFill.style.width = shown + "%";
+      bootPercent.textContent = String(shown).padStart(2, "0") + "%";
+
+      const newLineIndex = Math.min(
+        bootLines.length - 1,
+        Math.floor((shown / 100) * bootLines.length)
+      );
+      if (newLineIndex !== lineIndex) {
+        lineIndex = newLineIndex;
+        bootSub.firstChild.textContent = bootLines[lineIndex];
+      }
+
+      if (progress >= 100 && pageLoaded) {
+        setTimeout(() => bootLoader.classList.add("hide"), 350);
+        setTimeout(() => { bootLoader.hidden = true; }, 900);
+        return;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    bootLoader.addEventListener("click", () => {
+      if (progress > 60) {
+        progress = 100;
+      }
+    });
+  }
+
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const gate = document.getElementById("gate");
