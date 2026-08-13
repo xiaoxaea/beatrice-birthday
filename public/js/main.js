@@ -141,9 +141,9 @@
     });
   }
 
-  // ---- Character select — automated slot-machine reel ----
+  // ---- Character select — automated grid cursor ----
   const charSelect = document.getElementById("charSelect");
-  const csReel = document.getElementById("csReel");
+  const csGrid = document.getElementById("csGrid");
   const csCallout = document.getElementById("csCallout");
 
   const csCharacters = [
@@ -155,71 +155,68 @@
     { name: "GOLD-WING",  head: "#FFC72C", body: "#33404F" },
   ];
   const csTargetIndex = 4; // Spider-Bae — the system always locks in this pick
-  const csCellHeight = 44;
 
-  function buildCharReel() {
-    if (!csReel || csReel.childElementCount) return csReel ? csReel.childElementCount : 0;
-    const loops = 4;
-    const sequence = [];
-    for (let l = 0; l < loops; l++) {
-      csCharacters.forEach((c) => sequence.push(c));
+  function buildCharGrid() {
+    if (!csGrid) return [];
+    if (csGrid.childElementCount) {
+      return Array.from(csGrid.children);
     }
-    sequence.push(csCharacters[csTargetIndex]);
-
-    sequence.forEach((c) => {
-      const row = document.createElement("div");
-      row.className = "cs-reel-row";
+    const cards = [];
+    csCharacters.forEach((c) => {
+      const card = document.createElement("div");
+      card.className = "cs-card";
 
       const head = document.createElement("span");
-      head.className = "cs-head";
+      head.className = "cs-card-head";
       head.style.background = c.head;
       if (c.accent) head.style.boxShadow = "0 0 0 2px " + c.accent;
 
       const body = document.createElement("span");
-      body.className = "cs-body";
+      body.className = "cs-card-body";
       body.style.background = c.body;
 
       const name = document.createElement("span");
-      name.className = "cs-name";
+      name.className = "cs-card-name";
       name.textContent = c.name;
 
-      row.appendChild(head);
-      row.appendChild(body);
-      row.appendChild(name);
-      csReel.appendChild(row);
+      card.appendChild(head);
+      card.appendChild(body);
+      card.appendChild(name);
+      csGrid.appendChild(card);
+      cards.push(card);
     });
-    return sequence.length;
+    return cards;
   }
 
-  function csEaseOutBack(t) {
-    const c1 = 1.4, c3 = c1 + 1;
-    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+  function setHighlighted(cards, index) {
+    cards.forEach((card, i) => {
+      card.classList.toggle("cs-card--highlight", i === index);
+    });
   }
 
-  function spinCharReel(sequenceLength, onDone) {
-    const finalOffset = (sequenceLength - 1) * csCellHeight - csCellHeight * 1.5;
-    let start = null;
-    const duration = 2800;
-    function frame(ts) {
-      if (!start) start = ts;
-      const elapsed = ts - start;
-      const t = Math.min(elapsed / duration, 1);
-      const eased = t < 0.85
-        ? (1 - Math.pow(1 - Math.min(t / 0.85, 1), 3)) * 0.94
-        : 0.94 + csEaseOutBack((t - 0.85) / 0.15) * 0.06;
-      const y = -finalOffset * Math.min(eased, 1);
-      csReel.style.transform = "translateY(" + y + "px)";
-      const blur = t < 0.7 ? (1 - t / 0.7) * 3 : 0;
-      csReel.style.filter = "blur(" + blur.toFixed(1) + "px)";
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        csReel.style.transform = "translateY(" + (-finalOffset) + "px)";
-        csReel.style.filter = "none";
+  // Cursor hops card to card, slowing down as it approaches the final
+  // landing spot on Spider-Bae — an arcade "select" cadence instead of a
+  // continuous spin.
+  function runGridSelection(cards, targetIndex, onDone) {
+    if (!cards.length) { onDone(); return; }
+    const total = cards.length;
+    const loops = 2;
+    const totalSteps = loops * total + targetIndex + 1;
+    let step = 0;
+
+    function tick() {
+      const current = step % total;
+      setHighlighted(cards, current);
+      step += 1;
+      if (step >= totalSteps) {
         onDone();
+        return;
       }
+      const progress = step / totalSteps;
+      const delay = 70 + Math.pow(progress, 3) * 260;
+      setTimeout(tick, delay);
     }
-    requestAnimationFrame(frame);
+    tick();
   }
 
   function finishCharSelect() {
@@ -229,13 +226,16 @@
   }
 
   function startCharSelect() {
-    if (!charSelect || !csReel || !csCallout) return;
+    if (!charSelect || !csGrid || !csCallout) return;
     charSelect.hidden = false;
     charSelect.classList.remove("hide");
-    csCallout.textContent = "SPINNING...";
+    csCallout.textContent = "SELECTING...";
     csCallout.classList.remove("locked");
-    const seqLength = buildCharReel();
-    spinCharReel(seqLength, () => {
+    const cards = buildCharGrid();
+    runGridSelection(cards, csTargetIndex, () => {
+      setHighlighted(cards, -1);
+      const target = cards[csTargetIndex];
+      if (target) target.classList.add("cs-card--locked");
       csCallout.textContent = "SPIDER-BAE LOCKED IN";
       csCallout.classList.add("locked");
       setTimeout(finishCharSelect, 2400);
