@@ -11,6 +11,10 @@
   --gold: #FFC72C;
   --ink: #0B0E13;
   --ink-soft: #33404F;
+  --gwen-white: #F4EFE1;
+  --gwen-pink: #D4537E;
+  --gwen-pink-deep: #993556;
+  --gwen-blue: #1E5FC2;
 
   --display: 'Bangers', cursive;
   --body: 'Comic Neue', sans-serif;
@@ -202,6 +206,201 @@ button{ font-family: inherit; cursor: pointer; }
   20%{ opacity: 0.9; } 35%{ opacity: 0.2; } 50%{ opacity: 1; }
   100%{ opacity: 1; }
 }
+
+/* =========================================================
+   Trailer — mini pixel intro sequence
+========================================================= */
+#trailer{
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: var(--ink);
+  overflow: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#trailer[hidden]{ display: none; }
+#trailer.hide{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.trailer-scanlines{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.04) 0px,
+    rgba(255,255,255,0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.trailer-stage{
+  position: absolute;
+  inset: 0;
+}
+
+.tframe{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.tframe.active{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tframe-title{
+  font-family: 'Press Start 2P', var(--display);
+  font-size: clamp(1.3rem, 5vw, 2rem);
+  color: var(--rose);
+  text-shadow: 3px 3px 0 var(--sage-deep);
+  letter-spacing: 0.05em;
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+}
+.tframe-title-sm{ font-size: clamp(1rem, 3.6vw, 1.3rem); }
+.tframe-title-sm span{ color: var(--gwen-pink); text-shadow: 3px 3px 0 var(--gwen-blue); }
+
+.tframe-sub{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin: 0;
+  text-align: center;
+}
+
+.tframe-skip{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  color: var(--paper);
+  opacity: 0;
+  animation: flickerIn 0.4s ease forwards;
+  animation-delay: 1.2s;
+  margin: 0.6rem 0 0;
+}
+
+/* frame 1: city swing */
+.tframe-ground{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: repeating-linear-gradient(90deg, #1a1f2b 0 20px, #141821 20px 40px);
+  z-index: 1;
+}
+.tframe-skyline{
+  position: absolute;
+  bottom: 90px;
+  left: 0;
+  right: 0;
+  height: 110px;
+  z-index: 1;
+}
+.tframe-skyline span{
+  position: absolute;
+  bottom: 0;
+  background: #22283a;
+}
+
+.tframe-caption{
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  z-index: 2;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.tframe-hero{
+  position: absolute;
+  top: 35%;
+  left: -60px;
+  width: 26px;
+  height: 34px;
+  z-index: 2;
+  will-change: transform;
+}
+.tframe-hero .hero-head{
+  display: block;
+  width: 26px;
+  height: 18px;
+  border-radius: 4px;
+}
+.tframe-hero .hero-body{
+  display: block;
+  width: 26px;
+  height: 14px;
+  margin-top: 2px;
+}
+.tframe-hero-a .hero-head{ background: var(--rose); }
+.tframe-hero-a .hero-body{ background: var(--sage-deep); }
+.tframe-hero-b .hero-head{ background: var(--gwen-white); border: 2px solid var(--gwen-blue); box-sizing: border-box; }
+.tframe-hero-b .hero-body{ background: var(--gwen-pink); }
+
+/* frame 2: pixel heart */
+.tframe-heart{
+  display: grid;
+  grid-template-columns: repeat(8, 10px);
+  grid-template-rows: repeat(8, 10px);
+  gap: 1px;
+}
+.tframe-heart span{ width: 10px; height: 10px; display: block; }
+
+/* dots + skip */
+.trailer-dots{
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 4;
+}
+.tdot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-soft);
+  border: 1px solid var(--paper);
+  transition: background 0.3s ease;
+}
+.tdot.active{ background: var(--rose); }
+
+.trailer-skip-btn{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 5;
+  background: transparent;
+  border: 2px solid var(--paper);
+  color: var(--paper);
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.55rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+}
+.trailer-skip-btn:hover{ background: var(--paper); color: var(--ink); }
 
 /* =========================================================
    Gate / Invitation
@@ -1023,7 +1222,7 @@ button{ font-family: inherit; cursor: pointer; }
 @media (prefers-reduced-motion: reduce){
   .planes-layer{ display: none; }
   .boot-scanlines, .boot-halftone, .pixel-row::before, .pixel-row::after,
-  .boot-dots, .boot-flicker{ animation: none; }
+  .boot-dots, .boot-flicker, .tframe-skip{ animation: none; }
 }
 
 /* =========================================================
@@ -1036,4 +1235,5 @@ button{ font-family: inherit; cursor: pointer; }
   .music-section{ top: 14px; left: 14px; width: 200px; }
   .gps-overlay{ padding: 4.8rem 1rem 5rem; }
   .gps-popup{ max-width: 280px; }
+  .trailer-caption{ font-size: 0.5rem; }
 }
