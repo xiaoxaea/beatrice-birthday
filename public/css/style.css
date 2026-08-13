@@ -16,11 +16,11 @@
   --gwen-pink-deep: #993556;
   --gwen-blue: #1E5FC2;
 
-  --display: 'Bangers', cursive;
+  --display: 'Press Start 2P', 'Bangers', cursive;
   --body: 'Comic Neue', sans-serif;
   --ui: 'Nunito Sans', sans-serif;
 
-  --radius: 14px;
+  --radius: 6px;
   --shadow: 6px 6px 0 rgba(11,14,19,0.9);
   --bounce: cubic-bezier(.34,1.56,.64,1);
 }
@@ -38,6 +38,32 @@ html, body{
   color: var(--ink);
   font-family: var(--body);
   min-height: 100%;
+}
+
+/* site-wide CRT scanline overlay, ties gate/site look to the trailer */
+body::after{
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(11,14,19,0.035) 0px,
+    rgba(11,14,19,0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* pixel-cut corner panel, shared by gate card, modal, cards, popups */
+.pixel-panel{
+  clip-path: polygon(
+    10px 0, calc(100% - 10px) 0,
+    100% 10px, 100% calc(100% - 10px),
+    calc(100% - 10px) 100%, 10px 100%,
+    0 calc(100% - 10px), 0 10px
+  );
 }
 
 button{ font-family: inherit; cursor: pointer; }
@@ -748,16 +774,16 @@ button{ font-family: inherit; cursor: pointer; }
 .headline{
   font-family: var(--display);
   font-weight: 400;
-  letter-spacing: 0.02em;
-  font-size: clamp(2.6rem, 7vw, 3.6rem);
-  line-height: 1.05;
+  letter-spacing: 0.03em;
+  font-size: clamp(1.3rem, 5.5vw, 2rem);
+  line-height: 1.7;
   margin: 0 0 1.1rem;
   color: var(--ink);
-  -webkit-text-stroke: 1.5px var(--ink);
+  text-shadow: 3px 3px 0 var(--sage-deep);
 }
 .headline span{
   color: var(--rose);
-  -webkit-text-stroke: 1.5px var(--ink);
+  text-shadow: 3px 3px 0 var(--sage-deep);
 }
 
 .gate-copy{
@@ -819,11 +845,17 @@ button{ font-family: inherit; cursor: pointer; }
   font-size: 0.95rem;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 0.85rem 2.1rem;
   border: 3px solid var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
   transition: transform 0.28s var(--bounce), box-shadow 0.28s var(--bounce), background 0.18s ease;
+  clip-path: polygon(
+    6px 0, calc(100% - 6px) 0,
+    100% 6px, 100% calc(100% - 6px),
+    calc(100% - 6px) 100%, 6px 100%,
+    0 calc(100% - 6px), 0 6px
+  );
 }
 
 .btn-yes{
@@ -871,10 +903,11 @@ button{ font-family: inherit; cursor: pointer; }
   font-family: var(--display);
   font-weight: 400;
   letter-spacing: 0.02em;
-  font-size: clamp(2.2rem, 5.5vw, 3rem);
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  line-height: 1.7;
   margin: 0 0 0.6rem;
   color: var(--rose);
-  -webkit-text-stroke: 1.2px var(--ink);
+  text-shadow: 3px 3px 0 var(--sage-deep);
 }
 .site-intro{ color: var(--ink-soft); font-weight: 700; font-size: 1rem; max-width: 46ch; margin: 0 auto; }
 
@@ -934,7 +967,7 @@ button{ font-family: inherit; cursor: pointer; }
   color: var(--ink);
   font-family: var(--display);
   font-weight: 400;
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1025,10 +1058,11 @@ button{ font-family: inherit; cursor: pointer; }
 .game-title{
   font-family: var(--display);
   font-weight: 400;
-  font-size: 2rem;
+  font-size: clamp(0.85rem, 3vw, 1.15rem);
+  line-height: 1.7;
   margin: 0 0 0.3rem;
   color: var(--sage-deep);
-  -webkit-text-stroke: 1px var(--ink);
+  text-shadow: 2px 2px 0 var(--rose);
 }
 .game-sub{ color: var(--ink-soft); font-weight: 700; font-size: 0.9rem; margin: 0 0 1.5rem; }
 
@@ -1086,10 +1120,11 @@ button{ font-family: inherit; cursor: pointer; }
 .after-game-copy{
   font-family: var(--display);
   font-weight: 400;
-  font-size: 1.4rem;
+  font-size: 0.85rem;
+  line-height: 1.8;
   margin: 0 0 1rem;
   color: var(--rose);
-  -webkit-text-stroke: 0.8px var(--ink);
+  text-shadow: 2px 2px 0 var(--sage-deep);
 }
 .after-game-buttons{
   display: flex;
@@ -1187,10 +1222,11 @@ button{ font-family: inherit; cursor: pointer; }
 .modal h3{
   font-family: var(--display);
   font-weight: 400;
-  font-size: 2.1rem;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  line-height: 1.7;
   margin: 0 0 1.1rem;
   color: var(--sage-deep);
-  -webkit-text-stroke: 1px var(--ink);
+  text-shadow: 2px 2px 0 var(--rose);
 }
 
 .modal-body{
@@ -1323,7 +1359,7 @@ button{ font-family: inherit; cursor: pointer; }
   border-radius: 14px;
   padding: 0.4rem 0.8rem;
   font-family: var(--display);
-  font-size: 1.05rem;
+  font-size: 0.75rem;
   color: var(--ink);
   white-space: nowrap;
   opacity: 0;
@@ -1476,6 +1512,26 @@ button{ font-family: inherit; cursor: pointer; }
   8%{ opacity: 1; }
   88%{ opacity: 1; }
   100%{ opacity: 0; }
+}
+
+.trail-mark{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 2px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  transform: rotate(var(--tr, 0deg));
+  opacity: 0.9;
+  animation: trailFade 0.65s ease forwards;
+  pointer-events: none;
+}
+@keyframes trailFade{
+  0%{ opacity: 0.9; transform: rotate(var(--tr, 0deg)) scale(1); }
+  100%{ opacity: 0; transform: rotate(var(--tr, 0deg)) scale(0.4); }
 }
 
 @media (max-width: 640px){
