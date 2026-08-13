@@ -1,6 +1,141 @@
 (function () {
   "use strict";
 
+  // ---- Trailer ----
+  const trailer = document.getElementById("trailer");
+  const trailerFrames = trailer ? trailer.querySelectorAll(".tframe") : [];
+  const trailerDots = trailer ? trailer.querySelectorAll(".tdot") : [];
+  const trailerSkyline = document.getElementById("trailerSkyline");
+  const trailerHeart = document.getElementById("trailerHeart");
+  const trailerHeroA = document.getElementById("trailerHeroA");
+  const trailerHeroB = document.getElementById("trailerHeroB");
+  const trailerSkipBtn = document.getElementById("trailerSkipBtn");
+
+  let trailerCurrentFrame = 0;
+  let trailerHeroLoopRunning = false;
+  let trailerFinished = false;
+  let trailerAdvanceTimer = null;
+
+  function buildTrailerSkyline() {
+    if (!trailerSkyline || trailerSkyline.childElementCount) return;
+    const heights = [30, 55, 24, 70, 40, 85, 28, 62, 46, 75, 34, 58];
+    let x = 0;
+    heights.forEach((h) => {
+      const bar = document.createElement("span");
+      bar.style.left = x + "px";
+      bar.style.width = "34px";
+      bar.style.height = h + "px";
+      trailerSkyline.appendChild(bar);
+      x += 40;
+    });
+  }
+
+  function buildTrailerHeart() {
+    if (!trailerHeart || trailerHeart.childElementCount) return;
+    const pattern = [
+      0,1,1,0,1,1,0,0,
+      1,1,1,1,1,1,1,0,
+      1,1,1,1,1,1,1,0,
+      0,1,1,1,1,1,0,0,
+      0,0,1,1,1,0,0,0,
+      0,0,0,1,0,0,0,0,
+      0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0
+    ];
+    pattern.forEach((p) => {
+      const cell = document.createElement("span");
+      cell.style.background = p ? "#ED1D24" : "transparent";
+      trailerHeart.appendChild(cell);
+    });
+  }
+
+  function runHeroLoop() {
+    if (trailerHeroLoopRunning) return;
+    trailerHeroLoopRunning = true;
+    let ax = -60;
+    let bx = -110;
+
+    function step() {
+      if (!trailer || trailer.classList.contains("hide") || trailerFinished) {
+        trailerHeroLoopRunning = false;
+        return;
+      }
+      if (trailerCurrentFrame !== 1) {
+        ax = -60;
+        bx = -110;
+        requestAnimationFrame(step);
+        return;
+      }
+      ax += 4;
+      bx += 4;
+      const stageWidth = trailer.offsetWidth || 800;
+      if (ax > stageWidth + 60) ax = -60;
+      if (bx > stageWidth + 60) bx = -110;
+      const bobA = Math.sin(ax * 0.04) * 22;
+      const bobB = Math.sin(bx * 0.04 + 1) * 18;
+      if (trailerHeroA) {
+        trailerHeroA.style.transform = "translate(" + ax + "px," + bobA + "px) rotate(" + (bobA * 1.4) + "deg)";
+      }
+      if (trailerHeroB) {
+        trailerHeroB.style.transform = "translate(" + bx + "px," + bobB + "px) rotate(" + (bobB * 1.4) + "deg)";
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function showTrailerFrame(i) {
+    trailerCurrentFrame = i;
+    trailerFrames.forEach((f) => {
+      f.classList.toggle("active", Number(f.dataset.f) === i);
+    });
+    trailerDots.forEach((d) => {
+      d.classList.toggle("active", Number(d.dataset.d) === i);
+    });
+  }
+
+  function finishTrailer() {
+    if (trailerFinished) return;
+    trailerFinished = true;
+    if (trailerAdvanceTimer) clearTimeout(trailerAdvanceTimer);
+    if (trailer) {
+      trailer.classList.add("hide");
+      setTimeout(() => { trailer.hidden = true; }, 550);
+    }
+  }
+
+  function advanceTrailer() {
+    if (trailerFinished) return;
+    const next = trailerCurrentFrame + 1;
+    if (next >= trailerFrames.length) {
+      trailerAdvanceTimer = setTimeout(finishTrailer, 2500);
+      return;
+    }
+    showTrailerFrame(next);
+    trailerAdvanceTimer = setTimeout(advanceTrailer, 2500);
+  }
+
+  function startTrailer() {
+    if (!trailer) return;
+    buildTrailerSkyline();
+    buildTrailerHeart();
+    trailer.hidden = false;
+    trailer.classList.remove("hide");
+    showTrailerFrame(0);
+    runHeroLoop();
+    trailerAdvanceTimer = setTimeout(advanceTrailer, 2500);
+  }
+
+  if (trailerSkipBtn) {
+    trailerSkipBtn.addEventListener("click", finishTrailer);
+  }
+  if (trailer) {
+    trailer.addEventListener("click", (e) => {
+      if (e.target === trailerSkipBtn) return;
+      if (trailerCurrentFrame >= trailerFrames.length - 1) finishTrailer();
+    });
+  }
+
   // ---- Boot loader ----
   const bootLoader = document.getElementById("bootLoader");
   const bootBarFill = document.getElementById("bootBarFill");
@@ -16,7 +151,7 @@
     ];
     let lineIndex = 0;
     let progress = 0;
-    const minDuration = 5000;
+    const minDuration = 5000; // ms — full pixel boot-up sequence
     const start = performance.now();
     let pageLoaded = document.readyState === "complete";
     window.addEventListener("load", () => { pageLoaded = true; });
@@ -43,7 +178,10 @@
 
       if (progress >= 100 && pageLoaded) {
         setTimeout(() => bootLoader.classList.add("hide"), 350);
-        setTimeout(() => { bootLoader.hidden = true; }, 900);
+        setTimeout(() => {
+          bootLoader.hidden = true;
+          startTrailer();
+        }, 900);
         return;
       }
       requestAnimationFrame(tick);
@@ -55,6 +193,8 @@
         progress = 100;
       }
     });
+  } else {
+    startTrailer();
   }
 
   const noBtn = document.getElementById("noBtn");
