@@ -403,6 +403,128 @@ button{ font-family: inherit; cursor: pointer; }
 .trailer-skip-btn:hover{ background: var(--paper); color: var(--ink); }
 
 /* =========================================================
+   Character Select — automated slot-machine reel
+========================================================= */
+#charSelect{
+  position: fixed;
+  inset: 0;
+  z-index: 997;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#charSelect[hidden]{ display: none; }
+#charSelect.hide{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.cs-scanlines{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.04) 0px,
+    rgba(255,255,255,0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.cs-panel{
+  position: relative;
+  z-index: 2;
+  width: min(320px, 82vw);
+  text-align: center;
+}
+
+.cs-title{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin: 0 0 1rem;
+}
+
+.cs-reel-frame{
+  position: relative;
+  height: 132px;
+  overflow: hidden;
+  border: 3px solid var(--paper);
+  border-radius: 8px;
+  background: #141821;
+}
+
+.cs-reel{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  will-change: transform, filter;
+}
+
+.cs-reel-row{
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+}
+.cs-reel-row .cs-head{
+  width: 22px;
+  height: 15px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  display: block;
+}
+.cs-reel-row .cs-body{
+  width: 22px;
+  height: 11px;
+  flex-shrink: 0;
+  display: block;
+}
+.cs-reel-row .cs-name{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+}
+
+.cs-reel-window{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 44px;
+  transform: translateY(-50%);
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  background: rgba(255,199,44,0.06);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cs-callout{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  margin: 1rem 0 0;
+  min-height: 1em;
+}
+.cs-callout.locked{ color: var(--gwen-pink); }
+
+@media (prefers-reduced-motion: reduce){
+  .cs-reel{ transition: none !important; }
+}
+
+/* =========================================================
    Gate / Invitation
 ========================================================= */
 #gate{
