@@ -100,7 +100,12 @@
     if (trailerAdvanceTimer) clearTimeout(trailerAdvanceTimer);
     if (trailer) {
       trailer.classList.add("hide");
-      setTimeout(() => { trailer.hidden = true; }, 550);
+      setTimeout(() => {
+        trailer.hidden = true;
+        startCharSelect();
+      }, 550);
+    } else {
+      startCharSelect();
     }
   }
 
