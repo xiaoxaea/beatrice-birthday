@@ -358,14 +358,143 @@ button{ font-family: inherit; cursor: pointer; }
 .tframe-hero-b .hero-head{ background: var(--gwen-white); border: 2px solid var(--gwen-blue); box-sizing: border-box; }
 .tframe-hero-b .hero-body{ background: var(--gwen-pink); }
 
-/* frame 2: pixel heart */
-.tframe-heart{
-  display: grid;
-  grid-template-columns: repeat(8, 10px);
-  grid-template-rows: repeat(8, 10px);
-  gap: 1px;
+/* frame 2: glitching "PRESENTING" screen */
+.tframe-glitch{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--ink);
 }
-.tframe-heart span{ width: 10px; height: 10px; display: block; }
+
+.glitch-code{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0.5;
+  mix-blend-mode: screen;
+}
+
+.glitch-col{
+  position: absolute;
+  top: 0;
+  width: 9%;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  line-height: 1.7;
+  white-space: pre;
+  text-align: center;
+  color: var(--sage);
+  animation-name: codeFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  text-shadow: 0 0 6px currentColor;
+}
+.glitch-col:nth-child(3n){ color: var(--rose); }
+.glitch-col:nth-child(5n){ color: var(--gold); }
+.glitch-col:nth-child(7n){ color: var(--gwen-pink); }
+
+@keyframes codeFall{
+  0%{ transform: translateY(-60%); }
+  100%{ transform: translateY(120%); }
+}
+
+.glitch-word{
+  position: relative;
+  z-index: 3;
+  font-family: 'Press Start 2P', var(--display);
+  font-size: clamp(1.5rem, 6.5vw, 2.3rem);
+  letter-spacing: 0.1em;
+  color: var(--paper);
+  margin: 0;
+  text-transform: uppercase;
+  text-align: center;
+  animation: glitchFlicker 2.4s infinite steps(1);
+}
+.glitch-word::before,
+.glitch-word::after{
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.glitch-word::before{
+  color: var(--rose);
+  clip-path: inset(0 0 55% 0);
+  animation: glitchShiftTop 2.1s infinite linear alternate-reverse;
+}
+.glitch-word::after{
+  color: var(--sage);
+  clip-path: inset(55% 0 0 0);
+  animation: glitchShiftBottom 2.5s infinite linear alternate-reverse;
+}
+@keyframes glitchShiftTop{
+  0%{ transform: translate(0,0); }
+  20%{ transform: translate(-3px,-1px); }
+  40%{ transform: translate(3px,1px); }
+  60%{ transform: translate(-2px,1px); }
+  80%{ transform: translate(2px,-1px); }
+  100%{ transform: translate(0,0); }
+}
+@keyframes glitchShiftBottom{
+  0%{ transform: translate(0,0); }
+  20%{ transform: translate(3px,1px); }
+  40%{ transform: translate(-3px,-1px); }
+  60%{ transform: translate(2px,-1px); }
+  80%{ transform: translate(-2px,1px); }
+  100%{ transform: translate(0,0); }
+}
+@keyframes glitchFlicker{
+  0%, 84%, 88%, 100%{ opacity: 1; }
+  86%{ opacity: 0.35; }
+  93%{ opacity: 0.7; transform: translateX(2px); }
+  95%{ opacity: 1; transform: translateX(-2px); }
+  97%{ transform: translateX(0); }
+}
+
+.glitch-noise{
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.07) 0px,
+    rgba(255,255,255,0.07) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.5;
+  animation: noiseShift 0.15s steps(2) infinite;
+}
+@keyframes noiseShift{
+  0%{ transform: translateY(0); }
+  100%{ transform: translateY(4px); }
+}
+
+.glitch-bars{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 40%, rgba(237,29,36,0.12) 41%, transparent 43%),
+              linear-gradient(180deg, transparent 63%, rgba(30,95,194,0.14) 64%, transparent 66%);
+  animation: glitchBarShift 1.8s infinite steps(6);
+  mix-blend-mode: screen;
+}
+@keyframes glitchBarShift{
+  0%{ transform: translateY(0); opacity: 0.7; }
+  20%{ transform: translateY(-6%); opacity: 0.3; }
+  40%{ transform: translateY(4%); opacity: 0.8; }
+  60%{ transform: translateY(-3%); opacity: 0.2; }
+  80%{ transform: translateY(6%); opacity: 0.6; }
+  100%{ transform: translateY(0); opacity: 0.7; }
+}
 
 /* dots + skip */
 .trailer-dots{
@@ -1357,6 +1486,8 @@ button{ font-family: inherit; cursor: pointer; }
   .planes-layer{ display: none; }
   .boot-scanlines, .boot-halftone, .pixel-row::before, .pixel-row::after,
   .boot-dots, .boot-flicker, .tframe-skip{ animation: none; }
+  .glitch-col, .glitch-word, .glitch-word::before, .glitch-word::after,
+  .glitch-noise, .glitch-bars{ animation: none; }
 }
 
 /* =========================================================
