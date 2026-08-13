@@ -15,6 +15,9 @@
   --gwen-pink: #D4537E;
   --gwen-pink-deep: #993556;
   --gwen-blue: #1E5FC2;
+  --text-dim: rgba(244,239,225,0.72);
+  --panel-dark: #141821;
+  --panel-dark-2: #1a1f2b;
 
   --display: 'Press Start 2P', 'Bangers', cursive;
   --body: 'Comic Neue', sans-serif;
@@ -34,7 +37,7 @@
 html, body{
   margin: 0;
   padding: 0;
-  background: var(--paper);
+  background: var(--ink);
   color: var(--ink);
   font-family: var(--body);
   min-height: 100%;
@@ -49,8 +52,8 @@ body::after{
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(11,14,19,0.035) 0px,
-    rgba(11,14,19,0.035) 1px,
+    rgba(255,255,255,0.025) 0px,
+    rgba(255,255,255,0.025) 1px,
     transparent 1px,
     transparent 3px
   );
@@ -82,6 +85,7 @@ button{ font-family: inherit; cursor: pointer; }
   border-radius: 999px;
   margin: 0 0 0.8rem;
   transform: rotate(-1.5deg);
+  border: 2px solid var(--sage);
 }
 .eyebrow.center{ text-align: center; }
 
@@ -692,7 +696,7 @@ button{ font-family: inherit; cursor: pointer; }
 }
 
 /* =========================================================
-   Gate / Invitation
+   Gate / Invitation — dark neon arcade backdrop
 ========================================================= */
 #gate{
   position: relative;
@@ -703,9 +707,10 @@ button{ font-family: inherit; cursor: pointer; }
   padding: 2rem 1.25rem;
   overflow: hidden;
   background:
-    radial-gradient(circle at 15% 10%, rgba(30,95,194,0.25), transparent 55%),
-    radial-gradient(circle at 88% 88%, rgba(237,29,36,0.22), transparent 50%),
-    var(--paper);
+    radial-gradient(circle at 15% 12%, rgba(30,95,194,0.32), transparent 48%),
+    radial-gradient(circle at 88% 85%, rgba(237,29,36,0.28), transparent 46%),
+    radial-gradient(circle at 50% 100%, rgba(255,199,44,0.10), transparent 55%),
+    var(--ink);
 }
 
 .gate-bg .corner{
@@ -715,10 +720,11 @@ button{ font-family: inherit; cursor: pointer; }
   fill: none;
   stroke: var(--sage);
   stroke-width: 2;
-  opacity: 0.35;
+  opacity: 0.5;
+  filter: drop-shadow(0 0 4px rgba(30,95,194,0.6));
 }
 .corner-tl{ top: 0; left: 0; }
-.corner-br{ bottom: 0; right: 0; stroke: var(--rose); }
+.corner-br{ bottom: 0; right: 0; stroke: var(--rose); filter: drop-shadow(0 0 4px rgba(237,29,36,0.6)); }
 
 .halftone-burst{
   position: absolute;
@@ -727,7 +733,7 @@ button{ font-family: inherit; cursor: pointer; }
   border-radius: 50%;
   background-image: radial-gradient(var(--rose) 2.2px, transparent 2.6px);
   background-size: 15px 15px;
-  opacity: 0.18;
+  opacity: 0.22;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -737,7 +743,7 @@ button{ font-family: inherit; cursor: pointer; }
 }
 @keyframes halftoneBreathe{
   0%, 100%{ transform: translate(-50%, -50%) scale(1); opacity: 0.18; }
-  50%{ transform: translate(-50%, -50%) scale(1.15); opacity: 0.28; }
+  50%{ transform: translate(-50%, -50%) scale(1.15); opacity: 0.3; }
 }
 
 .skyline{
@@ -746,9 +752,10 @@ button{ font-family: inherit; cursor: pointer; }
   left: 0;
   width: 100%;
   height: 110px;
-  fill: var(--ink);
-  opacity: 0.85;
+  fill: #1a1f2b;
+  opacity: 0.9;
   z-index: 1;
+  filter: drop-shadow(0 -2px 10px rgba(30,95,194,0.25));
 }
 
 .gate-card{
@@ -757,7 +764,7 @@ button{ font-family: inherit; cursor: pointer; }
   background: #fff;
   border: 4px solid var(--ink);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), 0 0 30px rgba(30,95,194,0.25);
   max-width: 520px;
   width: 100%;
   padding: 3rem 2.5rem 2.5rem;
@@ -889,13 +896,18 @@ button{ font-family: inherit; cursor: pointer; }
 }
 
 /* =========================================================
-   Inside site
+   Inside site — dark neon arcade backdrop
 ========================================================= */
 #site{
   max-width: 760px;
   margin: 0 auto;
   padding: 4.5rem 1.5rem 5rem;
   position: relative;
+  background:
+    radial-gradient(circle at 85% 8%, rgba(237,29,36,0.22), transparent 42%),
+    radial-gradient(circle at 8% 60%, rgba(30,95,194,0.28), transparent 46%),
+    radial-gradient(circle at 60% 100%, rgba(255,199,44,0.10), transparent 55%),
+    var(--ink);
 }
 
 .site-header{ text-align: center; margin-bottom: 3rem; }
@@ -909,7 +921,7 @@ button{ font-family: inherit; cursor: pointer; }
   color: var(--rose);
   text-shadow: 3px 3px 0 var(--sage-deep);
 }
-.site-intro{ color: var(--ink-soft); font-weight: 700; font-size: 1rem; max-width: 46ch; margin: 0 auto; }
+.site-intro{ color: var(--text-dim); font-weight: 700; font-size: 1rem; max-width: 46ch; margin: 0 auto; }
 
 .letter-section{
   display: flex;
@@ -924,14 +936,14 @@ button{ font-family: inherit; cursor: pointer; }
   background: linear-gradient(180deg, var(--paper-2), var(--paper));
   border: 4px solid var(--ink);
   border-radius: 10px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), 0 0 26px rgba(255,199,44,0.18);
   padding: 0;
   overflow: visible;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   transform: rotate(0.6deg);
   perspective: 400px;
 }
-.envelope:hover{ transform: translate(-2px,-2px) rotate(0.6deg); box-shadow: 8px 8px 0 var(--ink); }
+.envelope:hover{ transform: translate(-2px,-2px) rotate(0.6deg); box-shadow: 8px 8px 0 var(--ink), 0 0 30px rgba(255,199,44,0.28); }
 
 .envelope-back{
   position: absolute;
@@ -1061,10 +1073,10 @@ button{ font-family: inherit; cursor: pointer; }
   font-size: clamp(0.85rem, 3vw, 1.15rem);
   line-height: 1.7;
   margin: 0 0 0.3rem;
-  color: var(--sage-deep);
-  text-shadow: 2px 2px 0 var(--rose);
+  color: var(--gold);
+  text-shadow: 0 0 8px rgba(255,199,44,0.5), 2px 2px 0 var(--rose-deep);
 }
-.game-sub{ color: var(--ink-soft); font-weight: 700; font-size: 0.9rem; margin: 0 0 1.5rem; }
+.game-sub{ color: var(--text-dim); font-weight: 700; font-size: 0.9rem; margin: 0 0 1.5rem; }
 
 .game-stage{
   position: relative;
@@ -1075,7 +1087,7 @@ button{ font-family: inherit; cursor: pointer; }
   max-width: 680px;
   margin: 0 auto;
   transition: opacity 0.9s ease, transform 0.9s ease;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), 0 0 30px rgba(30,95,194,0.2);
 }
 .game-stage.fading-out{
   opacity: 0;
@@ -1166,7 +1178,7 @@ button{ font-family: inherit; cursor: pointer; }
   font-weight: 700;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
-  color: var(--ink-soft);
+  color: var(--text-dim);
   opacity: 0.8;
 }
 
@@ -1176,7 +1188,7 @@ button{ font-family: inherit; cursor: pointer; }
 .modal-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(11,14,19,0.6);
+  background: rgba(11,14,19,0.72);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1190,7 +1202,7 @@ button{ font-family: inherit; cursor: pointer; }
   background: var(--paper);
   border: 4px solid var(--ink);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), 0 0 34px rgba(30,95,194,0.3);
   max-width: 600px;
   width: 100%;
   max-height: 82vh;
@@ -1424,7 +1436,7 @@ button{ font-family: inherit; cursor: pointer; }
 .gps-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(11,14,19,0.6);
+  background: rgba(11,14,19,0.72);
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
@@ -1438,7 +1450,7 @@ button{ font-family: inherit; cursor: pointer; }
   background: var(--paper);
   border: 4px solid var(--ink);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), 0 0 26px rgba(30,95,194,0.28);
   max-width: 320px;
   width: 100%;
   padding: 1.6rem 1.5rem 1.5rem;
