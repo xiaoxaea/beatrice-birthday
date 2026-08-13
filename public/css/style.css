@@ -327,24 +327,60 @@ button{ font-family: inherit; cursor: pointer; }
   color: var(--ink);
 }
 
-/* Music player — fixed floating widget, top-left */
+/* Music player — fixed dropdown widget, top-left */
 .music-section{
   position: fixed;
   top: 20px;
   left: 20px;
   z-index: 40;
-  width: 340px;
-  max-width: 82vw;
+  width: 240px;
+  max-width: 70vw;
   text-align: left;
 }
-.music-title{
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 1.2rem;
-  margin: 0 0 0.5rem;
-  color: var(--sage-deep);
-  text-align: left;
+
+.music-toggle{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 0.5rem 0.9rem;
+  font-family: var(--ui);
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
+.music-toggle:hover{ transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
+.music-toggle:active{ transform: translate(1px,1px); box-shadow: 2px 2px 0 var(--ink); }
+.music-toggle svg{ width: 17px; height: 17px; flex-shrink: 0; color: var(--sage-deep); }
+.music-toggle-label{ flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.music-toggle-chevron{
+  width: 15px !important;
+  height: 15px !important;
+  color: var(--ink) !important;
+  transition: transform 0.25s ease;
+}
+.music-toggle[aria-expanded="true"] .music-toggle-chevron{ transform: rotate(180deg); }
+
+.music-panel{
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+.music-panel.open{
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 0.6rem;
+}
+
 .music-card{
   background: #fff;
   border: 3px solid var(--ink);
@@ -689,5 +725,5 @@ button{ font-family: inherit; cursor: pointer; }
   .gate-card{ padding: 2.4rem 1.6rem 2rem; }
   .gate-actions{ flex-wrap: wrap; }
   .after-game-buttons{ flex-direction: column; }
-  .music-section{ top: 14px; left: 14px; width: 260px; }
+  .music-section{ top: 14px; left: 14px; width: 200px; }
 }
