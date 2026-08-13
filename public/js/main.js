@@ -168,4 +168,13 @@
       afterGame.hidden = false;
     }, 900);
   });
+
+  const musicToggle = document.getElementById("musicToggle");
+  const musicPanel = document.getElementById("musicPanel");
+  if (musicToggle && musicPanel) {
+    musicToggle.addEventListener("click", () => {
+      const isOpen = musicPanel.classList.toggle("open");
+      musicToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
 })();
