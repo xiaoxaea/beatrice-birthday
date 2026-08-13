@@ -45,6 +45,14 @@
         notifBell.classList.remove("active");
       }
     });
+
+    function wiggleBell() {
+      notifBell.classList.remove("wiggle");
+      void notifBell.offsetWidth;
+      notifBell.classList.add("wiggle");
+    }
+    setTimeout(wiggleBell, 1800);
+    setInterval(wiggleBell, 9000);
   }
 
   const hints = [
@@ -113,6 +121,7 @@
   const modalBody = document.getElementById("modalBody");
   const modalEyebrow = document.getElementById("modalEyebrow");
   const modalClose = document.getElementById("modalClose");
+  const envelope = document.getElementById("envelope");
 
   function openModal(eyebrow, title, body) {
     modalEyebrow.textContent = eyebrow;
@@ -122,6 +131,7 @@
   }
   function closeModal() {
     modalOverlay.hidden = true;
+    if (envelope) envelope.classList.remove("opening");
   }
   modalClose.addEventListener("click", closeModal);
   modalOverlay.addEventListener("click", (e) => {
@@ -138,13 +148,16 @@
     });
   }
 
-  const envelope = document.getElementById("envelope");
   envelope.addEventListener("click", () => {
-    fetchContent("letter")
-      .then((data) => openModal("for you", data.title, data.body))
-      .catch(() =>
-        openModal("for you", "For Beatrice", "The letter could not be loaded right now — please try again in a moment.")
-      );
+    if (envelope.classList.contains("opening")) return;
+    envelope.classList.add("opening");
+    setTimeout(() => {
+      fetchContent("letter")
+        .then((data) => openModal("for you", data.title, data.body))
+        .catch(() =>
+          openModal("for you", "For Beatrice", "The letter could not be loaded right now — please try again in a moment.")
+        );
+    }, 450);
   });
 
   document.querySelectorAll(".after-game-buttons .btn").forEach((btn) => {
