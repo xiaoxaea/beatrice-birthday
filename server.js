@@ -19,7 +19,7 @@ const LETTER_TEXT = `My dearest Bea,
 
 First of all, I wanna say Happy Birthday to you!! If you're reading this letter, that means you chose the "yes" button, right? Well yea, you don't have much of a choice here, you can't touch no e :p
 
-This is a little gift, more like a digital gift because I cannot really do much since I'm always at the hospital doing this kiosk- I mean, this very much website of yours, I had fun doing this even though this is my first time doing this for someone, so uhm you're kinda lucky that you were my first here ble. With that being said, I really na sana ma-enjoy mo this, I know it's not much and siguro it may take some time for reading, pero if you did, I'll be really glad.
+This is a little gift, more like a digital gift because I cannot really do much since I'm always at the hospital doing this kiosk- I mean, this very much website of yours, I had fun doing this even though this is my first time doing this for someone, so uhm you're kinda lucky that you were my first here ble. With that being said, I really hope na sana ma-enjoy mo 'to, I know it's not much and siguro it may take some time for reading, pero if you did, I'll be really glad.
 
 Maybe this is medyo weird, as someone who re-entered your life for like 3 months ago? I can't really remember the exact date, pero alam ko na it's there lang. Going back, siguro medyo weird nga na as a nobody who re-entered your life to be doing this for you, pero i can make sure that I did this because I want to, and I want you to be happy on your blessed day:)
 
