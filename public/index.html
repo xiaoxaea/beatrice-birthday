@@ -150,6 +150,27 @@
   </div>
 </div>
 
+<!-- ================= GPS TRACKER CORNER ================= -->
+<button type="button" class="gps-corner" id="gpsButton" aria-haspopup="dialog" aria-expanded="false" aria-label="Spidey data tracker">
+  <span class="gps-ping" aria-hidden="true"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 21s-7-7.2-7-12a7 7 0 0 1 14 0c0 4.8-7 12-7 12z"/>
+    <circle cx="12" cy="9" r="2.4"/>
+  </svg>
+</button>
+
+<div class="gps-overlay" id="gpsOverlay" hidden>
+  <div class="gps-popup" role="dialog" aria-modal="true" aria-labelledby="gpsPopupTitle">
+    <span class="gps-popup-web" aria-hidden="true"></span>
+    <p class="eyebrow">incoming signal</p>
+    <p class="gps-popup-title" id="gpsPopupTitle">Hey Gwen, my sensors just picked up a ping — this'll swing you straight over to the Spidey Data Tracker Base. You sure you wanna make the jump?</p>
+    <div class="gps-popup-actions">
+      <button type="button" class="btn btn-yes" id="gpsYes">Yes</button>
+      <button type="button" class="btn btn-no gps-no-btn" id="gpsNo">No</button>
+    </div>
+  </div>
+</div>
+
 <!-- ================= FLYING HERO POSES LAYER ================= -->
 <div class="planes-layer" id="planesLayer" aria-hidden="true">
   <svg width="0" height="0" style="position:absolute">
@@ -164,7 +185,6 @@
         <ellipse cx="43" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(-10 43 38)"/>
         <ellipse cx="58" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(10 58 38)"/>
       </symbol>
-
       <symbol id="hero-2" viewBox="0 0 100 130">
         <path d="M40 60 L20 55" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
         <path d="M60 60 L80 55" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
@@ -175,7 +195,6 @@
         <ellipse cx="43" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(-10 43 38)"/>
         <ellipse cx="58" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(10 58 38)"/>
       </symbol>
-
       <symbol id="hero-3" viewBox="0 0 100 130">
         <path d="M40 60 L10 45" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
         <path d="M60 60 L90 45" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
@@ -186,7 +205,6 @@
         <ellipse cx="43" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(-10 43 38)"/>
         <ellipse cx="58" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(10 58 38)"/>
       </symbol>
-
       <symbol id="hero-4" viewBox="0 0 100 130">
         <path d="M40 65 L15 60" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
         <path d="M60 65 L85 60" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
@@ -197,7 +215,6 @@
         <ellipse cx="43" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(-10 43 38)"/>
         <ellipse cx="58" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(10 58 38)"/>
       </symbol>
-
       <symbol id="hero-5" viewBox="0 0 100 130">
         <path d="M40 60 L25 20" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
         <path d="M60 60 L70 85" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
@@ -208,7 +225,6 @@
         <ellipse cx="43" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(-10 43 38)"/>
         <ellipse cx="58" cy="38" rx="6" ry="8" fill="#fff" stroke="#0B0E13" stroke-width="2" transform="rotate(10 58 38)"/>
       </symbol>
-
       <symbol id="hero-6" viewBox="0 0 100 130">
         <path d="M40 58 L5 50" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
         <path d="M60 58 L95 50" stroke="#0D3B78" stroke-width="7" stroke-linecap="round" fill="none"/>
