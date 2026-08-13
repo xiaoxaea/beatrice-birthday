@@ -136,6 +136,107 @@
     });
   }
 
+  // ---- Character select — automated slot-machine reel ----
+  const charSelect = document.getElementById("charSelect");
+  const csReel = document.getElementById("csReel");
+  const csCallout = document.getElementById("csCallout");
+
+  const csCharacters = [
+    { name: "WEB-RED",    head: "#ED1D24", body: "#0D3B78" },
+    { name: "NOIR",       head: "#2b2b2b", body: "#111111" },
+    { name: "IRON ARC",   head: "#B0141A", body: "#FFC72C" },
+    { name: "VENOM-X",    head: "#0f0f0f", body: "#1E5FC2" },
+    { name: "SPIDER-BAE", head: "#F4EFE1", body: "#D4537E", accent: "#7F5AF0" },
+    { name: "GOLD-WING",  head: "#FFC72C", body: "#33404F" },
+  ];
+  const csTargetIndex = 4; // Spider-Bae — the system always locks in this pick
+  const csCellHeight = 44;
+
+  function buildCharReel() {
+    if (!csReel || csReel.childElementCount) return csReel ? csReel.childElementCount : 0;
+    const loops = 4;
+    const sequence = [];
+    for (let l = 0; l < loops; l++) {
+      csCharacters.forEach((c) => sequence.push(c));
+    }
+    sequence.push(csCharacters[csTargetIndex]);
+
+    sequence.forEach((c) => {
+      const row = document.createElement("div");
+      row.className = "cs-reel-row";
+
+      const head = document.createElement("span");
+      head.className = "cs-head";
+      head.style.background = c.head;
+      if (c.accent) head.style.boxShadow = "0 0 0 2px " + c.accent;
+
+      const body = document.createElement("span");
+      body.className = "cs-body";
+      body.style.background = c.body;
+
+      const name = document.createElement("span");
+      name.className = "cs-name";
+      name.textContent = c.name;
+
+      row.appendChild(head);
+      row.appendChild(body);
+      row.appendChild(name);
+      csReel.appendChild(row);
+    });
+    return sequence.length;
+  }
+
+  function csEaseOutBack(t) {
+    const c1 = 1.4, c3 = c1 + 1;
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+  }
+
+  function spinCharReel(sequenceLength, onDone) {
+    const finalOffset = (sequenceLength - 1) * csCellHeight - csCellHeight * 1.5;
+    let start = null;
+    const duration = 2800;
+    function frame(ts) {
+      if (!start) start = ts;
+      const elapsed = ts - start;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = t < 0.85
+        ? (1 - Math.pow(1 - Math.min(t / 0.85, 1), 3)) * 0.94
+        : 0.94 + csEaseOutBack((t - 0.85) / 0.15) * 0.06;
+      const y = -finalOffset * Math.min(eased, 1);
+      csReel.style.transform = "translateY(" + y + "px)";
+      const blur = t < 0.7 ? (1 - t / 0.7) * 3 : 0;
+      csReel.style.filter = "blur(" + blur.toFixed(1) + "px)";
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        csReel.style.transform = "translateY(" + (-finalOffset) + "px)";
+        csReel.style.filter = "none";
+        onDone();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function finishCharSelect() {
+    if (!charSelect) return;
+    charSelect.classList.add("hide");
+    setTimeout(() => { charSelect.hidden = true; }, 550);
+  }
+
+  function startCharSelect() {
+    if (!charSelect || !csReel || !csCallout) return;
+    charSelect.hidden = false;
+    charSelect.classList.remove("hide");
+    csCallout.textContent = "SPINNING...";
+    csCallout.classList.remove("locked");
+    const seqLength = buildCharReel();
+    spinCharReel(seqLength, () => {
+      csCallout.textContent = "SPIDER-BAE LOCKED IN";
+      csCallout.classList.add("locked");
+      setTimeout(finishCharSelect, 2400);
+    });
+  }
+
   // ---- Boot loader ----
   const bootLoader = document.getElementById("bootLoader");
   const bootBarFill = document.getElementById("bootBarFill");
