@@ -6,10 +6,34 @@
 <title>For Beatrice — 19</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Nunito+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Bangers&family=Comic+Neue:wght@400;700&family=Nunito+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
+
+<!-- ================= BOOT LOADER ================= -->
+<section id="bootLoader" aria-label="Loading">
+  <div class="boot-scanlines" aria-hidden="true"></div>
+  <div class="boot-halftone" aria-hidden="true"></div>
+
+  <div class="boot-content">
+    <div class="pixel-mask" aria-hidden="true">
+      <div class="pixel-row"></div><div class="pixel-row"></div><div class="pixel-row"></div>
+      <div class="pixel-row"></div><div class="pixel-row"></div><div class="pixel-row"></div>
+      <div class="pixel-row"></div><div class="pixel-row"></div>
+    </div>
+
+    <p class="boot-title">BEA-VERSE.EXE</p>
+    <p class="boot-sub" id="bootSub">INITIALIZING WEB-SHOOTERS<span class="boot-dots">...</span></p>
+
+    <div class="boot-bar-track">
+      <div class="boot-bar-fill" id="bootBarFill"></div>
+    </div>
+    <p class="boot-percent" id="bootPercent">00%</p>
+
+    <p class="boot-flicker">PRESS ANY THWIP TO CONTINUE</p>
+  </div>
+</section>
 
 <!-- ================= GATE / INVITATION ================= -->
 <section id="gate" aria-label="Invitation">
