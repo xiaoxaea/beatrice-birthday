@@ -18,6 +18,7 @@
 
   --radius: 14px;
   --shadow: 6px 6px 0 rgba(11,14,19,0.9);
+  --bounce: cubic-bezier(.34,1.56,.64,1);
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -83,6 +84,7 @@ button{ font-family: inherit; cursor: pointer; }
 .corner-tl{ top: 0; left: 0; }
 .corner-br{ bottom: 0; right: 0; stroke: var(--rose); }
 
+/* Animation 8: breathing halftone background */
 .halftone-burst{
   position: absolute;
   width: 380px;
@@ -96,6 +98,11 @@ button{ font-family: inherit; cursor: pointer; }
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
+  animation: halftoneBreathe 6s ease-in-out infinite;
+}
+@keyframes halftoneBreathe{
+  0%, 100%{ transform: translate(-50%, -50%) scale(1); opacity: 0.18; }
+  50%{ transform: translate(-50%, -50%) scale(1.15); opacity: 0.28; }
 }
 
 .skyline{
@@ -109,6 +116,7 @@ button{ font-family: inherit; cursor: pointer; }
   z-index: 1;
 }
 
+/* Animation 4: gate card entrance */
 .gate-card{
   position: relative;
   z-index: 2;
@@ -121,6 +129,12 @@ button{ font-family: inherit; cursor: pointer; }
   padding: 3rem 2.5rem 2.5rem;
   text-align: center;
   transform: rotate(-0.6deg);
+  animation: gateCardIn 0.7s var(--bounce) both;
+}
+@keyframes gateCardIn{
+  0%{ opacity: 0; transform: translateY(50px) rotate(-5deg) scale(0.85); }
+  60%{ opacity: 1; transform: translateY(-8px) rotate(1deg) scale(1.02); }
+  100%{ opacity: 1; transform: translateY(0) rotate(-0.6deg) scale(1); }
 }
 
 .headline{
@@ -191,6 +205,7 @@ button{ font-family: inherit; cursor: pointer; }
   min-height: 56px;
 }
 
+/* Animation 3: button squash-press */
 .btn{
   font-family: var(--ui);
   font-weight: 800;
@@ -201,7 +216,7 @@ button{ font-family: inherit; cursor: pointer; }
   padding: 0.85rem 2.1rem;
   border: 3px solid var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.18s ease;
+  transition: transform 0.28s var(--bounce), box-shadow 0.28s var(--bounce), background 0.18s ease;
 }
 
 .btn-yes{
@@ -209,18 +224,18 @@ button{ font-family: inherit; cursor: pointer; }
   color: #fff;
 }
 .btn-yes:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); }
-.btn-yes:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-yes:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
 
 .btn-no{
   background: var(--gold);
   color: var(--ink);
   will-change: left, top;
 }
-.btn-no:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-no:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
 
 .btn-no.dodging{
   position: fixed;
-  transition: left 0.22s cubic-bezier(.2,.9,.3,1.3), top 0.22s cubic-bezier(.2,.9,.3,1.3);
+  transition: left 0.22s var(--bounce), top 0.22s var(--bounce);
   z-index: 50;
 }
 
@@ -275,6 +290,7 @@ button{ font-family: inherit; cursor: pointer; }
   overflow: visible;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   transform: rotate(0.6deg);
+  perspective: 400px;
 }
 .envelope:hover{ transform: translate(-2px,-2px) rotate(0.6deg); box-shadow: 8px 8px 0 var(--ink); }
 
@@ -284,6 +300,7 @@ button{ font-family: inherit; cursor: pointer; }
   border-radius: 6px;
 }
 
+/* Animation 1: envelope pop-open */
 .envelope-flap{
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -291,6 +308,12 @@ button{ font-family: inherit; cursor: pointer; }
   background: var(--rose);
   clip-path: polygon(0 0, 100% 0, 50% 68%);
   border-radius: 6px 6px 0 0;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--bounce);
+}
+.envelope.opening .envelope-flap{
+  transform: rotateX(150deg);
 }
 
 .envelope-seal{
@@ -311,6 +334,11 @@ button{ font-family: inherit; cursor: pointer; }
   align-items: center;
   justify-content: center;
   box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.3s var(--bounce) 0.15s, opacity 0.3s ease 0.15s;
+}
+.envelope.opening .envelope-seal{
+  transform: translate(-50%, -50%) scale(1.3) rotate(20deg);
+  opacity: 0;
 }
 
 .envelope-label{
@@ -334,7 +362,7 @@ button{ font-family: inherit; cursor: pointer; }
   left: 20px;
   z-index: 40;
   width: 240px;
-  max-width: 70vw;
+  max-width: 82vw;
   text-align: left;
 }
 
@@ -354,25 +382,26 @@ button{ font-family: inherit; cursor: pointer; }
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--ink);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.2s var(--bounce), box-shadow 0.2s var(--bounce);
 }
 .music-toggle:hover{ transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
-.music-toggle:active{ transform: translate(1px,1px); box-shadow: 2px 2px 0 var(--ink); }
+.music-toggle:active{ transform: scale(0.92,1.06); box-shadow: 2px 2px 0 var(--ink); }
 .music-toggle svg{ width: 17px; height: 17px; flex-shrink: 0; color: var(--sage-deep); }
 .music-toggle-label{ flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .music-toggle-chevron{
   width: 15px !important;
   height: 15px !important;
   color: var(--ink) !important;
-  transition: transform 0.25s ease;
+  transition: transform 0.3s var(--bounce);
 }
 .music-toggle[aria-expanded="true"] .music-toggle-chevron{ transform: rotate(180deg); }
 
+/* Animation 5: elastic dropdown */
 .music-panel{
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.3s ease;
+  transition: max-height 0.45s var(--bounce), opacity 0.3s ease, margin-top 0.45s var(--bounce);
   margin-top: 0;
 }
 .music-panel.open{
@@ -467,6 +496,20 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .after-game-buttons .btn{ flex: 1; }
 
+/* Animation 7: staggered button cascade */
+.after-game-buttons .btn{
+  opacity: 0;
+  animation: staggerPop 0.5s var(--bounce) forwards;
+}
+.after-game-buttons .btn:nth-child(1){ animation-delay: 0.05s; }
+.after-game-buttons .btn:nth-child(2){ animation-delay: 0.2s; }
+.after-game-buttons .btn:nth-child(3){ animation-delay: 0.35s; }
+@keyframes staggerPop{
+  0%{ opacity: 0; transform: translateY(20px) scale(0.8); }
+  60%{ opacity: 1; transform: translateY(-4px) scale(1.05); }
+  100%{ opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .btn-outline{
   background: #fff;
   color: var(--ink);
@@ -478,7 +521,7 @@ button{ font-family: inherit; cursor: pointer; }
   transform: translate(-2px,-2px);
   box-shadow: 6px 6px 0 var(--ink);
 }
-.btn-outline:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-outline:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
 
 .site-footer{
   text-align: center;
@@ -506,6 +549,7 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .modal-overlay[hidden]{ display: none; }
 
+/* Animation 2: modal comic entrance */
 .modal{
   position: relative;
   background: var(--paper);
@@ -517,6 +561,11 @@ button{ font-family: inherit; cursor: pointer; }
   max-height: 82vh;
   overflow-y: auto;
   padding: 2.75rem 2.25rem 2.25rem;
+  animation: modalPop 0.45s var(--bounce);
+}
+@keyframes modalPop{
+  0%{ opacity: 0; transform: scale(0.3) rotate(-6deg); }
+  100%{ opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
 .modal-close{
@@ -577,6 +626,20 @@ button{ font-family: inherit; cursor: pointer; }
   width: 20px;
   height: 20px;
   color: #fff;
+  transform-origin: 50% 15%;
+}
+/* Animation 6: bell attention wiggle */
+.notif-bell.wiggle svg{
+  animation: bellWiggle 0.6s ease-in-out;
+}
+@keyframes bellWiggle{
+  0%, 100%{ transform: rotate(0deg); }
+  15%{ transform: rotate(16deg); }
+  30%{ transform: rotate(-14deg); }
+  45%{ transform: rotate(10deg); }
+  60%{ transform: rotate(-7deg); }
+  75%{ transform: rotate(4deg); }
+  90%{ transform: rotate(-2deg); }
 }
 .notif-dot{
   position: absolute;
