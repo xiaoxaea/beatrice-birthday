@@ -190,4 +190,34 @@
       musicToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
   }
+
+  const gpsButton = document.getElementById("gpsButton");
+  const gpsOverlay = document.getElementById("gpsOverlay");
+  const gpsYes = document.getElementById("gpsYes");
+  const gpsNo = document.getElementById("gpsNo");
+
+  function openGpsPopup() {
+    gpsOverlay.hidden = false;
+    gpsButton.setAttribute("aria-expanded", "true");
+  }
+  function closeGpsPopup() {
+    gpsOverlay.hidden = true;
+    gpsButton.setAttribute("aria-expanded", "false");
+  }
+
+  if (gpsButton && gpsOverlay) {
+    gpsButton.addEventListener("click", openGpsPopup);
+    gpsOverlay.addEventListener("click", (e) => {
+      if (e.target === gpsOverlay) closeGpsPopup();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !gpsOverlay.hidden) closeGpsPopup();
+    });
+    gpsYes.addEventListener("click", () => {
+      window.open("https://spideytracker.net/", "_blank", "noopener");
+      closeGpsPopup();
+    });
+    gpsNo.addEventListener("click", closeGpsPopup);
+  }
+
 })();
