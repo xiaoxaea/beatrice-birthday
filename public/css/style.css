@@ -56,6 +56,154 @@ button{ font-family: inherit; cursor: pointer; }
 .eyebrow.center{ text-align: center; }
 
 /* =========================================================
+   Boot Loader — pixel arcade intro
+========================================================= */
+#bootLoader{
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#bootLoader.hide{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.boot-scanlines{
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  animation: scanlineDrift 6s linear infinite;
+}
+@keyframes scanlineDrift{
+  0%{ background-position: 0 0; }
+  100%{ background-position: 0 40px; }
+}
+
+.boot-halftone{
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background-image: radial-gradient(var(--rose) 2.2px, transparent 2.6px);
+  background-size: 16px 16px;
+  opacity: 0.14;
+  animation: halftoneBreathe 5s ease-in-out infinite;
+}
+
+.boot-content{
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+}
+
+.pixel-mask{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  margin: 0 auto 1.6rem;
+}
+.pixel-row{
+  height: 6px;
+  display: flex;
+  gap: 3px;
+}
+.pixel-row::before, .pixel-row::after{
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--rose);
+  animation: pixelBlink 1.4s steps(1) infinite;
+}
+.pixel-row:nth-child(1)::before, .pixel-row:nth-child(1)::after{ margin: 0 60px; background: var(--sage); }
+.pixel-row:nth-child(2)::before{ margin-right: 78px; } .pixel-row:nth-child(2)::after{ margin-left: 0; }
+.pixel-row:nth-child(3)::before{ margin-right: 6px; } .pixel-row:nth-child(3)::after{ margin-left: 6px; background: var(--gold); }
+.pixel-row:nth-child(4)::before, .pixel-row:nth-child(4)::after{ background: #fff; }
+.pixel-row:nth-child(5)::before, .pixel-row:nth-child(5)::after{ background: #fff; }
+.pixel-row:nth-child(6)::before{ margin-right: 6px; } .pixel-row:nth-child(6)::after{ margin-left: 6px; }
+.pixel-row:nth-child(7)::before, .pixel-row:nth-child(7)::after{ background: var(--rose); }
+.pixel-row:nth-child(8)::before, .pixel-row:nth-child(8)::after{ margin: 0 30px; background: var(--rose); }
+@keyframes pixelBlink{
+  0%, 100%{ opacity: 1; } 50%{ opacity: 0.55; }
+}
+
+.boot-title{
+  font-family: 'Press Start 2P', var(--display);
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  color: var(--rose);
+  text-shadow: 3px 3px 0 var(--sage-deep);
+  letter-spacing: 0.05em;
+  margin: 0 0 0.9rem;
+}
+
+.boot-sub{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  margin: 0 0 1.4rem;
+}
+.boot-dots{ animation: dotBlink 1s steps(1) infinite; }
+@keyframes dotBlink{ 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+
+.boot-bar-track{
+  width: min(320px, 70vw);
+  height: 18px;
+  margin: 0 auto 0.6rem;
+  background: var(--ink-soft);
+  border: 3px solid var(--paper);
+  padding: 2px;
+  image-rendering: pixelated;
+}
+.boot-bar-fill{
+  height: 100%;
+  width: 0%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--rose) 0px, var(--rose) 8px,
+    var(--rose-deep) 8px, var(--rose-deep) 16px
+  );
+  transition: width 0.12s steps(6);
+}
+
+.boot-percent{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.7rem;
+  color: var(--paper);
+  margin: 0 0 2rem;
+}
+
+.boot-flicker{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  color: var(--paper);
+  opacity: 0;
+  animation: flickerIn 0.4s ease forwards;
+  animation-delay: 1.8s;
+}
+@keyframes flickerIn{
+  0%{ opacity: 0; }
+  20%{ opacity: 0.9; } 35%{ opacity: 0.2; } 50%{ opacity: 1; }
+  100%{ opacity: 1; }
+}
+
+/* =========================================================
    Gate / Invitation
 ========================================================= */
 #gate{
@@ -84,7 +232,6 @@ button{ font-family: inherit; cursor: pointer; }
 .corner-tl{ top: 0; left: 0; }
 .corner-br{ bottom: 0; right: 0; stroke: var(--rose); }
 
-/* Animation 8: breathing halftone */
 .halftone-burst{
   position: absolute;
   width: 380px;
@@ -116,7 +263,6 @@ button{ font-family: inherit; cursor: pointer; }
   z-index: 1;
 }
 
-/* Animation 4: gate card entrance */
 .gate-card{
   position: relative;
   z-index: 2;
@@ -205,7 +351,6 @@ button{ font-family: inherit; cursor: pointer; }
   min-height: 56px;
 }
 
-/* Animation 3: button squash-press */
 .btn{
   font-family: var(--ui);
   font-weight: 800;
@@ -271,7 +416,6 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .site-intro{ color: var(--ink-soft); font-weight: 700; font-size: 1rem; max-width: 46ch; margin: 0 auto; }
 
-/* Letter / envelope */
 .letter-section{
   display: flex;
   justify-content: center;
@@ -300,7 +444,6 @@ button{ font-family: inherit; cursor: pointer; }
   border-radius: 6px;
 }
 
-/* Animation 1: envelope pop-open */
 .envelope-flap{
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -355,7 +498,6 @@ button{ font-family: inherit; cursor: pointer; }
   color: var(--ink);
 }
 
-/* Music player — fixed dropdown widget, top-left */
 .music-section{
   position: fixed;
   top: 20px;
@@ -396,7 +538,6 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .music-toggle[aria-expanded="true"] .music-toggle-chevron{ transform: rotate(180deg); }
 
-/* Animation 5: elastic dropdown */
 .music-panel{
   max-height: 0;
   opacity: 0;
@@ -418,7 +559,6 @@ button{ font-family: inherit; cursor: pointer; }
   padding: 0.6rem;
 }
 
-/* Game */
 .game-section{ text-align: center; }
 .game-title{
   font-family: var(--display);
@@ -496,7 +636,6 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .after-game-buttons .btn{ flex: 1; }
 
-/* Animation 7: staggered button cascade */
 .after-game-buttons .btn{
   opacity: 0;
   animation: staggerPop 0.5s var(--bounce) forwards;
@@ -549,7 +688,6 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .modal-overlay[hidden]{ display: none; }
 
-/* Animation 2: modal comic entrance */
 .modal{
   position: relative;
   background: var(--paper);
@@ -628,7 +766,6 @@ button{ font-family: inherit; cursor: pointer; }
   color: #fff;
   transform-origin: 50% 15%;
 }
-/* Animation 6: bell attention wiggle */
 .notif-bell.wiggle svg{
   animation: bellWiggle 0.6s ease-in-out;
 }
@@ -885,6 +1022,8 @@ button{ font-family: inherit; cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce){
   .planes-layer{ display: none; }
+  .boot-scanlines, .boot-halftone, .pixel-row::before, .pixel-row::after,
+  .boot-dots, .boot-flicker{ animation: none; }
 }
 
 /* =========================================================
