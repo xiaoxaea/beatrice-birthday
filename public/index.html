@@ -83,19 +83,30 @@
 
   <!-- Music -->
   <section class="music-section" aria-label="A song for you">
-    <p class="eyebrow">something to listen to</p>
-    <h3 class="music-title">a song, for while you read</h3>
-    <div class="music-card">
-      <iframe
-        style="border-radius: 12px"
-        src="https://open.spotify.com/embed/track/3hEfpBHxgieRLz4t3kLNEg?utm_source=generator&autoplay=1"
-        width="100%"
-        height="152"
-        frameborder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy">
-      </iframe>
+    <button type="button" class="music-toggle" id="musicToggle" aria-expanded="false" aria-controls="musicPanel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"/>
+        <circle cx="6" cy="18" r="3"/>
+        <circle cx="18" cy="16" r="3"/>
+      </svg>
+      <span class="music-toggle-label">song for you</span>
+      <svg class="music-toggle-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </button>
+    <div class="music-panel" id="musicPanel">
+      <div class="music-card">
+        <iframe
+          style="border-radius: 12px"
+          src="https://open.spotify.com/embed/track/3hEfpBHxgieRLz4t3kLNEg?utm_source=generator&autoplay=1"
+          width="100%"
+          height="152"
+          frameborder="0"
+          allowfullscreen=""
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
     </div>
   </section>
 
