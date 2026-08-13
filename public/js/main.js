@@ -16,7 +16,7 @@
     ];
     let lineIndex = 0;
     let progress = 0;
-    const minDuration = 2200;
+    const minDuration = 5000;
     const start = performance.now();
     let pageLoaded = document.readyState === "complete";
     window.addEventListener("load", () => { pageLoaded = true; });
