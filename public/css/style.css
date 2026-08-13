@@ -84,7 +84,7 @@ button{ font-family: inherit; cursor: pointer; }
 .corner-tl{ top: 0; left: 0; }
 .corner-br{ bottom: 0; right: 0; stroke: var(--rose); }
 
-/* Animation 8: breathing halftone background */
+/* Animation 8: breathing halftone */
 .halftone-burst{
   position: absolute;
   width: 380px;
@@ -362,7 +362,7 @@ button{ font-family: inherit; cursor: pointer; }
   left: 20px;
   z-index: 40;
   width: 240px;
-  max-width: 82vw;
+  max-width: 70vw;
   text-align: left;
 }
 
@@ -738,6 +738,112 @@ button{ font-family: inherit; cursor: pointer; }
 }
 
 /* =========================================================
+   GPS tracker corner — bottom left
+========================================================= */
+.gps-corner{
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 30;
+  width: 46px;
+  height: 46px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--sage-deep);
+  box-shadow: 3px 3px 0 var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.2s var(--bounce), box-shadow 0.2s var(--bounce);
+}
+.gps-corner svg{
+  width: 21px;
+  height: 21px;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+.gps-corner:hover{
+  transform: translate(-2px,-2px) rotate(-6deg);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.gps-corner:active{
+  transform: scale(0.88,1.1);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.gps-ping{
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  opacity: 0;
+  animation: gpsPing 2.6s ease-out infinite;
+}
+@keyframes gpsPing{
+  0%{ transform: scale(0.8); opacity: 0.9; }
+  70%{ transform: scale(1.7); opacity: 0; }
+  100%{ transform: scale(1.7); opacity: 0; }
+}
+
+.gps-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(11,14,19,0.6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 5.5rem 1.5rem 5.5rem;
+  z-index: 100;
+}
+.gps-overlay[hidden]{ display: none; }
+
+.gps-popup{
+  position: relative;
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 320px;
+  width: 100%;
+  padding: 1.6rem 1.5rem 1.5rem;
+  transform-origin: bottom left;
+  animation: gpsPopIn 0.45s var(--bounce);
+  overflow: hidden;
+}
+@keyframes gpsPopIn{
+  0%{ opacity: 0; transform: scale(0.3) rotate(-8deg); }
+  100%{ opacity: 1; transform: scale(1) rotate(0deg); }
+}
+.gps-popup-web{
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 90px;
+  height: 90px;
+  background-image: repeating-conic-gradient(from 0deg, rgba(11,14,19,0.08) 0deg 4deg, transparent 4deg 30deg);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.gps-popup-title{
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 1.3rem;
+}
+.gps-popup-actions{
+  display: flex;
+  gap: 0.8rem;
+}
+.gps-popup-actions .btn{
+  flex: 1;
+  padding: 0.7rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* =========================================================
    Flying planes layer
 ========================================================= */
 .planes-layer{
@@ -789,4 +895,6 @@ button{ font-family: inherit; cursor: pointer; }
   .gate-actions{ flex-wrap: wrap; }
   .after-game-buttons{ flex-direction: column; }
   .music-section{ top: 14px; left: 14px; width: 200px; }
+  .gps-overlay{ padding: 4.8rem 1rem 5rem; }
+  .gps-popup{ max-width: 280px; }
 }
