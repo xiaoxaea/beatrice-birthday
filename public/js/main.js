@@ -6,7 +6,7 @@
   const trailerFrames = trailer ? trailer.querySelectorAll(".tframe") : [];
   const trailerDots = trailer ? trailer.querySelectorAll(".tdot") : [];
   const trailerSkyline = document.getElementById("trailerSkyline");
-  const trailerHeart = document.getElementById("trailerHeart");
+  const glitchCode = document.getElementById("glitchCode");
   const trailerHeroA = document.getElementById("trailerHeroA");
   const trailerHeroB = document.getElementById("trailerHeroB");
   const trailerSkipBtn = document.getElementById("trailerSkipBtn");
@@ -30,23 +30,41 @@
     });
   }
 
-  function buildTrailerHeart() {
-    if (!trailerHeart || trailerHeart.childElementCount) return;
-    const pattern = [
-      0,1,1,0,1,1,0,0,
-      1,1,1,1,1,1,1,0,
-      1,1,1,1,1,1,1,0,
-      0,1,1,1,1,1,0,0,
-      0,0,1,1,1,0,0,0,
-      0,0,0,1,0,0,0,0,
-      0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0
+  function buildTrailerGlitch() {
+    if (!glitchCode || glitchCode.childElementCount) return;
+    const snippets = [
+      "01001000 01101001",
+      "function thwip(x){",
+      "  return x * 2;",
+      "}",
+      "const bea = 19;",
+      "while(true){ love++; }",
+      "<hero state='loading'/>",
+      "sys.init(webshooter)",
+      "> compiling gift.exe",
+      "01100010 01100101 01100001",
+      "render(heart, x, y)",
+      "if(bea.birthday) party();",
+      "spidey.sense += 1;",
+      "> linking multiverse.dll",
+      "class hero extends bae{}",
+      "01110000 01110010",
     ];
-    pattern.forEach((p) => {
-      const cell = document.createElement("span");
-      cell.style.background = p ? "#ED1D24" : "transparent";
-      trailerHeart.appendChild(cell);
-    });
+    const columns = 11;
+    for (let i = 0; i < columns; i++) {
+      const col = document.createElement("div");
+      col.className = "glitch-col";
+      col.style.left = (i * (100 / columns)) + "%";
+      col.style.animationDuration = (2.2 + Math.random() * 2.2).toFixed(2) + "s";
+      col.style.animationDelay = (-Math.random() * 3).toFixed(2) + "s";
+      const lines = 16 + Math.floor(Math.random() * 6);
+      let text = "";
+      for (let l = 0; l < lines; l++) {
+        text += snippets[Math.floor(Math.random() * snippets.length)] + "\n";
+      }
+      col.textContent = text;
+      glitchCode.appendChild(col);
+    }
   }
 
   function runHeroLoop() {
@@ -123,7 +141,7 @@
   function startTrailer() {
     if (!trailer) return;
     buildTrailerSkyline();
-    buildTrailerHeart();
+    buildTrailerGlitch();
     trailer.hidden = false;
     trailer.classList.remove("hide");
     showTrailerFrame(0);
