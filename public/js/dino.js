@@ -234,7 +234,8 @@
 
   // input
   window.addEventListener("keydown", (e) => {
-    if (e.code === "Space" && document.getElementById("site") && !document.getElementById("site").hidden) {
+    const overlay = document.getElementById("runnerOverlay");
+    if (e.code === "Space" && overlay && !overlay.hidden) {
       e.preventDefault();
       jump();
     }
