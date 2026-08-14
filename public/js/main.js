@@ -33,22 +33,11 @@
   function buildTrailerGlitch() {
     if (!glitchCode || glitchCode.childElementCount) return;
     const snippets = [
-      "01001000 01101001",
-      "function thwip(x){",
-      "  return x * 2;",
-      "}",
-      "const bea = 19;",
-      "while(true){ love++; }",
-      "<hero state='loading'/>",
-      "sys.init(webshooter)",
-      "> compiling gift.exe",
-      "01100010 01100101 01100001",
-      "render(heart, x, y)",
-      "if(bea.birthday) party();",
-      "spidey.sense += 1;",
-      "> linking multiverse.dll",
-      "class hero extends bae{}",
-      "01110000 01110010",
+      "01001000 01101001", "function thwip(x){", "  return x * 2;", "}",
+      "const bea = 19;", "while(true){ love++; }", "<hero state='loading'/>",
+      "sys.init(webshooter)", "> compiling gift.exe", "01100010 01100101 01100001",
+      "render(heart, x, y)", "if(bea.birthday) party();", "spidey.sense += 1;",
+      "> linking multiverse.dll", "class hero extends bae{}", "01110000 01110010",
     ];
     const columns = 11;
     for (let i = 0; i < columns; i++) {
@@ -91,12 +80,8 @@
       if (bx > stageWidth + 60) bx = -110;
       const bobA = Math.sin(ax * 0.04) * 22;
       const bobB = Math.sin(bx * 0.04 + 1) * 18;
-      if (trailerHeroA) {
-        trailerHeroA.style.transform = "translate(" + ax + "px," + bobA + "px) rotate(" + (bobA * 1.4) + "deg)";
-      }
-      if (trailerHeroB) {
-        trailerHeroB.style.transform = "translate(" + bx + "px," + bobB + "px) rotate(" + (bobB * 1.4) + "deg)";
-      }
+      if (trailerHeroA) trailerHeroA.style.transform = "translate(" + ax + "px," + bobA + "px) rotate(" + (bobA * 1.4) + "deg)";
+      if (trailerHeroB) trailerHeroB.style.transform = "translate(" + bx + "px," + bobB + "px) rotate(" + (bobB * 1.4) + "deg)";
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -104,12 +89,8 @@
 
   function showTrailerFrame(i) {
     trailerCurrentFrame = i;
-    trailerFrames.forEach((f) => {
-      f.classList.toggle("active", Number(f.dataset.f) === i);
-    });
-    trailerDots.forEach((d) => {
-      d.classList.toggle("active", Number(d.dataset.d) === i);
-    });
+    trailerFrames.forEach((f) => f.classList.toggle("active", Number(f.dataset.f) === i));
+    trailerDots.forEach((d) => d.classList.toggle("active", Number(d.dataset.d) === i));
   }
 
   function finishTrailer() {
@@ -149,9 +130,7 @@
     trailerAdvanceTimer = setTimeout(advanceTrailer, 2500);
   }
 
-  if (trailerSkipBtn) {
-    trailerSkipBtn.addEventListener("click", finishTrailer);
-  }
+  if (trailerSkipBtn) trailerSkipBtn.addEventListener("click", finishTrailer);
   if (trailer) {
     trailer.addEventListener("click", (e) => {
       if (e.target === trailerSkipBtn) return;
@@ -159,7 +138,7 @@
     });
   }
 
-  // ---- Character select — automated grid cursor ----
+  // ---- Character select ----
   const charSelect = document.getElementById("charSelect");
   const csGrid = document.getElementById("csGrid");
   const csCallout = document.getElementById("csCallout");
@@ -172,31 +151,25 @@
     { name: "SPIDER-BAE", head: "#F4EFE1", body: "#D4537E", accent: "#7F5AF0" },
     { name: "GOLD-WING",  head: "#FFC72C", body: "#33404F" },
   ];
-  const csTargetIndex = 4; // Spider-Bae — the system always locks in this pick
+  const csTargetIndex = 4;
 
   function buildCharGrid() {
     if (!csGrid) return [];
-    if (csGrid.childElementCount) {
-      return Array.from(csGrid.children);
-    }
+    if (csGrid.childElementCount) return Array.from(csGrid.children);
     const cards = [];
     csCharacters.forEach((c) => {
       const card = document.createElement("div");
       card.className = "cs-card";
-
       const head = document.createElement("span");
       head.className = "cs-card-head";
       head.style.background = c.head;
       if (c.accent) head.style.boxShadow = "0 0 0 2px " + c.accent;
-
       const body = document.createElement("span");
       body.className = "cs-card-body";
       body.style.background = c.body;
-
       const name = document.createElement("span");
       name.className = "cs-card-name";
       name.textContent = c.name;
-
       card.appendChild(head);
       card.appendChild(body);
       card.appendChild(name);
@@ -207,29 +180,20 @@
   }
 
   function setHighlighted(cards, index) {
-    cards.forEach((card, i) => {
-      card.classList.toggle("cs-card--highlight", i === index);
-    });
+    cards.forEach((card, i) => card.classList.toggle("cs-card--highlight", i === index));
   }
 
-  // Cursor hops card to card, slowing down as it approaches the final
-  // landing spot on Spider-Bae — an arcade "select" cadence instead of a
-  // continuous spin.
   function runGridSelection(cards, targetIndex, onDone) {
     if (!cards.length) { onDone(); return; }
     const total = cards.length;
     const loops = 2;
     const totalSteps = loops * total + targetIndex + 1;
     let step = 0;
-
     function tick() {
       const current = step % total;
       setHighlighted(cards, current);
       step += 1;
-      if (step >= totalSteps) {
-        onDone();
-        return;
-      }
+      if (step >= totalSteps) { onDone(); return; }
       const progress = step / totalSteps;
       const delay = 70 + Math.pow(progress, 3) * 260;
       setTimeout(tick, delay);
@@ -260,6 +224,178 @@
     });
   }
 
+  // ---- Game World engine ----
+  const GW = (function () {
+    const world = document.getElementById("gameWorld");
+    if (!world) return null;
+
+    const viewport = document.querySelector(".gw-viewport");
+    const stage = document.getElementById("gwStage");
+    const player = document.getElementById("gwPlayer");
+    const roomLabel = document.getElementById("gwRoomLabel");
+    const dpad = document.getElementById("gwDpad");
+
+    const STAGE_W = 640, STAGE_H = 360;
+    const PLAYER_W = 22, PLAYER_H = 30;
+
+    let px = 300, py = 250;
+    let currentRoom = "lounge";
+    let facing = 1;
+    let bobPhase = 0;
+    let nearestInteract = null;
+    const keys = {};
+
+    function scaleStage() {
+      if (!viewport || !stage) return;
+      const scale = viewport.clientWidth / STAGE_W;
+      stage.style.transform = "scale(" + scale + ")";
+      viewport.style.height = (STAGE_H * scale) + "px";
+    }
+    window.addEventListener("resize", scaleStage);
+
+    function activeRoomEl() {
+      return document.getElementById("room-" + currentRoom);
+    }
+
+    function getRect(el) {
+      return { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight };
+    }
+    function overlaps(a, b) {
+      return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+    }
+
+    function hideAllHints() {
+      document.querySelectorAll(".gw-interact-hint").forEach((h) => h.classList.remove("show"));
+      document.querySelectorAll(".gw-interact").forEach((h) => h.classList.remove("gw-interact-near"));
+    }
+
+    function switchRoom(to, sx, sy) {
+      const prev = activeRoomEl();
+      if (prev) prev.classList.remove("active");
+      currentRoom = to;
+      const next = activeRoomEl();
+      if (next) next.classList.add("active");
+      px = sx;
+      py = sy;
+      if (roomLabel) roomLabel.textContent = to.toUpperCase();
+      hideAllHints();
+    }
+
+    function resolveAxis(newX, newY, blockers) {
+      let x = newX, y = newY;
+      const rectX = { x: x, y: py, w: PLAYER_W, h: PLAYER_H };
+      for (const b of blockers) {
+        if (overlaps(rectX, b)) { x = px; break; }
+      }
+      const rectY = { x: x, y: y, w: PLAYER_W, h: PLAYER_H };
+      for (const b of blockers) {
+        if (overlaps(rectY, b)) { y = py; break; }
+      }
+      return { x, y };
+    }
+
+    function interact() {
+      if (nearestInteract) nearestInteract.click();
+    }
+
+    function loop() {
+      const room = activeRoomEl();
+      if (!room) { requestAnimationFrame(loop); return; }
+
+      let dx = 0, dy = 0;
+      if (keys["arrowup"] || keys["w"]) dy -= 1;
+      if (keys["arrowdown"] || keys["s"]) dy += 1;
+      if (keys["arrowleft"] || keys["a"]) { dx -= 1; facing = -1; }
+      if (keys["arrowright"] || keys["d"]) { dx += 1; facing = 1; }
+
+      const moving = dx !== 0 || dy !== 0;
+      const speed = 2.6;
+      const blockers = Array.from(room.querySelectorAll(".gw-blocking, .gw-interact")).map(getRect);
+
+      if (moving) {
+        const len = Math.hypot(dx, dy) || 1;
+        let nx = px + (dx / len) * speed;
+        let ny = py + (dy / len) * speed;
+        nx = Math.max(4, Math.min(STAGE_W - PLAYER_W - 4, nx));
+        ny = Math.max(30, Math.min(STAGE_H - PLAYER_H - 4, ny));
+        const resolved = resolveAxis(nx, ny, blockers);
+        px = resolved.x;
+        py = resolved.y;
+        bobPhase += 0.35;
+      } else {
+        bobPhase = 0;
+      }
+
+      const bob = moving ? Math.abs(Math.sin(bobPhase)) * 2 : 0;
+      player.style.left = px + "px";
+      player.style.top = (py - bob) + "px";
+      player.classList.toggle("facing-left", facing < 0);
+
+      const pRect = { x: px, y: py, w: PLAYER_W, h: PLAYER_H };
+      room.querySelectorAll(".gw-door").forEach((d) => {
+        const r = getRect(d);
+        if (overlaps(pRect, r)) {
+          const to = d.getAttribute("data-to");
+          const sx = parseFloat(d.getAttribute("data-spawn-x")) || 300;
+          const sy = parseFloat(d.getAttribute("data-spawn-y")) || 250;
+          switchRoom(to, sx, sy);
+        }
+      });
+
+      nearestInteract = null;
+      let bestDist = 9999;
+      room.querySelectorAll(".gw-interact").forEach((it) => {
+        const r = getRect(it);
+        const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+        const dist = Math.hypot((px + PLAYER_W / 2) - cx, (py + PLAYER_H / 2) - cy);
+        const near = dist < 46;
+        it.classList.toggle("gw-interact-near", near);
+        const hintId = it.getAttribute("data-hint");
+        const hint = hintId && document.getElementById(hintId);
+        if (hint) hint.classList.toggle("show", near);
+        if (near && dist < bestDist) { bestDist = dist; nearestInteract = it; }
+      });
+
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (world.hidden) return;
+      const k = e.key.toLowerCase();
+      if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(k)) e.preventDefault();
+      keys[k] = true;
+      if (k === "e") interact();
+    });
+    window.addEventListener("keyup", (e) => { keys[e.key.toLowerCase()] = false; });
+
+    if (dpad) {
+      dpad.querySelectorAll("button").forEach((btn) => {
+        const dir = btn.getAttribute("data-dir");
+        const setKey = (down) => {
+          if (dir === "up") keys["arrowup"] = down;
+          if (dir === "down") keys["arrowdown"] = down;
+          if (dir === "left") keys["arrowleft"] = down;
+          if (dir === "right") keys["arrowright"] = down;
+        };
+        btn.addEventListener("touchstart", (e) => { e.preventDefault(); if (dir === "e") interact(); else setKey(true); }, { passive: false });
+        btn.addEventListener("touchend", (e) => { e.preventDefault(); setKey(false); }, { passive: false });
+        btn.addEventListener("mousedown", () => { if (dir === "e") interact(); else setKey(true); });
+        btn.addEventListener("mouseup", () => setKey(false));
+        btn.addEventListener("mouseleave", () => setKey(false));
+      });
+    }
+
+    function start() {
+      world.hidden = false;
+      scaleStage();
+      player.style.left = px + "px";
+      player.style.top = py + "px";
+      requestAnimationFrame(loop);
+    }
+
+    return { start, scaleStage };
+  })();
+
   // ---- Boot loader ----
   const bootLoader = document.getElementById("bootLoader");
   const bootBarFill = document.getElementById("bootBarFill");
@@ -275,7 +411,7 @@
     ];
     let lineIndex = 0;
     let progress = 0;
-    const minDuration = 5000; // ms — full pixel boot-up sequence
+    const minDuration = 5000;
     const start = performance.now();
     let pageLoaded = document.readyState === "complete";
     window.addEventListener("load", () => { pageLoaded = true; });
@@ -291,10 +427,7 @@
       bootBarFill.style.width = shown + "%";
       bootPercent.textContent = String(shown).padStart(2, "0") + "%";
 
-      const newLineIndex = Math.min(
-        bootLines.length - 1,
-        Math.floor((shown / 100) * bootLines.length)
-      );
+      const newLineIndex = Math.min(bootLines.length - 1, Math.floor((shown / 100) * bootLines.length));
       if (newLineIndex !== lineIndex) {
         lineIndex = newLineIndex;
         bootSub.firstChild.textContent = bootLines[lineIndex];
@@ -313,9 +446,7 @@
     requestAnimationFrame(tick);
 
     bootLoader.addEventListener("click", () => {
-      if (progress > 60) {
-        progress = 100;
-      }
+      if (progress > 60) progress = 100;
     });
   } else {
     startTrailer();
@@ -351,8 +482,6 @@
     });
   }
 
-  const site = document.getElementById("site");
-
   const notifBell = document.getElementById("notifBell");
   if (notifBell) {
     notifBell.addEventListener("click", (e) => {
@@ -361,11 +490,8 @@
       notifBell.classList.toggle("active");
     });
     document.addEventListener("click", (e) => {
-      if (!notifBell.contains(e.target)) {
-        notifBell.classList.remove("active");
-      }
+      if (!notifBell.contains(e.target)) notifBell.classList.remove("active");
     });
-
     function wiggleBell() {
       notifBell.classList.remove("wiggle");
       void notifBell.offsetWidth;
@@ -417,21 +543,15 @@
   }
 
   noBtn.addEventListener("pointerenter", evade);
-  noBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    evade();
-  }, { passive: false });
-  noBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    evade();
-  });
+  noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); evade(); }, { passive: false });
+  noBtn.addEventListener("click", (e) => { e.preventDefault(); evade(); });
 
   yesBtn.addEventListener("click", () => {
     gate.style.transition = "opacity 0.6s ease";
     gate.style.opacity = "0";
     setTimeout(() => {
       gate.style.display = "none";
-      site.hidden = false;
+      if (GW) GW.start();
       window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
     }, 600);
   });
@@ -454,12 +574,8 @@
     if (envelope) envelope.classList.remove("opening");
   }
   modalClose.addEventListener("click", closeModal);
-  modalOverlay.addEventListener("click", (e) => {
-    if (e.target === modalOverlay) closeModal();
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
-  });
+  modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modalOverlay.hidden) closeModal(); });
 
   function fetchContent(type) {
     return fetch(`/api/content/${type}`).then((r) => {
@@ -474,9 +590,7 @@
     setTimeout(() => {
       fetchContent("letter")
         .then((data) => openModal("for you", data.title, data.body))
-        .catch(() =>
-          openModal("for you", "For Beatrice", "The letter could not be loaded right now — please try again in a moment.")
-        );
+        .catch(() => openModal("for you", "For Beatrice", "The letter could not be loaded right now — please try again in a moment."));
     }, 450);
   });
 
@@ -485,9 +599,7 @@
       const type = btn.getAttribute("data-content");
       fetchContent(type)
         .then((data) => openModal("for you", data.title, data.body))
-        .catch(() =>
-          openModal("for you", "Hmm", "This could not be loaded right now — please try again in a moment.")
-        );
+        .catch(() => openModal("for you", "Hmm", "This could not be loaded right now — please try again in a moment."));
     });
   });
 
@@ -501,6 +613,17 @@
       afterGame.hidden = false;
     }, 900);
   });
+
+  // Runner arcade cabinet
+  const runnerCabinet = document.getElementById("runnerCabinet");
+  const runnerOverlay = document.getElementById("runnerOverlay");
+  const runnerClose = document.getElementById("runnerClose");
+  if (runnerCabinet && runnerOverlay) {
+    runnerCabinet.addEventListener("click", () => { runnerOverlay.hidden = false; });
+  }
+  if (runnerClose && runnerOverlay) {
+    runnerClose.addEventListener("click", () => { runnerOverlay.hidden = true; });
+  }
 
   const musicToggle = document.getElementById("musicToggle");
   const musicPanel = document.getElementById("musicPanel");
@@ -527,12 +650,8 @@
 
   if (gpsButton && gpsOverlay) {
     gpsButton.addEventListener("click", openGpsPopup);
-    gpsOverlay.addEventListener("click", (e) => {
-      if (e.target === gpsOverlay) closeGpsPopup();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !gpsOverlay.hidden) closeGpsPopup();
-    });
+    gpsOverlay.addEventListener("click", (e) => { if (e.target === gpsOverlay) closeGpsPopup(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !gpsOverlay.hidden) closeGpsPopup(); });
     gpsYes.addEventListener("click", () => {
       window.open("https://spideytracker.net/", "_blank", "noopener");
       closeGpsPopup();
