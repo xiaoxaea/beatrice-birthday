@@ -240,6 +240,7 @@
     const viewport = document.querySelector(".gw-viewport");
     const stage = document.getElementById("gwStage");
     const player = document.getElementById("gwPlayer");
+    const playerArrow = document.getElementById("gwPlayerArrow");
     const roomLabel = document.getElementById("gwRoomLabel");
     const dpad = document.getElementById("gwDpad");
 
@@ -263,9 +264,17 @@
     let px = 300, py = 190;
     let currentRoom = "lounge";
     let facing = 1;
+    // Compass-style facing direction (independent of the left/right sprite
+    // mirror) — drives which way the directional arrow under the player
+    // points. Defaults to "down" since that reads naturally at spawn.
+    let facingDir = "down";
     let bobPhase = 0;
     let nearestInteract = null;
     const keys = {};
+
+    // Rotation (in degrees) applied to the arrow SVG per facing direction.
+    // The arrow icon points "up" in its own coordinate space by default.
+    const ARROW_ROTATION = { up: 0, right: 90, down: 180, left: 270 };
 
     // ---- NPCs: the 5 unpicked heroes from character select, plus Eubin,
     // wandering their rooms with a little side-to-side idle motion. Each has
@@ -489,10 +498,13 @@
 
       let dx = 0, dy = 0;
       if (!dialogueOpen) {
-        if (keys["arrowup"] || keys["w"]) dy -= 1;
-        if (keys["arrowdown"] || keys["s"]) dy += 1;
-        if (keys["arrowleft"] || keys["a"]) { dx -= 1; facing = -1; }
-        if (keys["arrowright"] || keys["d"]) { dx += 1; facing = 1; }
+        // Track compass-style facingDir alongside the existing left/right
+        // `facing` flag, so the directional arrow can point in all four
+        // directions instead of only mirroring left/right.
+        if (keys["arrowup"] || keys["w"]) { dy -= 1; facingDir = "up"; }
+        if (keys["arrowdown"] || keys["s"]) { dy += 1; facingDir = "down"; }
+        if (keys["arrowleft"] || keys["a"]) { dx -= 1; facing = -1; facingDir = "left"; }
+        if (keys["arrowright"] || keys["d"]) { dx += 1; facing = 1; facingDir = "right"; }
       }
 
       const moving = dx !== 0 || dy !== 0;
@@ -517,6 +529,14 @@
       player.style.left = px + "px";
       player.style.top = (py - bob) + "px";
       player.classList.toggle("facing-left", facing < 0);
+
+      // Rotate the directional arrow to match facingDir. The CSS reads this
+      // custom property (--arrow-rot) and also counter-mirrors the arrow
+      // when the parent .gw-player has .facing-left applied, so the arrow
+      // always renders right-side-up regardless of sprite mirroring.
+      if (playerArrow) {
+        playerArrow.style.setProperty("--arrow-rot", ARROW_ROTATION[facingDir] + "deg");
+      }
 
       const pRect = { x: px, y: py, w: PLAYER_W, h: PLAYER_H };
       room.querySelectorAll(".gw-door").forEach((d) => {
@@ -589,6 +609,9 @@
       scaleStage();
       player.style.left = px + "px";
       player.style.top = py + "px";
+      if (playerArrow) {
+        playerArrow.style.setProperty("--arrow-rot", ARROW_ROTATION[facingDir] + "deg");
+      }
       requestAnimationFrame(loop);
     }
 
