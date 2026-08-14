@@ -351,6 +351,137 @@ button{ font-family: inherit; cursor: pointer; }
 .gw-player-body{ display: block; width: 22px; height: 16px; background: var(--gwen-pink); margin-top: 2px; }
 .gw-player.facing-left{ transform: scaleX(-1); }
 
+/* =========================================================
+   NPCs — other unpicked heroes wandering the rooms
+========================================================= */
+.gw-npc.gw-interact{
+  width: 22px;
+  height: 30px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  display: block;
+  z-index: 4;
+  transform-origin: center bottom;
+  transition: transform 0.15s ease;
+}
+.gw-npc.gw-interact:hover{ transform: none; }
+.gw-npc.gw-interact.gw-interact-near{
+  box-shadow: none;
+  transform: scale(1.15);
+}
+.gw-npc-head{ display: block; width: 22px; height: 15px; border-radius: 4px; }
+.gw-npc-body{ display: block; width: 22px; height: 16px; margin-top: 2px; }
+.gw-npc-name{
+  position: absolute;
+  left: 50%;
+  top: -15px;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.38rem;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+  text-shadow: 1px 1px 0 var(--ink);
+}
+.gw-npc.gw-interact-near .gw-npc-name{ opacity: 1; }
+
+/* Pokémon-style dialogue box */
+.gw-dialogue{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 10px;
+  z-index: 25;
+}
+.gw-dialogue[hidden]{ display: none; }
+
+.gw-dialogue-box{
+  position: relative;
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  box-shadow: var(--shadow);
+  padding: 0.9rem 1.1rem 0.8rem;
+  min-height: 84px;
+  cursor: pointer;
+  animation: dialogueSlideIn 0.25s var(--bounce);
+}
+@keyframes dialogueSlideIn{ 0%{ opacity: 0; transform: translateY(16px); } 100%{ opacity: 1; transform: translateY(0); } }
+
+.gw-dialogue-name{
+  display: inline-block;
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.5rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--rose);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 0.28rem 0.6rem;
+  margin: -1.5rem 0 0.55rem;
+  box-shadow: 2px 2px 0 var(--edge);
+}
+
+.gw-dialogue-text{
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+  padding-right: 1.4rem;
+}
+
+.gw-dialogue-next{
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  color: var(--ink);
+  font-size: 0.85rem;
+  animation: dialogueBounce 0.9s ease-in-out infinite;
+}
+@keyframes dialogueBounce{ 0%, 100%{ transform: translateY(0); } 50%{ transform: translateY(4px); } }
+
+.gw-dialogue-choices{
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+}
+.gw-dialogue-choices[hidden]{ display: none; }
+
+.gw-dialogue-choice{
+  font-family: var(--ui);
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-align: left;
+  background: #fff;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 0.55rem 0.8rem;
+  box-shadow: 3px 3px 0 var(--edge);
+  transition: transform 0.15s var(--bounce), box-shadow 0.15s var(--bounce), background 0.15s ease;
+}
+.gw-dialogue-choice::before{ content: "▸ "; color: var(--rose); }
+.gw-dialogue-choice:hover{ background: var(--gold); transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--edge); }
+.gw-dialogue-choice:active{ transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--edge); }
+
+@media (max-width: 480px){
+  .gw-dialogue-text{ font-size: 0.82rem; }
+  .gw-dialogue-choice{ font-size: 0.76rem; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .gw-dialogue-box{ animation: none; }
+  .gw-dialogue-next{ animation: none; }
+}
+
 .gw-music-panel{ position: absolute; left: 200px; top: 175px; width: 220px; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s var(--bounce), opacity 0.3s ease; z-index: 6; }
 .gw-music-panel.open{ max-height: 200px; opacity: 1; }
 
