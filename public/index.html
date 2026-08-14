@@ -193,6 +193,18 @@
             <span class="gw-door-glow" style="--door-color:#D4537E"></span>
             <span class="gw-door-label">TRACKER</span>
           </button>
+
+          <!-- NPCs -->
+          <button type="button" class="gw-npc gw-interact" id="npc-webred" data-npc="webred" style="left:110px;top:210px;">
+            <span class="gw-npc-name">WEB-RED</span>
+            <span class="gw-npc-head" style="background:#ED1D24"></span>
+            <span class="gw-npc-body" style="background:#0D3B78"></span>
+          </button>
+          <button type="button" class="gw-npc gw-interact" id="npc-eubin" data-npc="eubin" style="left:480px;top:210px;">
+            <span class="gw-npc-name">EUBIN</span>
+            <span class="gw-npc-head" style="background:#FFC72C"></span>
+            <span class="gw-npc-body" style="background:#33404F"></span>
+          </button>
         </div>
 
         <!-- LETTER ROOM -->
@@ -208,6 +220,13 @@
             <span class="envelope-seal">B</span>
           </button>
           <p class="gw-interact-hint" id="hintLetter" style="left:318px;top:78px;">PRESS E — READ LETTER</p>
+
+          <!-- NPC -->
+          <button type="button" class="gw-npc gw-interact" id="npc-noir" data-npc="noir" style="left:480px;top:230px;">
+            <span class="gw-npc-name">NOIR</span>
+            <span class="gw-npc-head" style="background:#2b2b2b"></span>
+            <span class="gw-npc-body" style="background:#111111"></span>
+          </button>
 
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="90" data-spawn-y="190" style="left:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
@@ -240,6 +259,13 @@
             </div>
           </div>
 
+          <!-- NPC -->
+          <button type="button" class="gw-npc gw-interact" id="npc-ironarc" data-npc="ironarc" style="left:130px;top:220px;">
+            <span class="gw-npc-name">IRON ARC</span>
+            <span class="gw-npc-head" style="background:#B0141A"></span>
+            <span class="gw-npc-body" style="background:#FFC72C"></span>
+          </button>
+
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="550" data-spawn-y="190" style="left:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
             <span class="gw-door-label">BACK</span>
@@ -254,6 +280,13 @@
 
           <button type="button" class="gw-interact gw-interact-cabinet" id="runnerCabinet" data-hint="hintRunner" style="left:290px;top:110px;">🕹️</button>
           <p class="gw-interact-hint" id="hintRunner" style="left:318px;top:78px;">PRESS E — PLAY GAME</p>
+
+          <!-- NPC -->
+          <button type="button" class="gw-npc gw-interact" id="npc-venomx" data-npc="venomx" style="left:470px;top:220px;">
+            <span class="gw-npc-name">VENOM-X</span>
+            <span class="gw-npc-head" style="background:#0f0f0f"></span>
+            <span class="gw-npc-body" style="background:#1E5FC2"></span>
+          </button>
 
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="90" data-spawn-y="250" style="left:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
@@ -275,6 +308,13 @@
           </button>
           <p class="gw-interact-hint" id="hintTracker" style="left:318px;top:78px;">PRESS E — SCAN</p>
 
+          <!-- NPC -->
+          <button type="button" class="gw-npc gw-interact" id="npc-goldwing" data-npc="goldwing" style="left:470px;top:190px;">
+            <span class="gw-npc-name">GOLD-WING</span>
+            <span class="gw-npc-head" style="background:#FFC72C"></span>
+            <span class="gw-npc-body" style="background:#33404F"></span>
+          </button>
+
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="550" data-spawn-y="250" style="right:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
             <span class="gw-door-label">BACK</span>
@@ -284,6 +324,16 @@
         <div class="gw-player" id="gwPlayer">
           <span class="gw-player-head"></span>
           <span class="gw-player-body"></span>
+        </div>
+      </div>
+
+      <!-- Pokémon-style NPC dialogue box (sits outside the scaled stage so text stays crisp) -->
+      <div class="gw-dialogue" id="gwDialogue" hidden>
+        <div class="gw-dialogue-box pixel-panel" id="gwDialogueBox">
+          <p class="gw-dialogue-name" id="gwDialogueName"></p>
+          <p class="gw-dialogue-text" id="gwDialogueText"></p>
+          <span class="gw-dialogue-next" id="gwDialogueNext" aria-hidden="true">▼</span>
+          <div class="gw-dialogue-choices" id="gwDialogueChoices" hidden></div>
         </div>
       </div>
     </div>
