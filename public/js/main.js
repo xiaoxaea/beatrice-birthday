@@ -238,7 +238,12 @@
     const STAGE_W = 640, STAGE_H = 360;
     const PLAYER_W = 22, PLAYER_H = 30;
 
-    let px = 300, py = 250;
+    // FIX: original spawn (300, 250) landed the player inside the lounge
+    // couch's hitbox (left:270 top:250, 120x44 => x:270-390, y:250-294),
+    // which permanently trapped the collision-resolution logic (it reverts
+    // to the previous position on any overlap, so the player could never
+    // move at all). Spawning clear of all blockers fixes it.
+    let px = 300, py = 190;
     let currentRoom = "lounge";
     let facing = 1;
     let bobPhase = 0;
