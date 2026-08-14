@@ -243,6 +243,15 @@
     const roomLabel = document.getElementById("gwRoomLabel");
     const dpad = document.getElementById("gwDpad");
 
+    // Dialogue box elements (Pokémon-style: NPC lines you click through, then a
+    // question with a few reply choices, then the NPC's response to what you picked)
+    const dlgEl = document.getElementById("gwDialogue");
+    const dlgBox = document.getElementById("gwDialogueBox");
+    const dlgName = document.getElementById("gwDialogueName");
+    const dlgText = document.getElementById("gwDialogueText");
+    const dlgNext = document.getElementById("gwDialogueNext");
+    const dlgChoices = document.getElementById("gwDialogueChoices");
+
     const STAGE_W = 640, STAGE_H = 360;
     const PLAYER_W = 22, PLAYER_H = 30;
 
@@ -257,6 +266,167 @@
     let bobPhase = 0;
     let nearestInteract = null;
     const keys = {};
+
+    // ---- NPCs: the 5 unpicked heroes from character select, plus Eubin,
+    // wandering their rooms with a little side-to-side idle motion. Each has
+    // a short greeting, then a question with reply choices you pick, then a
+    // response tailored to what you picked — like an NPC chat in a Pokémon game.
+    const npcRoster = [
+      {
+        id: "npc-webred", name: "WEB-RED", baseX: 110, baseY: 210, range: 20, speed: 0.6, phase: 0,
+        lines: ["Yo! Watch the couch, I tripped on it twice already.", "Big day today, huh? Nineteen!"],
+        question: "So — favorite way to celebrate a birthday?",
+        choices: [
+          { label: "Cake, obviously.", reply: "Ha, can't argue with that. Save me a slice." },
+          { label: "A quiet day in.", reply: "Respect. Sometimes low-key is the best kind of celebration." },
+          { label: "Go all out!", reply: "That's the spirit! Go make some noise, Bea." },
+        ],
+      },
+      {
+        id: "npc-noir", name: "NOIR", baseX: 480, baseY: 230, range: 20, speed: 0.55, phase: 0.8,
+        lines: ["This room's quiet. Good for reading things twice.", "There's an envelope waiting for you, by the way."],
+        question: "Read it now, or save it for later?",
+        choices: [
+          { label: "Now, obviously.", reply: "Can't say I blame you. Go on, then." },
+          { label: "I'll save it.", reply: "Patience. I can respect that too." },
+          { label: "What's it about?", reply: "Not my secret to tell. Go find out yourself." },
+        ],
+      },
+      {
+        id: "npc-ironarc", name: "IRON ARC", baseX: 130, baseY: 220, range: 20, speed: 0.65, phase: 2.1,
+        lines: ["Nice speakers, right? Upgraded the bass myself. Unofficially.", "Every birthday needs a soundtrack."],
+        question: "What's the vibe today?",
+        choices: [
+          { label: "Upbeat and loud.", reply: "Now we're talking. Turn it up." },
+          { label: "Something chill.", reply: "Good pick. Chill still counts as celebrating." },
+          { label: "Surprise me.", reply: "Dangerous request. I like it." },
+        ],
+      },
+      {
+        id: "npc-venomx", name: "VENOM-X", baseX: 470, baseY: 220, range: 20, speed: 0.6, phase: 1.7,
+        lines: ["Think you can beat the high score? Doubt it.", "This cabinet's rigged with good vibes only. Promise."],
+        question: "One round, for birthday luck?",
+        choices: [
+          { label: "You're on.", reply: "That's the spirit. Don't blame me if you lose, though." },
+          { label: "Maybe later.", reply: "Sure, sure. I'll be here." },
+          { label: "I don't play.", reply: "Boo. Fine, I'll cheer from the sidelines." },
+        ],
+      },
+      {
+        id: "npc-goldwing", name: "GOLD-WING", baseX: 470, baseY: 190, range: 20, speed: 0.5, phase: 0.3,
+        lines: ["This console's been pinging non-stop.", "Every signal on this map points to one thing: today's your day."],
+        question: "Ready to see what it found?",
+        choices: [
+          { label: "Let's see it.", reply: "That's the spirit. Go on, check it out." },
+          { label: "A little nervous.", reply: "No need to be. It's all good things." },
+          { label: "Later, maybe.", reply: "It'll be here when you're ready." },
+        ],
+      },
+      {
+        id: "npc-eubin", name: "EUBIN", baseX: 480, baseY: 210, range: 20, speed: 0.5, phase: 1.4,
+        lines: ["Hii! Welcome to the lounge, make yourself at home!", "Did you know this whole place was made just for you?"],
+        question: "So? What do you think so far?",
+        choices: [
+          { label: "I love it!", reply: "Yesss! Worth every late night, then. Happy birthday, Bea!" },
+          { label: "It's really sweet.", reply: "That's exactly what I was going for. Enjoy your day!" },
+          { label: "Still exploring.", reply: "Take your time! There's more to see. Happy birthday!" },
+        ],
+      },
+    ];
+
+    // ---- Dialogue engine state ----
+    let dialogueOpen = false;
+    let dialogueNpc = null;
+    let dialogueStep = 0;
+    let dialoguePhase = "lines"; // "lines" -> "question" -> "reply"
+    let dialogueChoiceIndex = 0;
+
+    function renderDialogue() {
+      if (!dialogueNpc) return;
+      if (dialoguePhase === "lines") {
+        dlgText.textContent = dialogueNpc.lines[dialogueStep];
+        dlgNext.hidden = false;
+        dlgChoices.hidden = true;
+      } else if (dialoguePhase === "question") {
+        dlgText.textContent = dialogueNpc.question;
+        dlgNext.hidden = true;
+        dlgChoices.hidden = false;
+        dlgChoices.innerHTML = "";
+        dialogueNpc.choices.forEach((choice, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "gw-dialogue-choice";
+          btn.textContent = choice.label;
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            selectDialogueChoice(i);
+          });
+          dlgChoices.appendChild(btn);
+        });
+      } else if (dialoguePhase === "reply") {
+        dlgText.textContent = dialogueNpc.choices[dialogueChoiceIndex].reply;
+        dlgNext.hidden = false;
+        dlgChoices.hidden = true;
+      }
+    }
+
+    function openDialogue(npc) {
+      dialogueNpc = npc;
+      dialogueStep = 0;
+      dialoguePhase = "lines";
+      dialogueOpen = true;
+      dlgName.textContent = npc.name;
+      dlgEl.hidden = false;
+      renderDialogue();
+    }
+
+    function closeDialogue() {
+      dialogueOpen = false;
+      dialogueNpc = null;
+      dlgEl.hidden = true;
+      dlgChoices.innerHTML = "";
+    }
+
+    function advanceDialogue() {
+      if (!dialogueOpen) return;
+      if (dialoguePhase === "lines") {
+        dialogueStep += 1;
+        if (dialogueStep >= dialogueNpc.lines.length) {
+          dialoguePhase = "question";
+        }
+        renderDialogue();
+      } else if (dialoguePhase === "reply") {
+        closeDialogue();
+      }
+      // "question" phase ignores box clicks — a choice button must be picked.
+    }
+
+    function selectDialogueChoice(i) {
+      dialogueChoiceIndex = i;
+      dialoguePhase = "reply";
+      renderDialogue();
+    }
+
+    if (dlgBox) dlgBox.addEventListener("click", advanceDialogue);
+
+    function updateNpcMovement(now) {
+      const t = (now || performance.now()) / 1000;
+      npcRoster.forEach((n) => {
+        const el = document.getElementById(n.id);
+        if (!el) return;
+        const dx = Math.sin(t * n.speed + n.phase) * n.range;
+        el.style.left = (n.baseX + dx) + "px";
+        el.style.top = n.baseY + "px";
+      });
+    }
+
+    document.querySelectorAll(".gw-npc").forEach((el) => {
+      el.addEventListener("click", () => {
+        if (dialogueOpen) return;
+        const npc = npcRoster.find((n) => n.id === el.id);
+        if (npc) openDialogue(npc);
+      });
+    });
 
     function scaleStage() {
       if (!viewport || !stage) return;
@@ -311,15 +481,19 @@
       if (nearestInteract) nearestInteract.click();
     }
 
-    function loop() {
+    function loop(now) {
       const room = activeRoomEl();
       if (!room) { requestAnimationFrame(loop); return; }
 
+      updateNpcMovement(now);
+
       let dx = 0, dy = 0;
-      if (keys["arrowup"] || keys["w"]) dy -= 1;
-      if (keys["arrowdown"] || keys["s"]) dy += 1;
-      if (keys["arrowleft"] || keys["a"]) { dx -= 1; facing = -1; }
-      if (keys["arrowright"] || keys["d"]) { dx += 1; facing = 1; }
+      if (!dialogueOpen) {
+        if (keys["arrowup"] || keys["w"]) dy -= 1;
+        if (keys["arrowdown"] || keys["s"]) dy += 1;
+        if (keys["arrowleft"] || keys["a"]) { dx -= 1; facing = -1; }
+        if (keys["arrowright"] || keys["d"]) { dx += 1; facing = 1; }
+      }
 
       const moving = dx !== 0 || dy !== 0;
       const speed = 2.6;
@@ -376,6 +550,10 @@
       if (world.hidden) return;
       const k = e.key.toLowerCase();
       if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(k)) e.preventDefault();
+      if (dialogueOpen) {
+        if (k === "e" || k === "enter" || k === " ") advanceDialogue();
+        return;
+      }
       keys[k] = true;
       if (k === "e") interact();
     });
@@ -385,14 +563,22 @@
       dpad.querySelectorAll("button").forEach((btn) => {
         const dir = btn.getAttribute("data-dir");
         const setKey = (down) => {
+          if (dialogueOpen) return;
           if (dir === "up") keys["arrowup"] = down;
           if (dir === "down") keys["arrowdown"] = down;
           if (dir === "left") keys["arrowleft"] = down;
           if (dir === "right") keys["arrowright"] = down;
         };
-        btn.addEventListener("touchstart", (e) => { e.preventDefault(); if (dir === "e") interact(); else setKey(true); }, { passive: false });
+        const handlePress = () => {
+          if (dir === "e") {
+            if (dialogueOpen) advanceDialogue(); else interact();
+          } else {
+            setKey(true);
+          }
+        };
+        btn.addEventListener("touchstart", (e) => { e.preventDefault(); handlePress(); }, { passive: false });
         btn.addEventListener("touchend", (e) => { e.preventDefault(); setKey(false); }, { passive: false });
-        btn.addEventListener("mousedown", () => { if (dir === "e") interact(); else setKey(true); });
+        btn.addEventListener("mousedown", () => { handlePress(); });
         btn.addEventListener("mouseup", () => setKey(false));
         btn.addEventListener("mouseleave", () => setKey(false));
       });
