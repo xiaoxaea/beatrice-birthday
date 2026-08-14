@@ -147,78 +147,179 @@
   </div>
 </section>
 
-<!-- ================= INSIDE SITE ================= -->
-<main id="site" hidden>
+<!-- ================= GAME WORLD ================= -->
+<main id="gameWorld" aria-label="Bea-verse game world" hidden>
 
-  <header class="site-header">
-    <p class="eyebrow">hewo gandaa, welcome insidee:3</p>
-    <h2>Welcome inside, Bea</h2>
-    <p class="site-intro">There's a letter that I made for you, I think you can already see it — click the seal to open it. After that, one more very very smol thing—SMOL THING!?!? Anyways, I hope you're ready:p</p>
-  </header>
-
-  <!-- Letter -->
-  <section class="letter-section" aria-label="Birthday letter">
-    <button type="button" class="envelope pixel-panel" id="envelope" aria-haspopup="dialog">
-      <span class="envelope-back"></span>
-      <span class="envelope-flap"></span>
-      <span class="envelope-seal">B</span>
-      <span class="envelope-label">tap the seal to open</span>
-    </button>
-  </section>
-
-  <!-- Music -->
-  <section class="music-section" aria-label="A song for you">
-    <button type="button" class="music-toggle" id="musicToggle" aria-expanded="false" aria-controls="musicPanel">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 18V5l12-2v13"/>
-        <circle cx="6" cy="18" r="3"/>
-        <circle cx="18" cy="16" r="3"/>
-      </svg>
-      <span class="music-toggle-label">song for you</span>
-      <svg class="music-toggle-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 9l6 6 6-6"/>
-      </svg>
-    </button>
-    <div class="music-panel" id="musicPanel">
-      <div class="music-card pixel-panel">
-        <iframe
-          style="border-radius: 12px"
-          src="https://open.spotify.com/embed/track/3hEfpBHxgieRLz4t3kLNEg?utm_source=generator&autoplay=1"
-          width="100%"
-          height="152"
-          frameborder="0"
-          allowfullscreen=""
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy">
-        </iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- Dino game -->
-  <section class="game-section" aria-label="A small game">
-    <p class="eyebrow center">one more thing</p>
-    <h3 class="game-title">Get to 100, if you can</h3>
-    <p class="game-sub">Tap, click, or press space to jump.</p>
-
-    <div class="game-stage pixel-panel" id="gameStage">
-      <div class="game-hud">
-        <span>SCORE <b id="scoreDisplay">0</b></span>
-        <span>BEST <b id="bestDisplay">0</b></span>
-      </div>
-      <canvas id="dinoCanvas" width="640" height="180"></canvas>
-      <p class="game-instructions" id="gameInstructions">press space / tap the game to start</p>
+  <div class="gw-frame">
+    <div class="gw-hud">
+      <span class="gw-hud-tag">SPIDER-BAE</span>
+      <span class="gw-hud-hearts">♥ ♥ ♥</span>
+      <span class="gw-hud-room" id="gwRoomLabel">LOUNGE</span>
     </div>
 
-    <div class="after-game" id="afterGame" hidden>
-      <p class="after-game-copy">WOWWW!! Galing galing naman ng biya na iyan^^.</p>
-      <div class="after-game-buttons">
-        <button type="button" class="btn btn-outline" data-content="poem">Poem</button>
-        <button type="button" class="btn btn-outline" data-content="prose">Proses</button>
-        <button type="button" class="btn btn-outline" data-content="mystery">...</button>
+    <div class="gw-viewport">
+      <div class="gw-stage" id="gwStage">
+
+        <!-- LOUNGE -->
+        <div class="gw-room active" id="room-lounge" data-room="lounge">
+          <div class="gw-floor"></div>
+          <div class="gw-prop gw-rug" style="left:220px;top:150px;"></div>
+          <div class="gw-prop gw-poster" style="left:60px;top:20px;"></div>
+          <div class="gw-prop gw-poster" style="right:60px;top:20px;"></div>
+          <div class="gw-prop gw-couch gw-blocking" style="left:270px;top:250px;"></div>
+          <div class="gw-prop gw-plant" style="left:110px;top:230px;"></div>
+          <div class="gw-prop gw-plant" style="right:110px;top:230px;"></div>
+          <div class="gw-prop gw-arcade-deco gw-blocking" style="left:300px;top:30px;"></div>
+
+          <button type="button" class="gw-door" data-to="letter" data-spawn-x="300" data-spawn-y="260" style="left:20px;top:110px;">
+            <span class="gw-door-glow" style="--door-color:#FFC72C"></span>
+            <span class="gw-door-label">LETTER</span>
+          </button>
+          <button type="button" class="gw-door" data-to="music" data-spawn-x="300" data-spawn-y="260" style="right:20px;top:110px;">
+            <span class="gw-door-glow" style="--door-color:#1E5FC2"></span>
+            <span class="gw-door-label">MUSIC</span>
+          </button>
+          <button type="button" class="gw-door" data-to="runner" data-spawn-x="300" data-spawn-y="260" style="left:20px;bottom:20px;">
+            <span class="gw-door-glow" style="--door-color:#ED1D24"></span>
+            <span class="gw-door-label">RUNNER</span>
+          </button>
+          <button type="button" class="gw-door" data-to="tracker" data-spawn-x="300" data-spawn-y="260" style="right:20px;bottom:20px;">
+            <span class="gw-door-glow" style="--door-color:#D4537E"></span>
+            <span class="gw-door-label">TRACKER</span>
+          </button>
+        </div>
+
+        <!-- LETTER ROOM -->
+        <div class="gw-room" id="room-letter" data-room="letter">
+          <div class="gw-floor gw-floor-warm"></div>
+          <div class="gw-prop gw-bookshelf gw-blocking" style="left:30px;top:30px;"></div>
+          <div class="gw-prop gw-lamp" style="left:560px;top:40px;"></div>
+          <div class="gw-prop gw-rug gw-rug-warm" style="left:220px;top:200px;"></div>
+
+          <button type="button" class="envelope gw-interact gw-interact-envelope" id="envelope" aria-haspopup="dialog" data-hint="hintLetter" style="left:290px;top:110px;">
+            <span class="envelope-back"></span>
+            <span class="envelope-flap"></span>
+            <span class="envelope-seal">B</span>
+          </button>
+          <p class="gw-interact-hint" id="hintLetter" style="left:318px;top:78px;">PRESS E — READ LETTER</p>
+
+          <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="90" data-spawn-y="190" style="left:20px;bottom:20px;">
+            <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
+            <span class="gw-door-label">BACK</span>
+          </button>
+        </div>
+
+        <!-- MUSIC ROOM -->
+        <div class="gw-room" id="room-music" data-room="music">
+          <div class="gw-floor gw-floor-disco"></div>
+          <div class="gw-prop gw-speaker gw-blocking" style="left:30px;top:40px;"></div>
+          <div class="gw-prop gw-speaker gw-blocking" style="right:30px;top:40px;"></div>
+          <div class="gw-prop gw-couch" style="left:270px;top:250px;"></div>
+
+          <button type="button" class="gw-interact gw-interact-jukebox" id="musicToggle" aria-expanded="false" aria-controls="musicPanel" data-hint="hintMusic" style="left:290px;top:110px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+            </svg>
+          </button>
+          <p class="gw-interact-hint" id="hintMusic" style="left:318px;top:78px;">PRESS E — PLAY SONG</p>
+
+          <div class="music-panel gw-music-panel" id="musicPanel">
+            <div class="music-card pixel-panel">
+              <iframe
+                style="border-radius: 12px"
+                src="https://open.spotify.com/embed/track/3hEfpBHxgieRLz4t3kLNEg?utm_source=generator&autoplay=1"
+                width="100%" height="120" frameborder="0" allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"></iframe>
+            </div>
+          </div>
+
+          <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="550" data-spawn-y="190" style="left:20px;bottom:20px;">
+            <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
+            <span class="gw-door-label">BACK</span>
+          </button>
+        </div>
+
+        <!-- RUNNER ROOM -->
+        <div class="gw-room" id="room-runner" data-room="runner">
+          <div class="gw-floor gw-floor-neon"></div>
+          <div class="gw-prop gw-cab-deco gw-blocking" style="left:40px;top:30px;"></div>
+          <div class="gw-prop gw-cab-deco gw-blocking" style="right:40px;top:30px;"></div>
+
+          <button type="button" class="gw-interact gw-interact-cabinet" id="runnerCabinet" data-hint="hintRunner" style="left:290px;top:110px;">🕹️</button>
+          <p class="gw-interact-hint" id="hintRunner" style="left:318px;top:78px;">PRESS E — PLAY GAME</p>
+
+          <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="90" data-spawn-y="250" style="left:20px;bottom:20px;">
+            <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
+            <span class="gw-door-label">BACK</span>
+          </button>
+        </div>
+
+        <!-- TRACKER ROOM -->
+        <div class="gw-room" id="room-tracker" data-room="tracker">
+          <div class="gw-floor gw-floor-cool"></div>
+          <div class="gw-prop gw-monitor-wall gw-blocking" style="left:30px;top:30px;"></div>
+          <div class="gw-prop gw-map-table gw-blocking" style="left:250px;top:230px;"></div>
+
+          <button type="button" class="gw-interact gw-interact-console" id="gpsButton" aria-haspopup="dialog" aria-expanded="false" aria-label="Spidey data tracker" data-hint="hintTracker" style="left:290px;top:110px;">
+            <span class="gps-ping" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-7-7.2-7-12a7 7 0 0 1 14 0c0 4.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.4"/>
+            </svg>
+          </button>
+          <p class="gw-interact-hint" id="hintTracker" style="left:318px;top:78px;">PRESS E — SCAN</p>
+
+          <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="550" data-spawn-y="250" style="right:20px;bottom:20px;">
+            <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
+            <span class="gw-door-label">BACK</span>
+          </button>
+        </div>
+
+        <div class="gw-player" id="gwPlayer">
+          <span class="gw-player-head"></span>
+          <span class="gw-player-body"></span>
+        </div>
       </div>
     </div>
-  </section>
+
+    <p class="gw-prompt" id="gwPrompt">ARROW KEYS / WASD TO MOVE · E TO INTERACT</p>
+
+    <div class="gw-dpad" id="gwDpad" aria-hidden="true">
+      <button type="button" data-dir="up">▲</button>
+      <button type="button" data-dir="left">◀</button>
+      <button type="button" data-dir="right">▶</button>
+      <button type="button" data-dir="down">▼</button>
+      <button type="button" class="gw-dpad-e" data-dir="e">E</button>
+    </div>
+  </div>
+
+  <!-- Runner overlay panel (arcade cabinet screen) -->
+  <div class="runner-overlay" id="runnerOverlay" hidden>
+    <div class="runner-overlay-panel pixel-panel">
+      <button type="button" class="modal-close" id="runnerClose" aria-label="Close">×</button>
+      <p class="eyebrow center">one more thing</p>
+      <h3 class="game-title">Get to 100, if you can</h3>
+      <p class="game-sub">Tap, click, or press space to jump.</p>
+
+      <div class="game-stage" id="gameStage">
+        <div class="game-hud">
+          <span>SCORE <b id="scoreDisplay">0</b></span>
+          <span>BEST <b id="bestDisplay">0</b></span>
+        </div>
+        <canvas id="dinoCanvas" width="640" height="180"></canvas>
+        <p class="game-instructions" id="gameInstructions">press space / tap the game to start</p>
+      </div>
+
+      <div class="after-game" id="afterGame" hidden>
+        <p class="after-game-copy">WOWWW!! Galing galing naman ng biya na iyan^^.</p>
+        <div class="after-game-buttons">
+          <button type="button" class="btn btn-outline" data-content="poem">Poem</button>
+          <button type="button" class="btn btn-outline" data-content="prose">Proses</button>
+          <button type="button" class="btn btn-outline" data-content="mystery">...</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <p>made for a girl, a maiden, a perfect being, and for a person that's worth it &nbsp;·&nbsp; 19</p>
@@ -235,15 +336,7 @@
   </div>
 </div>
 
-<!-- ================= GPS TRACKER CORNER ================= -->
-<button type="button" class="gps-corner" id="gpsButton" aria-haspopup="dialog" aria-expanded="false" aria-label="Spidey data tracker">
-  <span class="gps-ping" aria-hidden="true"></span>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 21s-7-7.2-7-12a7 7 0 0 1 14 0c0 4.8-7 12-7 12z"/>
-    <circle cx="12" cy="9" r="2.4"/>
-  </svg>
-</button>
-
+<!-- ================= GPS TRACKER POPUP (triggered from the Tracker room console) ================= -->
 <div class="gps-overlay" id="gpsOverlay" hidden>
   <div class="gps-popup pixel-panel" role="dialog" aria-modal="true" aria-labelledby="gpsPopupTitle">
     <span class="gps-popup-web" aria-hidden="true"></span>
