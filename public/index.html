@@ -157,7 +157,6 @@
     </div>
 
     <div class="gw-viewport">
-      <span class="gw-hud-hearts">♥ ♥ ♥</span>
       <div class="gw-stage" id="gwStage">
 
         <!-- LOUNGE -->
@@ -183,12 +182,6 @@
             <span class="gw-door-glow" style="--door-color:#ED1D24"></span>
             <span class="gw-door-label">RUNNER</span>
           </button>
-          <!-- FIX: this door used to spawn the player at (300,260) inside the
-               tracker room, which overlaps the map table's blocking hitbox
-               (x:250-340, y:230-280) and froze movement. Spawn moved to
-               (300,190), clear of the monitor wall (y:30-90), the map table
-               (y:230-280), and the console/gpsButton hitbox (x:290-346,
-               y:110-166). -->
           <button type="button" class="gw-door" data-to="tracker" data-spawn-x="300" data-spawn-y="190" style="right:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#D4537E"></span>
             <span class="gw-door-label">TRACKER</span>
@@ -315,7 +308,16 @@
             <span class="gw-npc-body" style="background:#33404F"></span>
           </button>
 
-          <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="550" data-spawn-y="250" style="right:20px;bottom:20px;">
+          <!-- FIX (exit-loop bug): this door used to spawn the player back
+               in the lounge at (550, 250), which sits right against the
+               RUNNER door's hitbox and the couch's blocking box, so the
+               room-switch collision check re-triggered a switch on the very
+               next frame — bouncing the player straight back into the
+               tracker room in an infinite loop. Spawn moved to (470, 150),
+               clear of every door (all at y:110-180 or the bottom row) and
+               clear of the couch (x:270-390, y:250-294) and arcade cabinet
+               (x:300-340, y:30-90). -->
+          <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="470" data-spawn-y="150" style="right:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
             <span class="gw-door-label">BACK</span>
           </button>
@@ -324,6 +326,11 @@
         <div class="gw-player" id="gwPlayer">
           <span class="gw-player-head"></span>
           <span class="gw-player-body"></span>
+          <span class="gw-player-arrow" id="gwPlayerArrow">
+            <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 0 L11 8 L6 6 L1 8 Z"></path>
+            </svg>
+          </span>
         </div>
       </div>
 
@@ -339,6 +346,30 @@
     </div>
 
     <p class="gw-prompt" id="gwPrompt">ARROW KEYS / WASD TO MOVE · E TO INTERACT</p>
+
+    <!-- Pixel hearts moved beside the D-pad / movement controls, pixelated
+         and animated (jump/bob + occasional glitch flicker), instead of
+         sitting as a static text glyph over the game view. -->
+    <div class="gw-hearts-panel" id="gwHeartsPanel" aria-label="Lives">
+      <span class="gw-heart-pixel">
+        <svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg">
+          <path class="heart-fill" d="M2 2h2v-2h4v2h2v-2h4v2h2v6h-2v2h-2v2h-2v2h-4v-2h-2v-2h-2v-2h-2v-6h2z"></path>
+          <path class="heart-shine" d="M3 3h2v2h-2z"></path>
+        </svg>
+      </span>
+      <span class="gw-heart-pixel">
+        <svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg">
+          <path class="heart-fill" d="M2 2h2v-2h4v2h2v-2h4v2h2v6h-2v2h-2v2h-2v2h-4v-2h-2v-2h-2v-2h-2v-6h2z"></path>
+          <path class="heart-shine" d="M3 3h2v2h-2z"></path>
+        </svg>
+      </span>
+      <span class="gw-heart-pixel">
+        <svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg">
+          <path class="heart-fill" d="M2 2h2v-2h4v2h2v-2h4v2h2v6h-2v2h-2v2h-2v2h-4v-2h-2v-2h-2v-2h-2v-6h2z"></path>
+          <path class="heart-shine" d="M3 3h2v2h-2z"></path>
+        </svg>
+      </span>
+    </div>
 
     <div class="gw-dpad" id="gwDpad" aria-hidden="true">
       <button type="button" data-dir="up">▲</button>
