@@ -99,9 +99,9 @@
   // The flight arc above is pre-computed once at spawn time (it's played back
   // as a single CSS keyframe animation, not simulated frame-by-frame), so
   // "bouncing" is done by finding where the path first enters the game
-  // frame's rect and mirroring everything after that point across the wall
-  // it hit — same idea as a ball bouncing off a flat surface, just applied
-  // to the whole precomputed path in one pass.
+  // frame's rect and reflecting the rest of the path off that wall at the
+  // true angle of incidence, then sending it in a straight line far enough
+  // to clear the screen — a proper bounce, not just a mirrored curve.
 
   function getGameRect() {
     const world = document.getElementById("gameWorld");
@@ -121,6 +121,18 @@
   function inRect(pt, rect) {
     return pt.x >= rect.left && pt.x <= rect.right && pt.y >= rect.top && pt.y <= rect.bottom;
   }
+
+  function normalize(v) {
+    const len = Math.max(1e-6, Math.hypot(v.x, v.y));
+    return { x: v.x / len, y: v.y / len };
+  }
+
+  const WALL_NORMALS = {
+    left: { x: -1, y: 0 },
+    right: { x: 1, y: 0 },
+    top: { x: 0, y: -1 },
+    bottom: { x: 0, y: 1 },
+  };
 
   // p0 is outside the rect, p1 is inside it — binary-search along the
   // segment for the boundary crossing, and report which wall it's nearest.
@@ -150,6 +162,11 @@
     return { hit, wall };
   }
 
+  // Finds the first point where the path enters the rect, then replaces
+  // everything from there onward with a straight ray reflected off that
+  // wall (true angle-of-incidence bounce) that travels far enough to clear
+  // the screen entirely. This guarantees the plane can't re-enter the same
+  // box on its way out, which a simple one-axis mirror couldn't promise.
   function applyBounces(points, rect) {
     let path = points.slice();
     let bounces = 0;
@@ -165,20 +182,28 @@
       if (hitIndex === -1) break;
 
       const { hit, wall } = findWallHit(path[hitIndex - 1], path[hitIndex], rect);
-      const before = path.slice(0, hitIndex);
-      const tail = path.slice(hitIndex);
-
-      // Mirror everything after the hit across the wall — a left/right wall
-      // flips the horizontal component and keeps vertical motion going;
-      // a top/bottom wall does the reverse. That's the actual "bounce".
-      const mirrored = tail.map((p) => {
-        if (wall === "left" || wall === "right") {
-          return { x: 2 * hit.x - p.x, y: p.y };
-        }
-        return { x: p.x, y: 2 * hit.y - p.y };
+      const normal = WALL_NORMALS[wall];
+      const inDir = normalize({
+        x: path[hitIndex].x - path[hitIndex - 1].x,
+        y: path[hitIndex].y - path[hitIndex - 1].y,
       });
+      const dot = inDir.x * normal.x + inDir.y * normal.y;
+      const outDir = { x: inDir.x - 2 * dot * normal.x, y: inDir.y - 2 * dot * normal.y };
 
-      path = before.concat([hit], mirrored);
+      // Push a few px outside the wall so the bounce point itself is never
+      // re-classified as "inside" the rect on the next pass.
+      const nudged = { x: hit.x + normal.x * 4, y: hit.y + normal.y * 4 };
+
+      const before = path.slice(0, hitIndex);
+      const tailCount = Math.max(2, path.length - hitIndex);
+      const travel = Math.max(vw(), vh()) * 1.4; // comfortably clears the screen
+      const tail = [];
+      for (let j = 0; j < tailCount; j++) {
+        const t = (j / (tailCount - 1)) * travel;
+        tail.push({ x: nudged.x + outDir.x * t, y: nudged.y + outDir.y * t });
+      }
+
+      path = before.concat(tail);
       bounces += 1;
     }
 
