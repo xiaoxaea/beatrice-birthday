@@ -298,8 +298,22 @@ button{ font-family: inherit; cursor: pointer; }
 .gw-frame{ max-width: 700px; margin: 0 auto; padding: 14px; background: linear-gradient(160deg, #1c2230, #0B0E13); border: 4px solid var(--gold); border-radius: 14px; box-shadow: var(--shadow), 0 0 40px rgba(255,199,44,0.18); }
 
 .gw-hud{ display: flex; justify-content: space-between; align-items: center; font-family: 'Press Start 2P', var(--ui); font-size: 0.5rem; color: var(--paper); letter-spacing: 0.04em; margin-bottom: 0.7rem; padding: 0 0.2rem; }
-.gw-hud-hearts{ color: var(--rose); }
 .gw-hud-room{ color: var(--gold); }
+
+/* Hearts moved off the cramped top HUD row and enlarged in the game
+   screen's lower-left corner, where they're actually easy to see. */
+.gw-hud-hearts{
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  z-index: 21;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  color: var(--rose);
+  text-shadow: 2px 2px 0 var(--ink), 0 0 12px rgba(237,29,36,0.55);
+  pointer-events: none;
+}
 
 .gw-viewport{ width: 100%; max-width: 640px; margin: 0 auto; position: relative; overflow: hidden; border: 3px solid var(--ink-soft); border-radius: 8px; background: #0B0E13; }
 .gw-stage{ width: 640px; height: 360px; position: relative; transform-origin: top left; image-rendering: pixelated; }
