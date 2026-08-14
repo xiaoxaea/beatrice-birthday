@@ -1164,18 +1164,44 @@ button{ font-family: inherit; cursor: pointer; }
   100%{ opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* Arcade cabinet-button treatment for Poem / Proses / ... —
+   dark panel base with a color-coded neon border+glow per button,
+   instead of the flat white default. */
 .btn-outline{
-  background: #fff;
-  color: var(--ink);
-  border-color: var(--ink);
-  box-shadow: 4px 4px 0 var(--edge);
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  color: var(--paper);
+  border-color: var(--gold);
+  box-shadow: 4px 4px 0 var(--edge), 0 0 14px rgba(255,199,44,0.25);
 }
 .btn-outline:hover{
   background: var(--gold);
+  color: var(--ink);
   transform: translate(-2px,-2px);
-  box-shadow: 6px 6px 0 var(--edge);
+  box-shadow: 6px 6px 0 var(--edge), 0 0 20px rgba(255,199,44,0.45);
 }
 .btn-outline:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--edge); }
+
+.after-game-buttons .btn:nth-child(1){
+  border-color: var(--rose);
+  box-shadow: 4px 4px 0 var(--edge), 0 0 14px rgba(237,29,36,0.3);
+}
+.after-game-buttons .btn:nth-child(1):hover{
+  background: var(--rose);
+  color: #fff;
+  box-shadow: 6px 6px 0 var(--edge), 0 0 20px rgba(237,29,36,0.5);
+}
+.after-game-buttons .btn:nth-child(2){
+  border-color: var(--sage);
+  box-shadow: 4px 4px 0 var(--edge), 0 0 14px rgba(30,95,194,0.3);
+}
+.after-game-buttons .btn:nth-child(2):hover{
+  background: var(--sage);
+  color: #fff;
+  box-shadow: 6px 6px 0 var(--edge), 0 0 20px rgba(30,95,194,0.5);
+}
+.after-game-buttons .btn:nth-child(3){
+  border-color: var(--gold);
+}
 
 .site-footer{
   text-align: center;
@@ -1226,7 +1252,7 @@ button{ font-family: inherit; cursor: pointer; }
   top: 0.7rem;
   right: 0.9rem;
   background: var(--rose);
-  border: 2px solid var(--ink);
+  border: 2px solid var(--gold);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -1234,8 +1260,9 @@ button{ font-family: inherit; cursor: pointer; }
   line-height: 1;
   color: #fff;
   font-weight: 800;
+  box-shadow: 0 0 10px rgba(255,199,44,0.55);
 }
-.modal-close:hover{ background: var(--rose-deep); }
+.modal-close:hover{ background: var(--rose-deep); box-shadow: 0 0 14px rgba(255,199,44,0.75); }
 
 .modal h3{
   font-family: var(--display);
