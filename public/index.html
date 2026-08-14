@@ -183,7 +183,13 @@
             <span class="gw-door-glow" style="--door-color:#ED1D24"></span>
             <span class="gw-door-label">RUNNER</span>
           </button>
-          <button type="button" class="gw-door" data-to="tracker" data-spawn-x="300" data-spawn-y="260" style="right:20px;bottom:20px;">
+          <!-- FIX: this door used to spawn the player at (300,260) inside the
+               tracker room, which overlaps the map table's blocking hitbox
+               (x:250-340, y:230-280) and froze movement. Spawn moved to
+               (300,190), clear of the monitor wall (y:30-90), the map table
+               (y:230-280), and the console/gpsButton hitbox (x:290-346,
+               y:110-166). -->
+          <button type="button" class="gw-door" data-to="tracker" data-spawn-x="300" data-spawn-y="190" style="right:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#D4537E"></span>
             <span class="gw-door-label">TRACKER</span>
           </button>
