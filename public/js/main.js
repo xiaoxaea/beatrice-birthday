@@ -94,6 +94,10 @@
   }
 
   function finishTrailer() {
+    // FIX: previously this jumped straight into character select after the
+    // trailer. Now the trailer just reveals the invitation (#gate), which is
+    // already sitting underneath it in normal page flow — no extra call
+    // needed. Character select is kicked off later, from the Yes button.
     if (trailerFinished) return;
     trailerFinished = true;
     if (trailerAdvanceTimer) clearTimeout(trailerAdvanceTimer);
@@ -101,10 +105,7 @@
       trailer.classList.add("hide");
       setTimeout(() => {
         trailer.hidden = true;
-        startCharSelect();
       }, 550);
-    } else {
-      startCharSelect();
     }
   }
 
@@ -202,9 +203,16 @@
   }
 
   function finishCharSelect() {
+    // FIX: character select now runs AFTER the user clicks "Yes" on the
+    // invitation, so once it finishes here, it should hand off straight
+    // into the game world (this used to happen in the yesBtn click handler).
     if (!charSelect) return;
     charSelect.classList.add("hide");
-    setTimeout(() => { charSelect.hidden = true; }, 550);
+    setTimeout(() => {
+      charSelect.hidden = true;
+      if (GW) GW.start();
+      window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    }, 550);
   }
 
   function startCharSelect() {
@@ -552,12 +560,14 @@
   noBtn.addEventListener("click", (e) => { e.preventDefault(); evade(); });
 
   yesBtn.addEventListener("click", () => {
+    // FIX: clicking Yes now fades out the invitation and kicks off the
+    // automated character select. The game world itself only starts once
+    // character select finishes (see finishCharSelect above).
     gate.style.transition = "opacity 0.6s ease";
     gate.style.opacity = "0";
     setTimeout(() => {
       gate.style.display = "none";
-      if (GW) GW.start();
-      window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+      startCharSelect();
     }, 600);
   });
 
