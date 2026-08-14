@@ -18,13 +18,14 @@
   --text-dim: rgba(244,239,225,0.72);
   --panel-dark: #141821;
   --panel-dark-2: #1a1f2b;
+  --edge: #FFC72C;
 
   --display: 'Press Start 2P', 'Bangers', cursive;
   --body: 'Comic Neue', sans-serif;
   --ui: 'Nunito Sans', sans-serif;
 
   --radius: 6px;
-  --shadow: 6px 6px 0 rgba(11,14,19,0.9);
+  --shadow: 6px 6px 0 var(--edge);
   --bounce: cubic-bezier(.34,1.56,.64,1);
 }
 
@@ -855,7 +856,7 @@ button{ font-family: inherit; cursor: pointer; }
   border-radius: 4px;
   padding: 0.85rem 2.1rem;
   border: 3px solid var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--edge);
   transition: transform 0.28s var(--bounce), box-shadow 0.28s var(--bounce), background 0.18s ease;
   clip-path: polygon(
     6px 0, calc(100% - 6px) 0,
@@ -869,15 +870,15 @@ button{ font-family: inherit; cursor: pointer; }
   background: var(--rose);
   color: #fff;
 }
-.btn-yes:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); }
-.btn-yes:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-yes:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--edge); }
+.btn-yes:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--edge); }
 
 .btn-no{
   background: var(--gold);
   color: var(--ink);
   will-change: left, top;
 }
-.btn-no:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-no:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--edge); }
 
 .btn-no.dodging{
   position: fixed;
@@ -889,7 +890,7 @@ button{ font-family: inherit; cursor: pointer; }
   font-family: var(--ui);
   font-weight: 700;
   font-size: 0.8rem;
-  color: var(--ink-soft);
+  color: var(--text-dim);
   opacity: 0.85;
   min-height: 1.2em;
   margin: 0.9rem 0 0;
@@ -943,7 +944,7 @@ button{ font-family: inherit; cursor: pointer; }
   transform: rotate(0.6deg);
   perspective: 400px;
 }
-.envelope:hover{ transform: translate(-2px,-2px) rotate(0.6deg); box-shadow: 8px 8px 0 var(--ink), 0 0 30px rgba(255,199,44,0.28); }
+.envelope:hover{ transform: translate(-2px,-2px) rotate(0.6deg); box-shadow: 8px 8px 0 var(--edge), 0 0 30px rgba(255,199,44,0.28); }
 
 .envelope-back{
   position: absolute;
@@ -1023,7 +1024,7 @@ button{ font-family: inherit; cursor: pointer; }
   background: #fff;
   border: 3px solid var(--ink);
   border-radius: 999px;
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--edge);
   padding: 0.5rem 0.9rem;
   font-family: var(--ui);
   font-weight: 800;
@@ -1033,8 +1034,8 @@ button{ font-family: inherit; cursor: pointer; }
   color: var(--ink);
   transition: transform 0.2s var(--bounce), box-shadow 0.2s var(--bounce);
 }
-.music-toggle:hover{ transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
-.music-toggle:active{ transform: scale(0.92,1.06); box-shadow: 2px 2px 0 var(--ink); }
+.music-toggle:hover{ transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--edge); }
+.music-toggle:active{ transform: scale(0.92,1.06); box-shadow: 2px 2px 0 var(--edge); }
 .music-toggle svg{ width: 17px; height: 17px; flex-shrink: 0; color: var(--sage-deep); }
 .music-toggle-label{ flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .music-toggle-chevron{
@@ -1062,7 +1063,7 @@ button{ font-family: inherit; cursor: pointer; }
   background: #fff;
   border: 3px solid var(--ink);
   border-radius: var(--radius);
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 5px 5px 0 var(--edge);
   padding: 0.6rem;
 }
 
@@ -1162,14 +1163,14 @@ button{ font-family: inherit; cursor: pointer; }
   background: #fff;
   color: var(--ink);
   border-color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--edge);
 }
 .btn-outline:hover{
   background: var(--gold);
   transform: translate(-2px,-2px);
-  box-shadow: 6px 6px 0 var(--ink);
+  box-shadow: 6px 6px 0 var(--edge);
 }
-.btn-outline:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-outline:active{ transform: scale(0.86,1.14) translate(1px,1px); box-shadow: 1px 1px 0 var(--edge); }
 
 .site-footer{
   text-align: center;
@@ -1263,7 +1264,7 @@ button{ font-family: inherit; cursor: pointer; }
   border: 3px solid var(--ink);
   border-radius: 50%;
   background: var(--rose);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 3px 3px 0 var(--edge);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1308,7 +1309,7 @@ button{ font-family: inherit; cursor: pointer; }
   border: 3px solid var(--ink);
   border-radius: 14px;
   padding: 1rem 1.1rem;
-  box-shadow: var(--shadow);
+  box-shadow: 5px 5px 0 var(--edge);
   font-family: var(--body);
   font-weight: 700;
   font-size: 0.88rem;
@@ -1346,7 +1347,7 @@ button{ font-family: inherit; cursor: pointer; }
   width: 100%;
   height: 100%;
   display: block;
-  filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.25));
+  filter: drop-shadow(2px 3px 0 rgba(255,199,44,0.55));
 }
 @keyframes spidey-sway{
   0%, 100%{ transform: rotate(-6deg) translateY(0); }
@@ -1378,6 +1379,7 @@ button{ font-family: inherit; cursor: pointer; }
   transform: translateY(6px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   pointer-events: none;
+  box-shadow: 3px 3px 0 var(--edge);
 }
 .spidey-bubble.show{
   opacity: 1;
@@ -1397,7 +1399,7 @@ button{ font-family: inherit; cursor: pointer; }
   border: 3px solid var(--ink);
   border-radius: 50%;
   background: var(--sage-deep);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 3px 3px 0 var(--edge);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1413,11 +1415,11 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .gps-corner:hover{
   transform: translate(-2px,-2px) rotate(-6deg);
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 5px 5px 0 var(--edge);
 }
 .gps-corner:active{
   transform: scale(0.88,1.1);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 var(--edge);
 }
 .gps-ping{
   position: absolute;
@@ -1510,7 +1512,7 @@ button{ font-family: inherit; cursor: pointer; }
   width: 90px;
   height: auto;
   opacity: 0;
-  filter: drop-shadow(2px 3px 0 rgba(11,14,19,0.18));
+  filter: drop-shadow(2px 3px 0 rgba(255,199,44,0.3));
   will-change: transform, opacity;
 }
 
