@@ -762,10 +762,10 @@ button{ font-family: inherit; cursor: pointer; }
 .gate-card{
   position: relative;
   z-index: 2;
-  background: #fff;
-  border: 4px solid var(--ink);
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 4px solid var(--gold);
   border-radius: var(--radius);
-  box-shadow: var(--shadow), 0 0 30px rgba(30,95,194,0.25);
+  box-shadow: var(--shadow), 0 0 34px rgba(255,199,44,0.18);
   max-width: 520px;
   width: 100%;
   padding: 3rem 2.5rem 2.5rem;
@@ -786,7 +786,7 @@ button{ font-family: inherit; cursor: pointer; }
   font-size: clamp(1.3rem, 5.5vw, 2rem);
   line-height: 1.7;
   margin: 0 0 1.1rem;
-  color: var(--ink);
+  color: var(--paper);
   text-shadow: 3px 3px 0 var(--sage-deep);
 }
 .headline span{
@@ -797,7 +797,7 @@ button{ font-family: inherit; cursor: pointer; }
 .gate-copy{
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--ink-soft);
+  color: var(--text-dim);
   line-height: 1.6;
   margin: 0 0 1.4rem;
 }
@@ -805,8 +805,8 @@ button{ font-family: inherit; cursor: pointer; }
 .gate-question{
   position: relative;
   display: inline-block;
-  background: #fff;
-  border: 3px solid var(--ink);
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 3px solid var(--gold);
   border-radius: 20px;
   padding: 1rem 1.4rem 1.1rem;
   margin: 0 0 2rem;
@@ -814,7 +814,7 @@ button{ font-family: inherit; cursor: pointer; }
   font-weight: 700;
   font-style: normal;
   font-size: 1.15rem;
-  color: var(--ink);
+  color: var(--paper);
 }
 .gate-question::after{
   content:"";
@@ -824,7 +824,7 @@ button{ font-family: inherit; cursor: pointer; }
   transform: translateX(-50%);
   border-width: 15px 10px 0;
   border-style: solid;
-  border-color: var(--ink) transparent transparent;
+  border-color: var(--gold) transparent transparent;
 }
 .gate-question::before{
   content:"";
@@ -834,7 +834,7 @@ button{ font-family: inherit; cursor: pointer; }
   transform: translateX(-50%);
   border-width: 11px 7px 0;
   border-style: solid;
-  border-color: #fff transparent transparent;
+  border-color: #171c28 transparent transparent;
   z-index:1;
 }
 
@@ -1026,8 +1026,8 @@ button{ font-family: inherit; cursor: pointer; }
   align-items: center;
   gap: 0.5rem;
   width: 100%;
-  background: #fff;
-  border: 3px solid var(--ink);
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 3px solid var(--gold);
   border-radius: 999px;
   box-shadow: 4px 4px 0 var(--edge);
   padding: 0.5rem 0.9rem;
@@ -1036,17 +1036,17 @@ button{ font-family: inherit; cursor: pointer; }
   font-size: 0.8rem;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--paper);
   transition: transform 0.2s var(--bounce), box-shadow 0.2s var(--bounce);
 }
 .music-toggle:hover{ transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--edge); }
 .music-toggle:active{ transform: scale(0.92,1.06); box-shadow: 2px 2px 0 var(--edge); }
-.music-toggle svg{ width: 17px; height: 17px; flex-shrink: 0; color: var(--sage-deep); }
+.music-toggle svg{ width: 17px; height: 17px; flex-shrink: 0; color: var(--sage); }
 .music-toggle-label{ flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .music-toggle-chevron{
   width: 15px !important;
   height: 15px !important;
-  color: var(--ink) !important;
+  color: var(--paper) !important;
   transition: transform 0.3s var(--bounce);
 }
 .music-toggle[aria-expanded="true"] .music-toggle-chevron{ transform: rotate(180deg); }
@@ -1065,8 +1065,8 @@ button{ font-family: inherit; cursor: pointer; }
 }
 
 .music-card{
-  background: #fff;
-  border: 3px solid var(--ink);
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 3px solid var(--gold);
   border-radius: var(--radius);
   box-shadow: 5px 5px 0 var(--edge);
   padding: 0.6rem;
@@ -1086,14 +1086,14 @@ button{ font-family: inherit; cursor: pointer; }
 
 .game-stage{
   position: relative;
-  background: var(--paper-2);
-  border: 4px solid var(--ink);
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 4px solid var(--gold);
   border-radius: var(--radius);
   padding: 1.25rem;
   max-width: 680px;
   margin: 0 auto;
   transition: opacity 0.9s ease, transform 0.9s ease;
-  box-shadow: var(--shadow), 0 0 30px rgba(30,95,194,0.2);
+  box-shadow: var(--shadow), 0 0 30px rgba(255,199,44,0.18);
 }
 .game-stage.fading-out{
   opacity: 0;
@@ -1109,7 +1109,7 @@ button{ font-family: inherit; cursor: pointer; }
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--paper);
   margin-bottom: 0.6rem;
 }
 
@@ -1119,7 +1119,7 @@ button{ font-family: inherit; cursor: pointer; }
   display: block;
   background: #fff;
   border-radius: 8px;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--gold);
   touch-action: manipulation;
 }
 
@@ -1127,7 +1127,7 @@ button{ font-family: inherit; cursor: pointer; }
   font-family: var(--ui);
   font-weight: 700;
   font-size: 0.78rem;
-  color: var(--ink-soft);
+  color: var(--text-dim);
   margin: 0.7rem 0 0;
 }
 
