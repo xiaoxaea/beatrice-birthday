@@ -735,14 +735,14 @@
   let dodgeCount = 0;
 
   function randomPosition() {
-    const rect = noBtn.getBoundingClientRect();
-    const margin = 20;
-    const maxX = Math.max(margin, window.innerWidth - rect.width - margin);
-    const maxY = Math.max(margin, window.innerHeight - rect.height - margin);
-    const x = margin + Math.random() * (maxX - margin);
-    const y = margin + Math.random() * (maxY - margin);
-    return { x, y };
-  }
+  const rect = noBtn.getBoundingClientRect();
+  const margin = 20;
+  const maxX = Math.max(margin, window.innerWidth - rect.width - margin);
+  const maxY = Math.max(margin, window.innerHeight - rect.height - margin);
+  const x = margin + Math.random() * (maxX - margin);
+  const y = margin + Math.random() * (maxY - margin);
+  return { x, y };
+}
 
   function moveNoBtn() {
     const { x, y } = randomPosition();
@@ -751,18 +751,27 @@
   }
 
   function evade() {
-    dodgeCount += 1;
-    if (!noBtn.classList.contains("dodging")) {
-      const rect = noBtn.getBoundingClientRect();
-      noBtn.style.left = rect.left + "px";
-      noBtn.style.top = rect.top + "px";
-      noBtn.classList.add("dodging");
-      requestAnimationFrame(moveNoBtn);
-    } else {
-      moveNoBtn();
-    }
-    gateHint.textContent = hints[Math.min(dodgeCount - 1, hints.length - 1)];
+  dodgeCount += 1;
+
+  // FIX: previously .dodging was added AFTER reading getBoundingClientRect(),
+  // so the very first evade() used the button's static (in-flow) position,
+  // which can sit outside the fixed-position containing block once
+  // .dodging (position:fixed) is applied — making the button appear to
+  // vanish for a frame on first hover. Add .dodging FIRST, then measure.
+  if (!noBtn.classList.contains("dodging")) {
+    noBtn.classList.add("dodging");
+    const rect = noBtn.getBoundingClientRect();
+    noBtn.style.left = rect.left + "px";
+    noBtn.style.top = rect.top + "px";
+    // force a reflow so the browser commits the starting position
+    // before we animate it to a new random spot
+    void noBtn.offsetWidth;
+    requestAnimationFrame(moveNoBtn);
+  } else {
+    moveNoBtn();
   }
+  gateHint.textContent = hints[Math.min(dodgeCount - 1, hints.length - 1)];
+}
 
   noBtn.addEventListener("pointerenter", evade);
   noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); evade(); }, { passive: false });
