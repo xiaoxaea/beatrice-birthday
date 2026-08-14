@@ -300,20 +300,12 @@ button{ font-family: inherit; cursor: pointer; }
 .gw-hud{ display: flex; justify-content: space-between; align-items: center; font-family: 'Press Start 2P', var(--ui); font-size: 0.5rem; color: var(--paper); letter-spacing: 0.04em; margin-bottom: 0.7rem; padding: 0 0.2rem; }
 .gw-hud-room{ color: var(--gold); }
 
-/* Hearts moved off the cramped top HUD row and enlarged in the game
-   screen's lower-left corner, where they're actually easy to see. */
-.gw-hud-hearts{
-  position: absolute;
-  left: 12px;
-  bottom: 10px;
-  z-index: 21;
-  font-size: 1.5rem;
-  line-height: 1;
-  letter-spacing: 0.12em;
-  color: var(--rose);
-  text-shadow: 2px 2px 0 var(--ink), 0 0 12px rgba(237,29,36,0.55);
-  pointer-events: none;
-}
+/* Old text-glyph hearts in the corner of the viewport — replaced by the
+   pixel-art .gw-hearts-panel rendered below the D-pad prompt instead, so
+   they sit beside the movement controls rather than floating over the
+   game view. Kept hidden (rather than deleted) in case anything still
+   targets the id. */
+.gw-hud-hearts{ display: none !important; }
 
 .gw-viewport{ width: 100%; max-width: 640px; margin: 0 auto; position: relative; overflow: hidden; border: 3px solid var(--ink-soft); border-radius: 8px; background: #0B0E13; }
 .gw-stage{ width: 640px; height: 360px; position: relative; transform-origin: top left; image-rendering: pixelated; }
@@ -364,6 +356,43 @@ button{ font-family: inherit; cursor: pointer; }
 .gw-player-head{ display: block; width: 22px; height: 15px; background: var(--gwen-white); border: 2px solid var(--gwen-purple); border-radius: 4px; box-sizing: border-box; }
 .gw-player-body{ display: block; width: 22px; height: 16px; background: var(--gwen-pink); margin-top: 2px; }
 .gw-player.facing-left{ transform: scaleX(-1); }
+
+/* Directional facing arrow — a small pixel triangle anchored just below the
+   player sprite, rotated to match whichever way the player is currently
+   moving/facing so it's always clear which way she's pointed. */
+.gw-player-arrow{
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -2px;
+  pointer-events: none;
+  transform-origin: 50% 30%;
+  transition: transform 0.12s steps(4);
+  image-rendering: pixelated;
+  z-index: 4;
+}
+.gw-player-arrow svg{
+  width: 100%;
+  height: 100%;
+  display: block;
+  shape-rendering: crispEdges;
+}
+.gw-player-arrow path{
+  fill: var(--gold);
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+/* the arrow should always read right-side-up regardless of the parent
+   sprite's left/right mirror, so counter-flip it when the player does */
+.gw-player.facing-left .gw-player-arrow{ transform: scaleX(-1) rotate(var(--arrow-rot, 0deg)); }
+.gw-player-arrow{ transform: rotate(var(--arrow-rot, 0deg)); }
+
+@media (prefers-reduced-motion: reduce){
+  .gw-player-arrow{ transition: none; }
+}
 
 /* =========================================================
    NPCs — other unpicked heroes wandering the rooms
@@ -500,6 +529,76 @@ button{ font-family: inherit; cursor: pointer; }
 .gw-music-panel.open{ max-height: 200px; opacity: 1; }
 
 .gw-prompt{ font-family: 'Press Start 2P', var(--ui); font-size: 0.5rem; color: var(--text-dim); text-align: center; margin: 0.9rem 0 0; letter-spacing: 0.04em; }
+
+/* =========================================================
+   Pixel hearts — sit beside the D-pad / movement prompt now,
+   instead of floating over the game view. Jump/bob continuously,
+   with an occasional glitch flicker sweep so they read as "alive"
+   rather than a static HUD readout.
+========================================================= */
+.gw-hearts-panel{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0.6rem 0 0;
+}
+.gw-heart-pixel{
+  width: 16px;
+  height: 14px;
+  position: relative;
+  image-rendering: pixelated;
+  animation: heartJump 1.6s ease-in-out infinite;
+}
+.gw-heart-pixel:nth-child(2){ animation-delay: 0.15s; }
+.gw-heart-pixel:nth-child(3){ animation-delay: 0.3s; }
+
+.gw-heart-pixel svg{
+  width: 100%;
+  height: 100%;
+  display: block;
+  shape-rendering: crispEdges;
+}
+.gw-heart-pixel .heart-fill{ fill: var(--rose); }
+.gw-heart-pixel .heart-shine{ fill: #ffffff; opacity: 0.55; }
+
+@keyframes heartJump{
+  0%, 100%{ transform: translateY(0) scale(1); }
+  20%{ transform: translateY(-4px) scale(1.05, 0.92); }
+  35%{ transform: translateY(0) scale(0.95, 1.08); }
+  50%{ transform: translateY(-1px) scale(1); }
+}
+
+.gw-heart-pixel::after{
+  content: "";
+  position: absolute; inset: 0;
+  background: var(--gold);
+  mix-blend-mode: color-dodge;
+  opacity: 0;
+  clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+  animation: heartGlitch 3.4s steps(1) infinite;
+}
+.gw-heart-pixel:nth-child(2)::after{ animation-delay: 1s; }
+.gw-heart-pixel:nth-child(3)::after{ animation-delay: 2.1s; }
+@keyframes heartGlitch{
+  0%, 92%, 100%{ opacity: 0; transform: translateX(0); }
+  93%{ opacity: 0.8; transform: translateX(-2px); }
+  95%{ opacity: 0.4; transform: translateX(2px); }
+  96%{ opacity: 0; }
+}
+
+.gw-heart-pixel.losing{
+  animation: heartBreak 0.5s ease forwards;
+}
+@keyframes heartBreak{
+  0%{ transform: scale(1); opacity: 1; }
+  40%{ transform: scale(1.3) rotate(-8deg); opacity: 1; }
+  100%{ transform: scale(0.2) rotate(20deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .gw-heart-pixel, .gw-heart-pixel::after{ animation: none !important; }
+}
 
 .gw-dpad{ display: none; grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(2, 46px); grid-template-areas: ". up e" "left down right"; gap: 6px; justify-content: center; margin: 1rem auto 0; }
 .gw-dpad button{ font-family: 'Press Start 2P', var(--ui); font-size: 0.75rem; border: 2px solid var(--gold); border-radius: 6px; background: #1c2230; color: var(--paper); }
