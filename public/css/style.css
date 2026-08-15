@@ -837,6 +837,40 @@ button{ font-family: inherit; cursor: pointer; }
 .gw-interact-hint{ position: absolute; z-index: 4; transform: translateX(-50%); font-family: 'Press Start 2P', var(--ui); font-size: 0.4rem; color: var(--gold); white-space: nowrap; opacity: 0; transition: opacity 0.15s; pointer-events: none; }
 .gw-interact-hint.show{ opacity: 1; }
 
+/* =========================================================
+   Pickup items — small collectible markers scattered around the
+   rooms. Visually a scaled-down, brighter variant of .gw-interact
+   (same family) so they read as "a thing in the world" rather
+   than a door or NPC, with a gentle bob + glow to draw the eye.
+   Once collected via E, main.js adds .gw-pickup--collected which
+   hides the marker (display:none) so it doesn't reappear.
+========================================================= */
+.gw-pickup{
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #2a3348, #141821);
+  box-shadow: 0 0 10px rgba(255,199,44,0.45);
+  font-size: 1.15rem;
+  animation: pickupBob 1.8s ease-in-out infinite;
+}
+.gw-pickup.gw-interact-near{
+  box-shadow: 0 0 20px rgba(255,199,44,0.75);
+  transform: scale(1.12);
+}
+@keyframes pickupBob{
+  0%, 100%{ transform: translateY(0); }
+  50%{ transform: translateY(-5px); }
+}
+.gw-pickup.gw-pickup--collected{
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .gw-pickup{ animation: none; }
+}
+
 .gw-player{ position: absolute; width: 22px; height: 30px; z-index: 5; left: 300px; top: 170px; will-change: transform, left, top; }
 .gw-player-head{ display: block; width: 22px; height: 15px; background: var(--gwen-white); border: 2px solid var(--gwen-purple); border-radius: 4px; box-sizing: border-box; }
 .gw-player-body{ display: block; width: 22px; height: 16px; background: var(--gwen-pink); margin-top: 2px; }
@@ -1092,6 +1126,97 @@ button{ font-family: inherit; cursor: pointer; }
 
 @media (max-width: 720px){
   .gw-dpad{ display: grid; }
+}
+
+/* =========================================================
+   Inventory system — sits below the game viewport, maximizing the
+   blank space that used to be there. Reuses the exact same panel
+   language as .gw-left-box (gold border, dark gradient, corner
+   shadow) so it reads as part of the same visual family as the
+   quest log / spider-chips / vitals boxes, just laid out full-width
+   inside .gw-frame instead of in the fixed side stacks.
+========================================================= */
+.gw-inventory-panel{
+  margin-top: 1.1rem;
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 3px solid var(--gold);
+  border-radius: 12px;
+  box-shadow: var(--shadow), 0 0 22px rgba(255,199,44,0.14);
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.gw-inventory-count{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.5rem;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+
+.gw-inventory-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+  gap: 8px;
+}
+
+.gw-inventory-slot{
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #33404F;
+  border-radius: 8px;
+  background: #141821;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s var(--bounce);
+}
+
+.gw-inventory-slot.filled{
+  border-color: var(--gold);
+  background: #232a3d;
+  box-shadow: 0 0 10px rgba(255,199,44,0.3);
+  animation: invSlotPop 0.4s var(--bounce);
+}
+@keyframes invSlotPop{
+  0%{ transform: scale(0.4); opacity: 0; }
+  60%{ transform: scale(1.12); opacity: 1; }
+  100%{ transform: scale(1); opacity: 1; }
+}
+
+.gw-inventory-slot-label{
+  position: absolute;
+  left: 50%;
+  bottom: -1.5em;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.34rem;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.gw-inventory-slot:hover .gw-inventory-slot-label,
+.gw-inventory-slot:focus-visible .gw-inventory-slot-label{
+  opacity: 1;
+  color: var(--gold);
+}
+
+.gw-inventory-hint{
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin: 0.9rem 0 0;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
+}
+.gw-inventory-hint.hidden{ display: none; }
+
+@media (prefers-reduced-motion: reduce){
+  .gw-inventory-slot.filled{ animation: none; }
 }
 
 /* =========================================================
