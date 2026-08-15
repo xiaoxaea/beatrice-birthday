@@ -370,10 +370,10 @@
     <p class="gw-side-playlist-eyebrow">desktop extra</p>
     <p class="gw-side-playlist-title">TRACK LIST</p>
     <ul class="gw-side-playlist-list" id="gwPlaylistList">
-      <li class="gw-side-playlist-item" data-src="/audio/track-01.mp3">
-        <span class="gw-side-playlist-num">01</span>
-        <span class="gw-side-playlist-name">Sunflower</span>
-      </li>
+      <li class="gw-side-playlist-item" data-src="/audio/track-01.mp3" data-spotify="3KkXRkHbMCARz0aVfEt68P">
+  <span class="gw-side-playlist-num">01</span>
+  <span class="gw-side-playlist-name">Sunflower</span>
+</li>
       <li class="gw-side-playlist-item" data-src="/audio/track-02.mp3">
         <span class="gw-side-playlist-num">02</span>
         <span class="gw-side-playlist-name">Track Two</span>
@@ -402,6 +402,19 @@
       <button type="button" class="gw-playlist-btn" id="playlistNext" aria-label="Next track">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2V6zm-3.5 6L4 6v12l8.5-6z"/></svg>
       </button>
+    </div>
+    <div class="gw-spotify-embed" id="gwSpotifyEmbed" hidden>
+      <iframe
+        id="gwSpotifyIframe"
+        style="border-radius:12px"
+        src=""
+        width="100%"
+        height="152"
+        frameborder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
     </div>
     <audio id="gwPlaylistAudio" preload="none"></audio>
   </aside>
