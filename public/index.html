@@ -291,15 +291,6 @@
             <span class="gw-npc-body" style="background:#33404F"></span>
           </button>
 
-          <!-- FIX (exit-loop bug): this door used to spawn the player back
-               in the lounge at (550, 250), which sits right against the
-               RUNNER door's hitbox and the couch's blocking box, so the
-               room-switch collision check re-triggered a switch on the very
-               next frame — bouncing the player straight back into the
-               tracker room in an infinite loop. Spawn moved to (470, 150),
-               clear of every door (all at y:110-180 or the bottom row) and
-               clear of the couch (x:270-390, y:250-294) and arcade cabinet
-               (x:300-340, y:30-90). -->
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="470" data-spawn-y="150" style="right:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
             <span class="gw-door-label">BACK</span>
@@ -371,9 +362,9 @@
     <p class="gw-side-playlist-title">TRACK LIST</p>
     <ul class="gw-side-playlist-list" id="gwPlaylistList">
       <li class="gw-side-playlist-item" data-src="/audio/track-01.mp3" data-spotify="3KkXRkHbMCARz0aVfEt68P">
-  <span class="gw-side-playlist-num">01</span>
-  <span class="gw-side-playlist-name">Sunflower</span>
-</li>
+        <span class="gw-side-playlist-num">01</span>
+        <span class="gw-side-playlist-name">Sunflower</span>
+      </li>
       <li class="gw-side-playlist-item" data-src="/audio/track-02.mp3">
         <span class="gw-side-playlist-num">02</span>
         <span class="gw-side-playlist-name">Track Two</span>
