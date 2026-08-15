@@ -354,48 +354,86 @@
     </div>
   </div>
 
-  <!-- Desktop-only side playlist. Hidden entirely on mobile widths via CSS
-       (see .gw-side-playlist in style.css) — takes over from the old
-       in-room jukebox, which has been removed. -->
-  <aside class="gw-side-playlist" aria-label="Playlist">
-    <p class="gw-side-playlist-eyebrow">desktop extra</p>
-    <p class="gw-side-playlist-title">TRACK LIST</p>
-    <ul class="gw-side-playlist-list" id="gwPlaylistList">
-      <li class="gw-side-playlist-item" data-src="/audio/track-01.mp3" data-spotify="3KkXRkHbMCARz0aVfEt68P">
-        <span class="gw-side-playlist-num">01</span>
-        <span class="gw-side-playlist-name">Sunflower</span>
-      </li>
-      <li class="gw-side-playlist-item" data-src="/audio/track-02.mp3" data-spotify="68HocO7fx9z0MgDU0ZPHro">
-        <span class="gw-side-playlist-num">02</span>
-        <span class="gw-side-playlist-name">Every Summertime</span>
-      </li>
-      <li class="gw-side-playlist-item" data-src="/audio/track-03.mp3" data-spotify="1WYrTfvKjQYaYfVziGG1ET">
-        <span class="gw-side-playlist-num">03</span>
-        <span class="gw-side-playlist-name">Linger - Remastered</span>
-      </li>
-      <li class="gw-side-playlist-item" data-src="/audio/track-04.mp3" data-spotify="754kgU5rWscRTfvlsuEwFp">
-        <span class="gw-side-playlist-num">04</span>
-        <span class="gw-side-playlist-name">Kiss Me</span>
-      </li>
-      <li class="gw-side-playlist-item" data-src="/audio/track-05.mp3" data-spotify="1jX3kBGxntjFzVD22eEvvV">
-        <span class="gw-side-playlist-num">05</span>
-        <span class="gw-side-playlist-name">Meet Me At Our Spot</span>
-      </li>
-    </ul>
+  <!-- Desktop-only side column: track list + the new vitals monitor, stacked
+       together so they read as one matched set. Hidden entirely on mobile
+       widths via CSS (see .gw-side-stack in style.css). -->
+  <div class="gw-side-stack">
+    <aside class="gw-side-playlist" aria-label="Playlist">
+      <p class="gw-side-playlist-eyebrow">desktop extra</p>
+      <p class="gw-side-playlist-title">TRACK LIST</p>
+      <ul class="gw-side-playlist-list" id="gwPlaylistList">
+        <li class="gw-side-playlist-item" data-src="/audio/track-01.mp3" data-spotify="3KkXRkHbMCARz0aVfEt68P">
+          <span class="gw-side-playlist-num">01</span>
+          <span class="gw-side-playlist-name">Sunflower</span>
+        </li>
+        <li class="gw-side-playlist-item" data-src="/audio/track-02.mp3" data-spotify="68HocO7fx9z0MgDU0ZPHro">
+          <span class="gw-side-playlist-num">02</span>
+          <span class="gw-side-playlist-name">Every Summertime</span>
+        </li>
+        <li class="gw-side-playlist-item" data-src="/audio/track-03.mp3" data-spotify="1WYrTfvKjQYaYfVziGG1ET">
+          <span class="gw-side-playlist-num">03</span>
+          <span class="gw-side-playlist-name">Linger - Remastered</span>
+        </li>
+        <li class="gw-side-playlist-item" data-src="/audio/track-04.mp3" data-spotify="754kgU5rWscRTfvlsuEwFp">
+          <span class="gw-side-playlist-num">04</span>
+          <span class="gw-side-playlist-name">Kiss Me</span>
+        </li>
+        <li class="gw-side-playlist-item" data-src="/audio/track-05.mp3" data-spotify="1jX3kBGxntjFzVD22eEvvV">
+          <span class="gw-side-playlist-num">05</span>
+          <span class="gw-side-playlist-name">Meet Me At Our Spot</span>
+        </li>
+      </ul>
 
-    <div class="gw-side-playlist-controls" id="gwPlaylistControls">
-      <button type="button" class="gw-playlist-btn" id="playlistPrev" aria-label="Previous track">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6V6zm3.5 6 8.5 6V6l-8.5 6z"/></svg>
-      </button>
-      <button type="button" class="gw-playlist-btn gw-playlist-btn-play" id="playlistPlay" aria-label="Play">
-        <svg viewBox="0 0 24 24" fill="currentColor" id="playlistPlayIcon"><path d="M8 5v14l11-7z"/></svg>
-      </button>
-      <button type="button" class="gw-playlist-btn" id="playlistNext" aria-label="Next track">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2V6zm-3.5 6L4 6v12l8.5-6z"/></svg>
-      </button>
-    </div>
-    <audio id="gwPlaylistAudio" preload="none"></audio>
-  </aside>
+      <div class="gw-side-playlist-controls" id="gwPlaylistControls">
+        <button type="button" class="gw-playlist-btn" id="playlistPrev" aria-label="Previous track">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6V6zm3.5 6 8.5 6V6l-8.5 6z"/></svg>
+        </button>
+        <button type="button" class="gw-playlist-btn gw-playlist-btn-play" id="playlistPlay" aria-label="Play">
+          <svg viewBox="0 0 24 24" fill="currentColor" id="playlistPlayIcon"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button type="button" class="gw-playlist-btn" id="playlistNext" aria-label="Next track">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2V6zm-3.5 6L4 6v12l8.5-6z"/></svg>
+        </button>
+      </div>
+      <audio id="gwPlaylistAudio" preload="none"></audio>
+    </aside>
+
+    <!-- Spidey-sense vitals monitor — a live "heartbeat" readout wired to
+         the game: PULSE rises while Bea's moving, SIGNAL fills up near
+         doors/NPCs/interactables, and the waveform spikes whenever a quest
+         completes. The whole box is also tappable for a manual "ping". -->
+    <aside class="gw-left-box gw-vitals-panel" id="gwVitalsPanel" aria-label="Spidey-sense monitor, tap to ping" role="button" tabindex="0">
+      <p class="gw-left-box-eyebrow">vitals uplink</p>
+      <p class="gw-vitals-title">
+        SPIDEY-SENSE
+        <span class="gw-vitals-live">LIVE</span>
+      </p>
+
+      <div class="gw-vitals-graph">
+        <canvas id="gwVitalsCanvas" width="230" height="56"></canvas>
+        <span class="gw-vitals-spike-label" id="gwVitalsSpikeLabel">SPIKE!</span>
+      </div>
+
+      <div class="gw-vitals-stats">
+        <div class="gw-vitals-stat">
+          <span class="gw-vitals-stat-label">PULSE</span>
+          <span class="gw-vitals-stat-value"><span id="gwVitalsPulse">72</span> <small>bpm</small></span>
+        </div>
+        <div class="gw-vitals-stat">
+          <span class="gw-vitals-stat-label">FOCUS</span>
+          <div class="gw-vitals-bar-track"><div class="gw-vitals-bar-fill" id="gwVitalsFocusFill"></div></div>
+        </div>
+        <div class="gw-vitals-stat">
+          <span class="gw-vitals-stat-label">SIGNAL</span>
+          <div class="gw-vitals-signal" id="gwVitalsSignal">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <p class="gw-vitals-hint">tap to ping</p>
+    </aside>
+  </div>
   </div>
 
   <!-- Runner overlay panel (arcade cabinet screen) -->
