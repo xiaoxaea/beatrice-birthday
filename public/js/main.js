@@ -116,8 +116,10 @@
     trailerAdvanceTimer = setTimeout(advanceTrailer, 2500);
   }
 
+  let trailerStarted = false;
   function startTrailer() {
-    if (!trailer) return;
+    if (!trailer || trailerStarted) return;
+    trailerStarted = true;
     buildTrailerSkyline();
     buildTrailerGlitch();
     trailer.hidden = false;
@@ -853,10 +855,18 @@
       }
 
       if (progress >= 100 && pageLoaded) {
+        // Start the trailer FIRST, while the boot loader is still fully
+        // opaque on top of it. Only once the trailer is actually rendered
+        // do we begin fading the boot loader out — that way, as the boot
+        // loader becomes transparent, what shows through underneath is the
+        // trailer (already in place), not the invitation gate sitting
+        // further down in the stacking order. Previously the trailer wasn't
+        // unhidden until after the boot loader had already faded, which
+        // let the gate flash through for that gap.
+        startTrailer();
         setTimeout(() => bootLoader.classList.add("hide"), 350);
         setTimeout(() => {
           bootLoader.hidden = true;
-          startTrailer();
         }, 900);
         return;
       }
