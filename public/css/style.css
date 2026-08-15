@@ -295,7 +295,105 @@ button{ font-family: inherit; cursor: pointer; }
 #gameWorld{ padding: 1.5rem 1rem 3rem; min-height: 100vh; background: radial-gradient(circle at 85% 8%, rgba(237,29,36,0.2), transparent 42%), radial-gradient(circle at 8% 60%, rgba(30,95,194,0.26), transparent 46%), var(--ink); }
 #gameWorld[hidden]{ display: none; }
 
+/* Wraps .gw-frame and the desktop-only side playlist. On narrow (mobile)
+   viewports this stays a plain centered block — .gw-side-playlist is
+   display:none there, so nothing changes for mobile users. On wide
+   viewports it becomes a flex row so the playlist sits in the unused
+   margin beside the game frame instead of empty space. */
+.gw-layout{ max-width: 700px; margin: 0 auto; }
+
 .gw-frame{ max-width: 700px; margin: 0 auto; padding: 14px; background: linear-gradient(160deg, #1c2230, #0B0E13); border: 4px solid var(--gold); border-radius: 14px; box-shadow: var(--shadow), 0 0 40px rgba(255,199,44,0.18); }
+
+/* =========================================================
+   Desktop-only side playlist
+   Replaces the old in-room jukebox. Hidden by default (mobile-first);
+   only revealed once there's enough spare width beside the game frame
+   for it to sit comfortably without cramping anything.
+========================================================= */
+.gw-side-playlist{ display: none; }
+
+@media (min-width: 1180px){
+  .gw-layout{
+    max-width: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 28px;
+  }
+  .gw-frame{ margin: 0; flex: 0 0 auto; }
+
+  .gw-side-playlist{
+    display: block;
+    width: 230px;
+    flex: 0 0 auto;
+    margin-top: 6px;
+    padding: 1.1rem 1.1rem 1.3rem;
+    background: linear-gradient(160deg, #1c2230, #0B0E13);
+    border: 3px solid var(--gold);
+    border-radius: 10px;
+    box-shadow: var(--shadow), 0 0 24px rgba(255,199,44,0.14);
+  }
+  .gw-side-playlist-eyebrow{
+    font-family: 'Press Start 2P', var(--ui);
+    font-size: 0.4rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 0.5rem;
+    opacity: 0.85;
+  }
+  .gw-side-playlist-title{
+    font-family: 'Press Start 2P', var(--ui);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    color: var(--paper);
+    margin: 0 0 0.9rem;
+  }
+  .gw-side-playlist-list{
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .gw-side-playlist-item{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem 0.6rem;
+    background: #1a1f2b;
+    border: 2px solid #33404F;
+    border-radius: 6px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .gw-side-playlist-item:hover{
+    border-color: var(--gold);
+    background: #232a3d;
+  }
+  .gw-side-playlist-num{
+    font-family: 'Press Start 2P', var(--ui);
+    font-size: 0.42rem;
+    color: var(--gold);
+    flex: 0 0 auto;
+  }
+  .gw-side-playlist-name{
+    font-family: var(--ui);
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--paper);
+    line-height: 1.3;
+  }
+  .gw-side-playlist-note{
+    font-family: var(--ui);
+    font-weight: 700;
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.75;
+  }
+}
 
 .gw-hud{ display: flex; justify-content: space-between; align-items: center; font-family: 'Press Start 2P', var(--ui); font-size: 0.5rem; color: var(--paper); letter-spacing: 0.04em; margin-bottom: 0.7rem; padding: 0 0.2rem; }
 .gw-hud-room{ color: var(--gold); }
@@ -340,7 +438,6 @@ button{ font-family: inherit; cursor: pointer; }
 .gw-interact{ position: absolute; width: 56px; height: 56px; border: 2px solid var(--gold); border-radius: 8px; background: #1c2230; display: flex; align-items: center; justify-content: center; z-index: 3; box-shadow: 0 0 12px rgba(255,199,44,0.3); transition: box-shadow 0.2s, transform 0.2s; padding: 0; }
 .gw-interact svg{ width: 22px; height: 22px; color: #fff; }
 .gw-interact.gw-interact-near{ box-shadow: 0 0 22px rgba(255,199,44,0.65); transform: scale(1.07); }
-.gw-interact-jukebox svg{ color: var(--sage); }
 .gw-interact-cabinet{ font-size: 1.6rem; }
 .gw-interact-console svg{ color: var(--gwen-pink); }
 
@@ -524,9 +621,6 @@ button{ font-family: inherit; cursor: pointer; }
   .gw-dialogue-box{ animation: none; }
   .gw-dialogue-next{ animation: none; }
 }
-
-.gw-music-panel{ position: absolute; left: 200px; top: 175px; width: 220px; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s var(--bounce), opacity 0.3s ease; z-index: 6; }
-.gw-music-panel.open{ max-height: 200px; opacity: 1; }
 
 .gw-prompt{ font-family: 'Press Start 2P', var(--ui); font-size: 0.5rem; color: var(--text-dim); text-align: center; margin: 0.9rem 0 0; letter-spacing: 0.04em; }
 
