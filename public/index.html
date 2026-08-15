@@ -199,6 +199,10 @@
             <span class="gw-npc-head" style="background:#FFC72C"></span>
             <span class="gw-npc-body" style="background:#33404F"></span>
           </button>
+
+          <!-- Pickups -->
+          <button type="button" class="gw-pickup gw-interact" id="pickup-webshooter" data-item="webshooter" data-hint="hintPickupWebshooter" style="left:170px;top:70px;">🕸️</button>
+          <p class="gw-interact-hint" id="hintPickupWebshooter" style="left:198px;top:38px;">PRESS E — PICK UP</p>
         </div>
 
         <!-- LETTER ROOM -->
@@ -222,6 +226,10 @@
             <span class="gw-npc-body" style="background:#111111"></span>
           </button>
 
+          <!-- Pickup -->
+          <button type="button" class="gw-pickup gw-interact" id="pickup-photo" data-item="photo" data-hint="hintPickupPhoto" style="left:120px;top:230px;">🖼️</button>
+          <p class="gw-interact-hint" id="hintPickupPhoto" style="left:148px;top:198px;">PRESS E — PICK UP</p>
+
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="90" data-spawn-y="190" style="left:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
             <span class="gw-door-label">BACK</span>
@@ -241,6 +249,10 @@
             <span class="gw-npc-head" style="background:#B0141A"></span>
             <span class="gw-npc-body" style="background:#FFC72C"></span>
           </button>
+
+          <!-- Pickup -->
+          <button type="button" class="gw-pickup gw-interact" id="pickup-vinyl" data-item="vinyl" data-hint="hintPickupVinyl" style="left:480px;top:110px;">💿</button>
+          <p class="gw-interact-hint" id="hintPickupVinyl" style="left:508px;top:78px;">PRESS E — PICK UP</p>
 
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="550" data-spawn-y="190" style="left:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
@@ -263,6 +275,10 @@
             <span class="gw-npc-head" style="background:#0f0f0f"></span>
             <span class="gw-npc-body" style="background:#1E5FC2"></span>
           </button>
+
+          <!-- Pickup -->
+          <button type="button" class="gw-pickup gw-interact" id="pickup-token" data-item="token" data-hint="hintPickupToken" style="left:150px;top:110px;">🪙</button>
+          <p class="gw-interact-hint" id="hintPickupToken" style="left:178px;top:78px;">PRESS E — PICK UP</p>
 
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="150" data-spawn-y="190" style="left:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
@@ -290,6 +306,10 @@
             <span class="gw-npc-head" style="background:#FFC72C"></span>
             <span class="gw-npc-body" style="background:#33404F"></span>
           </button>
+
+          <!-- Pickup -->
+          <button type="button" class="gw-pickup gw-interact" id="pickup-badge" data-item="badge" data-hint="hintPickupBadge" style="left:150px;top:230px;">🎖️</button>
+          <p class="gw-interact-hint" id="hintPickupBadge" style="left:178px;top:198px;">PRESS E — PICK UP</p>
 
           <button type="button" class="gw-door gw-door-back" data-to="lounge" data-spawn-x="470" data-spawn-y="150" style="right:20px;bottom:20px;">
             <span class="gw-door-glow" style="--door-color:#F4EFE1"></span>
@@ -351,6 +371,20 @@
       <button type="button" data-dir="right">▶</button>
       <button type="button" data-dir="down">▼</button>
       <button type="button" class="gw-dpad-e" data-dir="e">E</button>
+    </div>
+
+    <!-- Inventory system — sits in the blank space below the game viewport,
+         same gold-edge panel language as the quest log / spider-chips /
+         vitals boxes. Items are picked up with E from pickups scattered
+         around the rooms and appear here as filled slots. -->
+    <div class="gw-inventory-panel" id="gwInventoryPanel" aria-label="Inventory">
+      <p class="gw-left-box-eyebrow">carried items</p>
+      <p class="gw-left-box-title">
+        INVENTORY
+        <span class="gw-inventory-count"><span id="gwInvCount">0</span>/<span id="gwInvTotal">0</span></span>
+      </p>
+      <div class="gw-inventory-grid" id="gwInventoryGrid"></div>
+      <p class="gw-inventory-hint" id="gwInventoryHint">nothing collected yet — explore the rooms</p>
     </div>
   </div>
 
