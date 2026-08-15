@@ -225,6 +225,79 @@
     });
   }
 
+  // ---- Quest log + Spider-Chips reward system ----
+  const QuestSystem = (function () {
+    const CHIP_REWARD = 10;
+    const quests = ["letter", "npc", "music", "runner", "tracker"];
+    const completed = new Set();
+
+    const leftStack = document.getElementById("gwLeftStack");
+    const questList = document.getElementById("gwQuestList");
+    const progressFill = document.getElementById("gwQuestProgressFill");
+    const progressLabel = document.getElementById("gwQuestProgressLabel");
+    const chipTotalEl = document.getElementById("gwChipTotal");
+    const chipIcon = document.getElementById("gwChipIcon");
+    const chipToast = document.getElementById("gwChipToast");
+    const chipToastText = document.getElementById("gwChipToastText");
+
+    let chips = 0;
+    let toastTimer = null;
+
+    function reveal() {
+      if (leftStack) leftStack.hidden = false;
+    }
+
+    function positionToast() {
+      if (!chipToast || !leftStack) return;
+      // float just above the left stack, regardless of viewport height
+      const rect = leftStack.getBoundingClientRect();
+      chipToast.style.bottom = (window.innerHeight - rect.top + 14) + "px";
+    }
+
+    function showToast(questLabel) {
+      if (!chipToast) return;
+      chipToastText.innerHTML = 'Quest complete! <b>+' + CHIP_REWARD + ' Spider-Chips</b>';
+      positionToast();
+      chipToast.classList.add("show");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => chipToast.classList.remove("show"), 2600);
+    }
+
+    function updateProgress() {
+      const done = completed.size;
+      const total = quests.length;
+      if (progressFill) progressFill.style.width = (done / total * 100) + "%";
+      if (progressLabel) progressLabel.textContent = done + "/" + total;
+    }
+
+    function updateChips() {
+      if (chipTotalEl) chipTotalEl.textContent = String(chips);
+      if (chipIcon) {
+        chipIcon.classList.remove("earning");
+        void chipIcon.offsetWidth;
+        chipIcon.classList.add("earning");
+      }
+    }
+
+    function complete(questId) {
+      if (!quests.includes(questId) || completed.has(questId)) return;
+      completed.add(questId);
+      chips += CHIP_REWARD;
+
+      const item = questList ? questList.querySelector('[data-quest="' + questId + '"]') : null;
+      if (item) {
+        item.classList.add("done", "just-done");
+        setTimeout(() => item.classList.remove("just-done"), 420);
+      }
+
+      updateProgress();
+      updateChips();
+      showToast(questId);
+    }
+
+    return { reveal, complete, updateProgress, updateChips };
+  })();
+
   // ---- Game World engine ----
   const GW = (function () {
     const world = document.getElementById("gameWorld");
@@ -383,6 +456,8 @@
       dlgName.textContent = npc.name;
       dlgEl.hidden = false;
       renderDialogue();
+      // Talking to any hero satisfies the "talk to a hero" quest
+      QuestSystem.complete("npc");
     }
 
     function closeDialogue() {
@@ -615,6 +690,9 @@
         playerArrow.style.setProperty("--arrow-rot", ARROW_ROTATION[facingDir] + "deg");
       }
       requestAnimationFrame(loop);
+      QuestSystem.reveal();
+      QuestSystem.updateProgress();
+      QuestSystem.updateChips();
     }
 
     return { start, scaleStage };
@@ -816,6 +894,7 @@
       fetchContent("letter")
         .then((data) => openModal("for you", data.title, data.body))
         .catch(() => openModal("for you", "For Beatrice", "The letter could not be loaded right now — please try again in a moment."));
+      QuestSystem.complete("letter");
     }, 450);
   });
 
@@ -837,6 +916,7 @@
       gameStage.hidden = true;
       afterGame.hidden = false;
     }, 900);
+    QuestSystem.complete("runner");
   });
 
   // Runner arcade cabinet
@@ -867,6 +947,7 @@
   function openGpsPopup() {
     gpsOverlay.hidden = false;
     gpsButton.setAttribute("aria-expanded", "true");
+    QuestSystem.complete("tracker");
   }
   function closeGpsPopup() {
     gpsOverlay.hidden = true;
@@ -896,6 +977,7 @@
   const ICON_PAUSE = '<path d="M7 5h4v14H7zm6 0h4v14h-4z"/>';
 
   let gwTrackIndex = 0;
+  let gwMusicQuestDone = false;
 
   // Spotify embed swap-in — Spotify tracks can't be streamed through a plain
   // <audio> tag (no public raw-audio URL), so whenever the selected track has
@@ -912,6 +994,11 @@
     const item = gwPlaylistItems[gwTrackIndex];
     gwPlaylistItems.forEach((it) => it.classList.remove("playing"));
     item.classList.add("playing");
+
+    if (autoplay && !gwMusicQuestDone) {
+      gwMusicQuestDone = true;
+      QuestSystem.complete("music");
+    }
 
     const spotifyId = item.getAttribute("data-spotify");
 
@@ -955,6 +1042,10 @@
       if (!gwAudio.src) gwLoadTrack(gwTrackIndex, false);
       if (gwAudio.paused) {
         gwAudio.play().catch(() => {});
+        if (!gwMusicQuestDone) {
+          gwMusicQuestDone = true;
+          QuestSystem.complete("music");
+        }
       } else {
         gwAudio.pause();
       }
@@ -973,5 +1064,6 @@
   });
 
   if (gwPlaylistItems.length) gwLoadTrack(0, false);
+  gwMusicQuestDone = false; // initial silent load shouldn't count as the quest
 
 })();
