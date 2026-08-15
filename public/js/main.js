@@ -9,6 +9,10 @@
   const glitchCode = document.getElementById("glitchCode");
   const trailerHeroA = document.getElementById("trailerHeroA");
   const trailerHeroB = document.getElementById("trailerHeroB");
+  const trailerHeroAVisual = document.getElementById("trailerHeroAVisual");
+  const trailerHeroBVisual = document.getElementById("trailerHeroBVisual");
+  const trailerHeroABubble = document.getElementById("trailerHeroABubble");
+  const trailerHeroBBubble = document.getElementById("trailerHeroBBubble");
   const trailerSkipBtn = document.getElementById("trailerSkipBtn");
 
   let trailerCurrentFrame = 0;
@@ -17,17 +21,27 @@
   let trailerAdvanceTimer = null;
 
   function buildTrailerSkyline() {
-    if (!trailerSkyline || trailerSkyline.childElementCount) return;
-    const heights = [30, 55, 24, 70, 40, 85, 28, 62, 46, 75, 34, 58];
+    if (!trailerSkyline) return;
+    // Rebuilt from scratch (rather than the old "only build once, fixed
+    // 12 bars" approach) so the skyline always reaches the far right edge
+    // of the screen, however wide the viewport is — previously it stopped
+    // after ~480px, leaving a visibly empty gap on wider screens.
+    trailerSkyline.innerHTML = "";
+    const heights = [30, 55, 24, 70, 40, 85, 28, 62, 46, 75, 34, 58, 42, 66, 26, 78, 36, 60, 48, 22];
+    const barWidth = 34;
+    const step = 40; // barWidth + gap, matches original spacing
+    const targetWidth = Math.max(window.innerWidth, (trailer && trailer.offsetWidth) || 0, 1200);
+    const count = Math.ceil(targetWidth / step) + 3; // small buffer past the edge
     let x = 0;
-    heights.forEach((h) => {
+    for (let i = 0; i < count; i++) {
+      const h = heights[i % heights.length];
       const bar = document.createElement("span");
       bar.style.left = x + "px";
-      bar.style.width = "34px";
+      bar.style.width = barWidth + "px";
       bar.style.height = h + "px";
       trailerSkyline.appendChild(bar);
-      x += 40;
-    });
+      x += step;
+    }
   }
 
   function buildTrailerGlitch() {
@@ -62,6 +76,13 @@
     let ax = -60;
     let bx = -110;
 
+    // Frame 1 (the swinging shot) only stays on screen for ~2.5s before the
+    // trailer auto-advances, so the sweep speed is scaled to the screen
+    // width to guarantee a full pass (start-to-finish) happens comfortably
+    // inside that window instead of crawling a few hundred pixels and
+    // looking stuck, like it did at fixed 4px/frame.
+    const SWEEP_MS = 2100;
+
     function step() {
       if (!trailer || trailer.classList.contains("hide") || trailerFinished) {
         trailerHeroLoopRunning = false;
@@ -73,18 +94,51 @@
         requestAnimationFrame(step);
         return;
       }
-      ax += 4;
-      bx += 4;
       const stageWidth = trailer.offsetWidth || 800;
+      const speed = (stageWidth + 170) / (SWEEP_MS / 16.67); // ~px per animation frame at 60fps
+      ax += speed;
+      bx += speed;
       if (ax > stageWidth + 60) ax = -60;
-      if (bx > stageWidth + 60) bx = -110;
+      if (bx > stageWidth + 110) bx = -110;
       const bobA = Math.sin(ax * 0.04) * 22;
       const bobB = Math.sin(bx * 0.04 + 1) * 18;
-      if (trailerHeroA) trailerHeroA.style.transform = "translate(" + ax + "px," + bobA + "px) rotate(" + (bobA * 1.4) + "deg)";
-      if (trailerHeroB) trailerHeroB.style.transform = "translate(" + bx + "px," + bobB + "px) rotate(" + (bobB * 1.4) + "deg)";
+      // Position/translate lives on the outer hero element; the tilt
+      // rotation is applied only to the inner "visual" wrapper (head +
+      // body), so a speech-bubble sibling on the outer element rides along
+      // with the movement but stays upright instead of spinning with it.
+      if (trailerHeroA) trailerHeroA.style.transform = "translate(" + ax + "px," + bobA + "px)";
+      if (trailerHeroAVisual) trailerHeroAVisual.style.transform = "rotate(" + (bobA * 1.4) + "deg)";
+      if (trailerHeroB) trailerHeroB.style.transform = "translate(" + bx + "px," + bobB + "px)";
+      if (trailerHeroBVisual) trailerHeroBVisual.style.transform = "rotate(" + (bobB * 1.4) + "deg)";
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
+  }
+
+  // ---- Hero banter while swinging (frame 1 only) ----
+  const spideyLines = ["Thwip!", "Left or right?", "Race ya!", "Watch that ledge!", "Almost there!", "Keep up!"];
+  const gwenLines = ["Catch me first!", "Too slow, Spidey!", "Nice web!", "Woo-hoo!", "This way!", "Almost home!"];
+  let heroDialogueTimer = null;
+  let heroDialogueTurn = 0;
+
+  function showHeroBubble(el, text) {
+    if (!el) return;
+    el.textContent = text;
+    el.classList.add("show");
+    setTimeout(() => el.classList.remove("show"), 1400);
+  }
+
+  function cycleHeroDialogue() {
+    if (trailerFinished) return;
+    if (trailerCurrentFrame === 1) {
+      if (heroDialogueTurn % 2 === 0) {
+        showHeroBubble(trailerHeroABubble, spideyLines[Math.floor(Math.random() * spideyLines.length)]);
+      } else {
+        showHeroBubble(trailerHeroBBubble, gwenLines[Math.floor(Math.random() * gwenLines.length)]);
+      }
+      heroDialogueTurn += 1;
+    }
+    heroDialogueTimer = setTimeout(cycleHeroDialogue, 900 + Math.random() * 500);
   }
 
   function showTrailerFrame(i) {
