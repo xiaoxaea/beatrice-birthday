@@ -295,33 +295,40 @@ button{ font-family: inherit; cursor: pointer; }
 #gameWorld{ padding: 1.5rem 1rem 3rem; min-height: 100vh; background: radial-gradient(circle at 85% 8%, rgba(237,29,36,0.2), transparent 42%), radial-gradient(circle at 8% 60%, rgba(30,95,194,0.26), transparent 46%), var(--ink); }
 #gameWorld[hidden]{ display: none; }
 
-/* Wraps .gw-frame and the desktop-only side playlist. On narrow (mobile)
-   viewports this is just a plain block — .gw-side-playlist is display:none
-   there, so nothing changes for mobile users. On wide viewports the frame
-   stays centered exactly as before (its own margin:auto, untouched by the
-   playlist), and the playlist is anchored beside it with absolute
-   positioning so it never shifts the frame off-center. */
+/* Wraps .gw-frame and the desktop-only side stack (track list + vitals
+   monitor). On narrow (mobile) viewports this is just a plain block —
+   .gw-side-stack is display:none there, so nothing changes for mobile
+   users. On wide viewports the frame stays centered exactly as before (its
+   own margin:auto, untouched by the side stack), and the stack is anchored
+   beside it with absolute positioning so it never shifts the frame off-center. */
 .gw-layout{ position: relative; max-width: 1400px; margin: 0 auto; }
 
 .gw-frame{ max-width: 700px; margin: 0 auto; padding: 14px; background: linear-gradient(160deg, #1c2230, #0B0E13); border: 4px solid var(--gold); border-radius: 14px; box-shadow: var(--shadow), 0 0 40px rgba(255,199,44,0.18); }
 
 /* =========================================================
-   Desktop-only side playlist
+   Desktop-only side stack — track list + vitals monitor
    Replaces the old in-room jukebox. Hidden by default (mobile-first);
    only revealed once there's enough spare width beside the game frame
    for it to sit comfortably without cramping anything. Positioned as an
    absolute overlay (not a flex sibling) specifically so it never affects
-   where .gw-frame gets centered on the page.
+   where .gw-frame gets centered on the page. The two boxes stack
+   top-to-bottom with a consistent gap, sharing one gold-edge panel
+   language so they read as one matched set — the vitals box lands in
+   the middle-right gap below the track list.
 ========================================================= */
-.gw-side-playlist{ display: none; }
+.gw-side-stack{ display: none; }
 
 @media (min-width: 1180px){
-  .gw-side-playlist{
-    display: block;
+  .gw-side-stack{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     position: absolute;
     top: 6px;
     right: 0;
     width: 230px;
+  }
+  .gw-side-playlist{
     padding: 1.1rem 1.1rem 1.3rem;
     background: linear-gradient(160deg, #1c2230, #0B0E13);
     border: 3px solid var(--gold);
@@ -665,8 +672,105 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .gw-chip-icon.earning svg{ animation: chipSpin 0.5s ease; }
 
+/* =========================================================
+   Spidey-sense vitals monitor
+   Sits as the second box in .gw-side-stack, below the track list,
+   reusing the same .gw-left-box panel language (gold border, dark
+   gradient fill, same shadow/radius) used everywhere else, so it
+   reads as part of the family rather than a new visual system.
+========================================================= */
+.gw-vitals-panel{
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+.gw-vitals-panel:hover{ box-shadow: var(--shadow), 0 0 30px rgba(255,199,44,0.28); }
+.gw-vitals-panel:active{ transform: translate(1px,1px); }
+
+.gw-vitals-title{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  margin: 0 0 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.gw-vitals-live{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.36rem;
+  color: var(--rose);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.gw-vitals-live::before{
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--rose);
+  animation: vitalsLiveBlink 1.1s steps(1) infinite;
+}
+@keyframes vitalsLiveBlink{ 0%,49%{ opacity: 1; } 50%,100%{ opacity: 0.25; } }
+
+.gw-vitals-graph{
+  position: relative;
+  background: #0c0f16;
+  border: 2px solid #33404F;
+  border-radius: 6px;
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+}
+.gw-vitals-graph canvas{ display: block; width: 100%; height: 56px; }
+.gw-vitals-spike-label{
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.42rem;
+  color: var(--rose);
+  text-shadow: 1px 1px 0 var(--ink);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+.gw-vitals-spike-label.show{ opacity: 1; transform: translateY(0); }
+
+.gw-vitals-stats{ display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 0.75rem; }
+.gw-vitals-stat{ display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.gw-vitals-stat-label{ font-family: 'Press Start 2P', var(--ui); font-size: 0.42rem; color: var(--gold); letter-spacing: 0.04em; flex: 0 0 auto; }
+.gw-vitals-stat-value{ font-family: var(--ui); font-weight: 800; font-size: 0.82rem; color: var(--paper); }
+.gw-vitals-stat-value small{ font-weight: 700; font-size: 0.6rem; color: var(--text-dim); }
+
+.gw-vitals-bar-track{ flex: 1 1 auto; height: 8px; background: #141821; border: 2px solid #33404F; border-radius: 999px; overflow: hidden; margin-left: 8px; }
+.gw-vitals-bar-fill{ height: 100%; width: 20%; background: repeating-linear-gradient(90deg, var(--sage) 0px, var(--sage) 6px, #16478f 6px, #16478f 12px); transition: width 0.25s ease; }
+
+.gw-vitals-signal{ display: flex; align-items: flex-end; gap: 3px; height: 16px; }
+.gw-vitals-signal span{ width: 5px; background: #33404F; border-radius: 1px; transition: background 0.2s ease, box-shadow 0.2s ease; }
+.gw-vitals-signal span:nth-child(1){ height: 5px; }
+.gw-vitals-signal span:nth-child(2){ height: 8px; }
+.gw-vitals-signal span:nth-child(3){ height: 11px; }
+.gw-vitals-signal span:nth-child(4){ height: 14px; }
+.gw-vitals-signal span:nth-child(5){ height: 16px; }
+.gw-vitals-signal span.active{ background: var(--gold); box-shadow: 0 0 6px rgba(255,199,44,0.7); }
+
+.gw-vitals-hint{ font-family: var(--ui); font-weight: 700; font-size: 0.66rem; color: var(--text-dim); text-align: center; margin: 0; letter-spacing: 0.03em; opacity: 0.8; }
+
+.gw-vitals-panel.gw-vitals-spike{ animation: vitalsSpikePulse 0.4s ease; }
+@keyframes vitalsSpikePulse{
+  0%{ box-shadow: var(--shadow), 0 0 22px rgba(255,199,44,0.14); }
+  35%{ box-shadow: var(--shadow), 0 0 34px rgba(237,29,36,0.55); }
+  100%{ box-shadow: var(--shadow), 0 0 22px rgba(255,199,44,0.14); }
+}
+
 @media (prefers-reduced-motion: reduce){
   .gw-quest-item.just-done, .gw-chip-icon.earning svg{ animation: none !important; }
+  .gw-vitals-live::before{ animation: none !important; }
+  .gw-vitals-panel.gw-vitals-spike{ animation: none !important; }
 }
 
 .gw-hud{ display: flex; justify-content: space-between; align-items: center; font-family: 'Press Start 2P', var(--ui); font-size: 0.5rem; color: var(--paper); letter-spacing: 0.04em; margin-bottom: 0.7rem; padding: 0 0.2rem; }
