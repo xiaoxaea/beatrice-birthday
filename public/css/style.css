@@ -296,11 +296,12 @@ button{ font-family: inherit; cursor: pointer; }
 #gameWorld[hidden]{ display: none; }
 
 /* Wraps .gw-frame and the desktop-only side playlist. On narrow (mobile)
-   viewports this stays a plain centered block — .gw-side-playlist is
-   display:none there, so nothing changes for mobile users. On wide
-   viewports it becomes a flex row so the playlist sits in the unused
-   margin beside the game frame instead of empty space. */
-.gw-layout{ max-width: 700px; margin: 0 auto; }
+   viewports this is just a plain block — .gw-side-playlist is display:none
+   there, so nothing changes for mobile users. On wide viewports the frame
+   stays centered exactly as before (its own margin:auto, untouched by the
+   playlist), and the playlist is anchored beside it with absolute
+   positioning so it never shifts the frame off-center. */
+.gw-layout{ position: relative; max-width: 1400px; margin: 0 auto; }
 
 .gw-frame{ max-width: 700px; margin: 0 auto; padding: 14px; background: linear-gradient(160deg, #1c2230, #0B0E13); border: 4px solid var(--gold); border-radius: 14px; box-shadow: var(--shadow), 0 0 40px rgba(255,199,44,0.18); }
 
@@ -308,25 +309,19 @@ button{ font-family: inherit; cursor: pointer; }
    Desktop-only side playlist
    Replaces the old in-room jukebox. Hidden by default (mobile-first);
    only revealed once there's enough spare width beside the game frame
-   for it to sit comfortably without cramping anything.
+   for it to sit comfortably without cramping anything. Positioned as an
+   absolute overlay (not a flex sibling) specifically so it never affects
+   where .gw-frame gets centered on the page.
 ========================================================= */
 .gw-side-playlist{ display: none; }
 
 @media (min-width: 1180px){
-  .gw-layout{
-    max-width: none;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 28px;
-  }
-  .gw-frame{ margin: 0; flex: 0 0 auto; }
-
   .gw-side-playlist{
     display: block;
+    position: absolute;
+    top: 6px;
+    right: 0;
     width: 230px;
-    flex: 0 0 auto;
-    margin-top: 6px;
     padding: 1.1rem 1.1rem 1.3rem;
     background: linear-gradient(160deg, #1c2230, #0B0E13);
     border: 3px solid var(--gold);
