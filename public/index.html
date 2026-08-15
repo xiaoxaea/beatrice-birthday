@@ -365,16 +365,14 @@
 
   <!-- Desktop-only side playlist. Hidden entirely on mobile widths via CSS
        (see .gw-side-playlist in style.css) — takes over from the old
-       in-room jukebox, which has been removed. Static list for now: swap
-       the placeholder titles/data-src paths for your own mp3s and wire up
-       playback whenever you're ready. -->
+       in-room jukebox, which has been removed. -->
   <aside class="gw-side-playlist" aria-label="Playlist">
     <p class="gw-side-playlist-eyebrow">desktop extra</p>
     <p class="gw-side-playlist-title">TRACK LIST</p>
     <ul class="gw-side-playlist-list" id="gwPlaylistList">
       <li class="gw-side-playlist-item" data-src="/audio/track-01.mp3">
         <span class="gw-side-playlist-num">01</span>
-        <span class="gw-side-playlist-name">Track One</span>
+        <span class="gw-side-playlist-name">Sunflower</span>
       </li>
       <li class="gw-side-playlist-item" data-src="/audio/track-02.mp3">
         <span class="gw-side-playlist-num">02</span>
@@ -393,7 +391,19 @@
         <span class="gw-side-playlist-name">Track Five</span>
       </li>
     </ul>
-    <p class="gw-side-playlist-note">swap in your own titles + mp3s here</p>
+
+    <div class="gw-side-playlist-controls" id="gwPlaylistControls">
+      <button type="button" class="gw-playlist-btn" id="playlistPrev" aria-label="Previous track">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6V6zm3.5 6 8.5 6V6l-8.5 6z"/></svg>
+      </button>
+      <button type="button" class="gw-playlist-btn gw-playlist-btn-play" id="playlistPlay" aria-label="Play">
+        <svg viewBox="0 0 24 24" fill="currentColor" id="playlistPlayIcon"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button type="button" class="gw-playlist-btn" id="playlistNext" aria-label="Next track">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2V6zm-3.5 6L4 6v12l8.5-6z"/></svg>
+      </button>
+    </div>
+    <audio id="gwPlaylistAudio" preload="none"></audio>
   </aside>
   </div>
 
