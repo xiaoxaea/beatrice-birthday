@@ -519,14 +519,34 @@ button{ font-family: inherit; cursor: pointer; }
   gap: 8px;
 }
 
-/* ---- Quest log ---- */
+/* ---- Quest log ----
+   Capped at a fixed height and made internally scrollable — the panel
+   itself is position:fixed with no top constraint, so before this it
+   just kept growing upward as quests were added (7 items) and ran off
+   the top of the viewport instead of wrapping/scrolling. */
 .gw-quest-list{
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 4px 0 0;
   display: flex;
   flex-direction: column;
   gap: 7px;
+  max-height: 260px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) #141821;
+}
+.gw-quest-list::-webkit-scrollbar{
+  width: 6px;
+}
+.gw-quest-list::-webkit-scrollbar-track{
+  background: #141821;
+  border-radius: 999px;
+}
+.gw-quest-list::-webkit-scrollbar-thumb{
+  background: var(--gold);
+  border-radius: 999px;
 }
 .gw-quest-item{
   display: flex;
