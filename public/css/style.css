@@ -476,6 +476,16 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .gw-left-stack > *{ pointer-events: auto; }
 
+/* IMPORTANT: `display: flex` above always wins over the browser's built-in
+   [hidden]{display:none} rule since it's an author-stylesheet rule, so the
+   `hidden` attribute set in the HTML (and removed later by
+   QuestSystem.reveal() once character select finishes) was being ignored
+   and the panel showed up immediately on page load. This explicit rule
+   restores the intended behavior — hidden until JS reveals it. */
+.gw-left-stack[hidden]{
+  display: none;
+}
+
 @media (max-width: 1179px){
   .gw-left-stack{ display: none; }
 }
