@@ -1317,6 +1317,41 @@ button{ font-family: inherit; cursor: pointer; }
 .spidey-bubble.show{ opacity: 1; transform: translateY(0); }
 
 /* =========================================================
+   Quest-log completion confetti — a one-time celebratory burst
+   fired by QuestSystem when every quest on the log is checked
+   off (7/7). Plain DOM spans falling from above the viewport,
+   removed automatically once the animation finishes. Skipped
+   entirely under prefers-reduced-motion (guarded in JS as well
+   as here for safety).
+========================================================= */
+.gw-confetti-layer{
+  position: fixed;
+  inset: 0;
+  z-index: 480;
+  pointer-events: none;
+  overflow: hidden;
+}
+.gw-confetti-piece{
+  position: absolute;
+  top: -24px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.95;
+  animation-name: confettiFall;
+  animation-timing-function: cubic-bezier(.4,.1,.6,1);
+  animation-fill-mode: forwards;
+}
+@keyframes confettiFall{
+  0%{ transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100%{ transform: translate(var(--drift), 108vh) rotate(var(--rot)); opacity: 0.85; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .gw-confetti-layer{ display: none; }
+}
+
+/* =========================================================
    GPS tracker popup
 ========================================================= */
 .gps-ping{ position: absolute; inset: -3px; border-radius: 50%; border: 2px solid var(--gold); opacity: 0; animation: gpsPing 2.6s ease-out infinite; }
