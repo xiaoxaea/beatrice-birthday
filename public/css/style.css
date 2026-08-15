@@ -444,6 +444,231 @@ button{ font-family: inherit; cursor: pointer; }
   .gw-spotify-fixed{ display: none; }
 }
 
+/* =========================================================
+   Left column — quest log + spider-chips reward stack
+   Sits fixed in the same left-edge column as the Spotify mini
+   player, stacked above it. Same width, same corner-cut panel
+   language, same gold-edge shadow, evenly gapped so the three
+   boxes (quest log / spider-chips / spotify) read as one matched
+   set. Desktop-only, same breakpoint as the Spotify fixed player.
+========================================================= */
+.gw-left-stack{
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 59;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 16px;
+  /* reserves room above the spotify player, which is mounted
+     separately at the same left:16px/bottom:16px anchor */
+  margin-bottom: 168px;
+  pointer-events: none;
+}
+.gw-left-stack > *{ pointer-events: auto; }
+
+@media (max-width: 1179px){
+  .gw-left-stack{ display: none; }
+}
+
+.gw-left-box{
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 3px solid var(--gold);
+  border-radius: 12px;
+  box-shadow: var(--shadow), 0 0 22px rgba(255,199,44,0.14);
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.gw-left-box-eyebrow{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.4rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 0.5rem;
+  opacity: 0.85;
+}
+.gw-left-box-title{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  margin: 0 0 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* ---- Quest log ---- */
+.gw-quest-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.gw-quest-item{
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 0.5rem 0.6rem;
+  background: #1a1f2b;
+  border: 2px solid #33404F;
+  border-radius: 6px;
+  transition: border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+.gw-quest-checkbox{
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  border: 2px solid var(--sage);
+  border-radius: 3px;
+  background: #141821;
+  position: relative;
+}
+.gw-quest-checkbox svg{
+  position: absolute;
+  inset: -1px;
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.2s var(--bounce), transform 0.2s var(--bounce);
+  color: var(--gold);
+}
+.gw-quest-text{
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: var(--paper);
+}
+.gw-quest-item.done{
+  border-color: var(--gold);
+  background: #232a3d;
+}
+.gw-quest-item.done .gw-quest-checkbox{
+  border-color: var(--gold);
+  background: var(--gold);
+}
+.gw-quest-item.done .gw-quest-checkbox svg{
+  opacity: 1;
+  transform: scale(1);
+  color: var(--ink);
+}
+.gw-quest-item.done .gw-quest-text{
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,199,44,0.55);
+  text-decoration-thickness: 2px;
+}
+.gw-quest-item.just-done{
+  animation: questPop 0.4s var(--bounce);
+}
+@keyframes questPop{
+  0%{ transform: scale(1); }
+  35%{ transform: scale(1.035); box-shadow: 0 0 14px rgba(255,199,44,0.4); }
+  100%{ transform: scale(1); }
+}
+
+.gw-quest-progress{
+  margin-top: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gw-quest-progress-track{
+  flex: 1 1 auto;
+  height: 8px;
+  background: #141821;
+  border: 2px solid #33404F;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.gw-quest-progress-fill{
+  height: 100%;
+  width: 0%;
+  background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 6px, #e0ac1f 6px, #e0ac1f 12px);
+  transition: width 0.4s var(--bounce);
+}
+.gw-quest-progress-label{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 0.42rem;
+  color: var(--gold);
+  flex: 0 0 auto;
+}
+
+/* ---- Spider-Chips reward box ---- */
+.gw-chips-row{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.gw-chip-icon{
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  position: relative;
+}
+.gw-chip-icon svg{ width: 100%; height: 100%; display: block; }
+.gw-chip-total{
+  font-family: 'Press Start 2P', var(--ui);
+  font-size: 1.05rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.gw-chip-sub{
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 0.35rem;
+}
+
+.gw-chip-toast{
+  position: fixed;
+  left: 16px;
+  z-index: 65;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(160deg, #1c2230, #0B0E13);
+  border: 3px solid var(--gold);
+  border-radius: 10px;
+  box-shadow: var(--shadow), 0 0 22px rgba(255,199,44,0.3);
+  padding: 0.6rem 0.9rem;
+  font-family: var(--ui);
+  font-weight: 800;
+  font-size: 0.78rem;
+  color: var(--paper);
+  opacity: 0;
+  transform: translateY(12px) scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.3s var(--bounce), transform 0.3s var(--bounce);
+}
+.gw-chip-toast.show{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.gw-chip-toast-icon{ width: 20px; height: 20px; flex: 0 0 auto; }
+.gw-chip-toast-icon svg{ width: 100%; height: 100%; display: block; }
+.gw-chip-toast b{ color: var(--gold); }
+
+@keyframes chipSpin{
+  0%{ transform: rotate(0deg); }
+  100%{ transform: rotate(360deg); }
+}
+.gw-chip-icon.earning svg{ animation: chipSpin 0.5s ease; }
+
+@media (prefers-reduced-motion: reduce){
+  .gw-quest-item.just-done, .gw-chip-icon.earning svg{ animation: none !important; }
+}
+
 .gw-hud{ display: flex; justify-content: space-between; align-items: center; font-family: 'Press Start 2P', var(--ui); font-size: 0.5rem; color: var(--paper); letter-spacing: 0.04em; margin-bottom: 0.7rem; padding: 0 0.2rem; }
 .gw-hud-room{ color: var(--gold); }
 
