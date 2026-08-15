@@ -22,16 +22,12 @@
 
   function buildTrailerSkyline() {
     if (!trailerSkyline) return;
-    // Rebuilt from scratch (rather than the old "only build once, fixed
-    // 12 bars" approach) so the skyline always reaches the far right edge
-    // of the screen, however wide the viewport is — previously it stopped
-    // after ~480px, leaving a visibly empty gap on wider screens.
     trailerSkyline.innerHTML = "";
     const heights = [30, 55, 24, 70, 40, 85, 28, 62, 46, 75, 34, 58, 42, 66, 26, 78, 36, 60, 48, 22];
     const barWidth = 34;
-    const step = 40; // barWidth + gap, matches original spacing
+    const step = 40;
     const targetWidth = Math.max(window.innerWidth, (trailer && trailer.offsetWidth) || 0, 1200);
-    const count = Math.ceil(targetWidth / step) + 3; // small buffer past the edge
+    const count = Math.ceil(targetWidth / step) + 3;
     let x = 0;
     for (let i = 0; i < count; i++) {
       const h = heights[i % heights.length];
@@ -76,11 +72,6 @@
     let ax = -60;
     let bx = -110;
 
-    // Frame 1 (the swinging shot) only stays on screen for ~2.5s before the
-    // trailer auto-advances, so the sweep speed is scaled to the screen
-    // width to guarantee a full pass (start-to-finish) happens comfortably
-    // inside that window instead of crawling a few hundred pixels and
-    // looking stuck, like it did at fixed 4px/frame.
     const SWEEP_MS = 2100;
 
     function step() {
@@ -95,17 +86,13 @@
         return;
       }
       const stageWidth = trailer.offsetWidth || 800;
-      const speed = (stageWidth + 170) / (SWEEP_MS / 16.67); // ~px per animation frame at 60fps
+      const speed = (stageWidth + 170) / (SWEEP_MS / 16.67);
       ax += speed;
       bx += speed;
       if (ax > stageWidth + 60) ax = -60;
       if (bx > stageWidth + 110) bx = -110;
       const bobA = Math.sin(ax * 0.04) * 22;
       const bobB = Math.sin(bx * 0.04 + 1) * 18;
-      // Position/translate lives on the outer hero element; the tilt
-      // rotation is applied only to the inner "visual" wrapper (head +
-      // body), so a speech-bubble sibling on the outer element rides along
-      // with the movement but stays upright instead of spinning with it.
       if (trailerHeroA) trailerHeroA.style.transform = "translate(" + ax + "px," + bobA + "px)";
       if (trailerHeroAVisual) trailerHeroAVisual.style.transform = "rotate(" + (bobA * 1.4) + "deg)";
       if (trailerHeroB) trailerHeroB.style.transform = "translate(" + bx + "px," + bobB + "px)";
@@ -282,11 +269,6 @@
   }
 
   // ---- Spidey-sense vitals monitor ----
-  // Small self-contained module: draws a live heartbeat-style waveform and a
-  // couple of readouts (PULSE / FOCUS / SIGNAL) in the new side panel next
-  // to the track list. It doesn't own any game state itself — GW feeds it
-  // "energy" (are we moving?) and "signal" (are we near something?) every
-  // frame, and QuestSystem pings it with a spike whenever a quest completes.
   const VitalsSystem = (function () {
     const panel = document.getElementById("gwVitalsPanel");
     const canvas = document.getElementById("gwVitalsCanvas");
@@ -306,8 +288,8 @@
     const history = new Array(W).fill(0);
 
     let phase = 0;
-    let energy = 0.22;       // 0..1, smoothed — how "active" the player currently is
-    let spikeEnergy = 0;     // transient boost from quest completions / manual pings
+    let energy = 0.22;
+    let spikeEnergy = 0;
     let displayedPulse = 72;
     let signalTarget = 0.08;
     let signalDisplay = 0.08;
@@ -415,7 +397,6 @@
 
     function positionToast() {
       if (!chipToast || !leftStack) return;
-      // float just above the left stack, regardless of viewport height
       const rect = leftStack.getBoundingClientRect();
       chipToast.style.bottom = (window.innerHeight - rect.top + 14) + "px";
     }
@@ -463,6 +444,88 @@
     }
 
     return { reveal, complete, updateProgress, updateChips };
+  })();
+
+  // ---- Inventory system ----
+  // Small self-contained module: tracks collected items and renders them as
+  // filled slots in the panel below the game viewport. Items are defined
+  // once here (icon + display name) and picked up in-world via the same
+  // gw-interact / E-key flow used by doors, NPCs, and other interactables.
+  // GW calls InventorySystem.collect(itemId) whenever the player interacts
+  // with a .gw-pickup element.
+  const InventorySystem = (function () {
+    const panel = document.getElementById("gwInventoryPanel");
+    const grid = document.getElementById("gwInventoryGrid");
+    const countEl = document.getElementById("gwInvCount");
+    const totalEl = document.getElementById("gwInvTotal");
+    const hintEl = document.getElementById("gwInventoryHint");
+
+    const itemDefs = {
+      webshooter: { icon: "🕸️", name: "Web Shooter" },
+      photo:      { icon: "🖼️", name: "Old Photo" },
+      vinyl:      { icon: "💿", name: "Mix Record" },
+      token:      { icon: "🪙", name: "Arcade Token" },
+      badge:      { icon: "🎖️", name: "Hero Badge" },
+    };
+    const order = ["webshooter", "photo", "vinyl", "token", "badge"];
+    const collected = new Set();
+
+    if (!panel || !grid) {
+      return { collect() {}, has() { return false; } };
+    }
+
+    function buildSlots() {
+      grid.innerHTML = "";
+      order.forEach((id) => {
+        const def = itemDefs[id];
+        const slot = document.createElement("div");
+        slot.className = "gw-inventory-slot";
+        slot.dataset.item = id;
+        slot.setAttribute("tabindex", "0");
+        slot.setAttribute("aria-label", def.name + " (not yet collected)");
+
+        const label = document.createElement("span");
+        label.className = "gw-inventory-slot-label";
+        label.textContent = def.name;
+        slot.appendChild(label);
+
+        grid.appendChild(slot);
+      });
+      if (totalEl) totalEl.textContent = String(order.length);
+    }
+    buildSlots();
+
+    function updateCount() {
+      if (countEl) countEl.textContent = String(collected.size);
+      if (hintEl) hintEl.classList.toggle("hidden", collected.size > 0);
+    }
+
+    function collect(itemId) {
+      const def = itemDefs[itemId];
+      if (!def || collected.has(itemId)) return;
+      collected.add(itemId);
+
+      const slot = grid.querySelector('[data-item="' + itemId + '"]');
+      if (slot) {
+        slot.textContent = "";
+        const label = document.createElement("span");
+        label.className = "gw-inventory-slot-label";
+        label.textContent = def.name;
+        slot.appendChild(document.createTextNode(def.icon));
+        slot.appendChild(label);
+        slot.classList.add("filled");
+        slot.setAttribute("aria-label", def.name + " (collected)");
+      }
+      updateCount();
+      VitalsSystem.spike(0.9);
+    }
+
+    function has(itemId) {
+      return collected.has(itemId);
+    }
+
+    updateCount();
+    return { collect, has };
   })();
 
   // ---- Game World engine ----
@@ -624,7 +687,6 @@
       dlgName.textContent = npc.name;
       dlgEl.hidden = false;
       renderDialogue();
-      // Talking to any hero satisfies the "talk to a hero" quest
       QuestSystem.complete("npc");
     }
 
@@ -686,6 +748,19 @@
         if (dialogueOpen) return;
         const npc = npcRoster.find((n) => n.id === el.id);
         if (npc) openDialogue(npc);
+      });
+    });
+
+    // Pickup items — clicking (or pressing E while near) a .gw-pickup marker
+    // collects it into the inventory and hides the marker for the rest of
+    // the session.
+    document.querySelectorAll(".gw-pickup").forEach((el) => {
+      el.addEventListener("click", () => {
+        if (dialogueOpen) return;
+        const itemId = el.getAttribute("data-item");
+        if (!itemId) return;
+        InventorySystem.collect(itemId);
+        el.classList.add("gw-pickup--collected");
       });
     });
 
@@ -797,6 +872,7 @@
       nearestInteract = null;
       let bestDist = 9999;
       room.querySelectorAll(".gw-interact").forEach((it) => {
+        if (it.classList.contains("gw-pickup--collected")) return;
         const r = getRect(it);
         const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
         const dist = Math.hypot((px + PLAYER_W / 2) - cx, (py + PLAYER_H / 2) - cy);
@@ -808,8 +884,6 @@
         if (near && dist < bestDist) { bestDist = dist; nearestInteract = it; }
       });
 
-      // Feed the vitals monitor: PULSE tracks whether Bea is on the move,
-      // SIGNAL tracks how close she is to whatever's interactable nearby.
       VitalsSystem.setEnergy(dialogueOpen ? 0.5 : (moving ? 0.62 : 0.22));
       VitalsSystem.setSignal(nearestInteract ? Math.max(0.15, 1 - bestDist / INTERACT_RANGE) : 0.06);
 
@@ -909,14 +983,6 @@
       }
 
       if (progress >= 100 && pageLoaded) {
-        // Start the trailer FIRST, while the boot loader is still fully
-        // opaque on top of it. Only once the trailer is actually rendered
-        // do we begin fading the boot loader out — that way, as the boot
-        // loader becomes transparent, what shows through underneath is the
-        // trailer (already in place), not the invitation gate sitting
-        // further down in the stacking order. Previously the trailer wasn't
-        // unhidden until after the boot loader had already faded, which
-        // let the gate flash through for that gap.
         startTrailer();
         setTimeout(() => bootLoader.classList.add("hide"), 350);
         setTimeout(() => {
@@ -1160,11 +1226,6 @@
   let gwTrackIndex = 0;
   let gwMusicQuestDone = false;
 
-  // Spotify embed swap-in — Spotify tracks can't be streamed through a plain
-  // <audio> tag (no public raw-audio URL), so whenever the selected track has
-  // a data-spotify id, this slot swaps to Spotify's own embedded player
-  // instead of loading a local file, and hides the local play/prev/next
-  // controls since the embed has its own.
   const gwSpotifyEmbed = document.getElementById("gwSpotifyEmbed");
   const gwSpotifyIframe = document.getElementById("gwSpotifyIframe");
   const gwPlaylistControls = document.getElementById("gwPlaylistControls");
@@ -1245,6 +1306,6 @@
   });
 
   if (gwPlaylistItems.length) gwLoadTrack(0, false);
-  gwMusicQuestDone = false; // initial silent load shouldn't count as the quest
+  gwMusicQuestDone = false;
 
 })();
