@@ -935,4 +935,59 @@
     gpsNo.addEventListener("click", closeGpsPopup);
   }
 
+  // Desktop side playlist — play/pause/next/prev controls
+  const gwAudio = document.getElementById("gwPlaylistAudio");
+  const gwPlaylistItems = Array.from(document.querySelectorAll(".gw-side-playlist-item"));
+  const playlistPlay = document.getElementById("playlistPlay");
+  const playlistPlayIcon = document.getElementById("playlistPlayIcon");
+  const playlistPrev = document.getElementById("playlistPrev");
+  const playlistNext = document.getElementById("playlistNext");
+
+  const ICON_PLAY = '<path d="M8 5v14l11-7z"/>';
+  const ICON_PAUSE = '<path d="M7 5h4v14H7zm6 0h4v14h-4z"/>';
+
+  let gwTrackIndex = 0;
+
+  function gwLoadTrack(index, autoplay) {
+    if (!gwAudio || !gwPlaylistItems.length) return;
+    gwTrackIndex = (index + gwPlaylistItems.length) % gwPlaylistItems.length;
+    const item = gwPlaylistItems[gwTrackIndex];
+    gwPlaylistItems.forEach((it) => it.classList.remove("playing"));
+    item.classList.add("playing");
+    gwAudio.src = item.getAttribute("data-src");
+    if (autoplay) {
+      gwAudio.play().catch(() => {});
+    }
+  }
+
+  function gwUpdatePlayIcon() {
+    if (!playlistPlayIcon) return;
+    playlistPlayIcon.innerHTML = (gwAudio && !gwAudio.paused) ? ICON_PAUSE : ICON_PLAY;
+    if (playlistPlay) playlistPlay.setAttribute("aria-label", (gwAudio && !gwAudio.paused) ? "Pause" : "Play");
+  }
+
+  if (playlistPlay && gwAudio) {
+    playlistPlay.addEventListener("click", () => {
+      if (!gwAudio.src) gwLoadTrack(gwTrackIndex, false);
+      if (gwAudio.paused) {
+        gwAudio.play().catch(() => {});
+      } else {
+        gwAudio.pause();
+      }
+    });
+    gwAudio.addEventListener("play", gwUpdatePlayIcon);
+    gwAudio.addEventListener("pause", gwUpdatePlayIcon);
+    gwAudio.addEventListener("ended", () => gwLoadTrack(gwTrackIndex + 1, true));
+  }
+
+  if (playlistPrev) playlistPrev.addEventListener("click", () => gwLoadTrack(gwTrackIndex - 1, true));
+  if (playlistNext) playlistNext.addEventListener("click", () => gwLoadTrack(gwTrackIndex + 1, true));
+
+  gwPlaylistItems.forEach((item, i) => {
+    item.style.cursor = "pointer";
+    item.addEventListener("click", () => gwLoadTrack(i, true));
+  });
+
+  if (gwPlaylistItems.length) gwLoadTrack(0, false);
+
 })();
