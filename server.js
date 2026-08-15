@@ -106,6 +106,63 @@ i like how you like love, how you twist it with things that associate to your li
 
 ...okay, maybe one more thing: I'm really glad you exist. Happy birthday, Beatrice. 🤍`;
 
+/* ---------------------------------------------------------
+   Music-room book letters — five short notes, one per track on
+   the playlist, each explaining why that particular song made
+   the cut and how it ties back to Bea's birthday and this site.
+--------------------------------------------------------- */
+
+const SONG_LETTER_1 = `Track One — "Sunflower" (Post Malone, Swae Lee)
+
+Okay, so this one's kind of the whole reason the site looks the way it does.
+
+"Sunflower" is the theme from Into the Spider-Verse, and once that song was stuck in my head, the Spider-Man idea for your site just followed right after — the pixel Spidey in the corner, the web-shooter doors, the whole "verse" of it. So genuinely, credit where it's due: this song built the bones of this website.
+
+Pero beyond that — a sunflower turns toward the sun, laging naka-harap sa liwanag kahit saan pa ito magpunta. That's very you. Whatever's happening, you find a way to turn toward the good part, or you carry the light there yourself. Nineteen looks like a good year to keep doing exactly that: turning toward whatever makes you feel most like you, again and again.
+
+Happy birthday, Bea. Here's to more sunlight this year.
+—eu`;
+
+const SONG_LETTER_2 = `Track Two — "Every Summertime" (NIKI)
+
+This one's just warm. Parang yung feeling ng late afternoon na ayaw mo pang tapusin — you know that specific kind of nostalgic-but-happy feeling, kahit di mo pa naman siya na-miss talaga, parang alam mo lang na someday you will.
+
+I think that's what I want your birthday to feel like when you look back on it later — not a big loud thing, just warm, soft, something you'd want to replay kahit malayo na ang date niya sa calendar. "Every summertime" din, in a way, is kind of a wish: na sana every year, hindi lang ngayon, ganito rin ka-soft at ka-safe yung pakiramdam mo pag birthday mo.
+
+Maliit lang siyang track sa playlist, pero ganito rin dapat kasing gaan ang pakiramdam mo this year — light, unhurried, yours.
+
+—eu`;
+
+const SONG_LETTER_3 = `Track Three — "Linger" (Remastered) — The Cranberries
+
+This one's an old song pero it fits weirdly well. "Linger" is about a feeling that just... stays. Hindi mo na kailangan pilitin, andun na lang siya, kahit di mo pa alam kung anong gagawin dun.
+
+Honestly parang ganon din tong website na 'to — something that lingered sa isip ko for weeks bago ko pa siya ginawa, hanggang sa naisip ko na lang na sige, gawin ko na lang, para naman siya makarating sa'yo. Some things are worth building just because they refuse to leave your head.
+
+Pang-birthday message naman nito, mas simple lang: sana yung mga bagay na dapat lumingger sa buhay mo this year ay yung mga bagay na talagang worth it — yung mga taong hindi umaalis, yung mga masayang memories na ayaw mong kalimutan, yung mga feeling na okay lang tumagal.
+
+—eu`;
+
+const SONG_LETTER_4 = `Track Four — "Kiss Me" — Sixpence None the Richer
+
+Classic. Kinda hard to make a birthday playlist without one throwback na pang-"dance under the fake stars in the frame" energy, and this one's always been that song for me — starlight, glow-worms, "kiss me out of the bearded barley," the whole soft nostalgic thing.
+
+Wala namang deep na correlation dito sa totoo lang, besides na feeling ko it just belongs sa energy ng buong site — yung kind of song na gustong i-play habang nagdedecorate ka ng birthday na parang movie scene. Medyo corny pero I think you'd like that it's here anyway.
+
+Kung meron mang dapat tandaan dito, siguro just this: hope this year may mga simpleng masasayang gabi ka, yung parang tumatakbo ka lang sa parang, walang big reason, masaya ka lang.
+
+—eu`;
+
+const SONG_LETTER_5 = `Track Five — "Meet Me At Our Spot" — THE ANXIETY: WILLOW, Tyler Cole
+
+Saved this one for last kasi it's literally about having a place — a spot — na pagpupuntahan mo pag gusto mong umalis sa ingay ng lahat. And I think that's kind of what I wanted this whole website to be, actually: your own little spot, kahit for a few minutes lang, away from whatever's loud sa totoong buhay.
+
+The lounge, the rooms, yung mga silly little games — think of it as "our spot" version ng website, isang bahagi lang na ginawa specifically para sa'yo, para pag pagod ka na, may mapupuntahan kang parang lugar na gawa lang para sa'yo.
+
+So — happy birthday, Bea. Sana this website, kahit papaano, naging spot mo rin, kahit sandali lang.
+
+—eu`;
+
 app.get("/api/content/letter", (req, res) => {
   res.json({ title: "For Beatrice", body: LETTER_TEXT });
 });
@@ -120,6 +177,26 @@ app.get("/api/content/prose", (req, res) => {
 
 app.get("/api/content/mystery", (req, res) => {
   res.json({ title: "...", body: MYSTERY_TEXT });
+});
+
+app.get("/api/content/song1", (req, res) => {
+  res.json({ title: "Track One — Sunflower", body: SONG_LETTER_1 });
+});
+
+app.get("/api/content/song2", (req, res) => {
+  res.json({ title: "Track Two — Every Summertime", body: SONG_LETTER_2 });
+});
+
+app.get("/api/content/song3", (req, res) => {
+  res.json({ title: "Track Three — Linger (Remastered)", body: SONG_LETTER_3 });
+});
+
+app.get("/api/content/song4", (req, res) => {
+  res.json({ title: "Track Four — Kiss Me", body: SONG_LETTER_4 });
+});
+
+app.get("/api/content/song5", (req, res) => {
+  res.json({ title: "Track Five — Meet Me At Our Spot", body: SONG_LETTER_5 });
 });
 
 /* ---------------------------------------------------------
