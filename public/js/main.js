@@ -94,10 +94,6 @@
   }
 
   function finishTrailer() {
-    // FIX: previously this jumped straight into character select after the
-    // trailer. Now the trailer just reveals the invitation (#gate), which is
-    // already sitting underneath it in normal page flow — no extra call
-    // needed. Character select is kicked off later, from the Yes button.
     if (trailerFinished) return;
     trailerFinished = true;
     if (trailerAdvanceTimer) clearTimeout(trailerAdvanceTimer);
@@ -203,9 +199,6 @@
   }
 
   function finishCharSelect() {
-    // FIX: character select now runs AFTER the user clicks "Yes" on the
-    // invitation, so once it finishes here, it should hand off straight
-    // into the game world (this used to happen in the yesBtn click handler).
     if (!charSelect) return;
     charSelect.classList.add("hide");
     setTimeout(() => {
@@ -244,8 +237,6 @@
     const roomLabel = document.getElementById("gwRoomLabel");
     const dpad = document.getElementById("gwDpad");
 
-    // Dialogue box elements (Pokémon-style: NPC lines you click through, then a
-    // question with a few reply choices, then the NPC's response to what you picked)
     const dlgEl = document.getElementById("gwDialogue");
     const dlgBox = document.getElementById("gwDialogueBox");
     const dlgName = document.getElementById("gwDialogueName");
@@ -256,30 +247,16 @@
     const STAGE_W = 640, STAGE_H = 360;
     const PLAYER_W = 22, PLAYER_H = 30;
 
-    // FIX: original spawn (300, 250) landed the player inside the lounge
-    // couch's hitbox (left:270 top:250, 120x44 => x:270-390, y:250-294),
-    // which permanently trapped the collision-resolution logic (it reverts
-    // to the previous position on any overlap, so the player could never
-    // move at all). Spawning clear of all blockers fixes it.
     let px = 300, py = 190;
     let currentRoom = "lounge";
     let facing = 1;
-    // Compass-style facing direction (independent of the left/right sprite
-    // mirror) — drives which way the directional arrow under the player
-    // points. Defaults to "down" since that reads naturally at spawn.
     let facingDir = "down";
     let bobPhase = 0;
     let nearestInteract = null;
     const keys = {};
 
-    // Rotation (in degrees) applied to the arrow SVG per facing direction.
-    // The arrow icon points "up" in its own coordinate space by default.
     const ARROW_ROTATION = { up: 0, right: 90, down: 180, left: 270 };
 
-    // ---- NPCs: the 5 unpicked heroes from character select, plus Eubin,
-    // wandering their rooms. Each has a short greeting, then a question with
-    // reply choices you pick, then a response tailored to what you picked —
-    // like an NPC chat in a Pokémon game.
     const npcRoster = [
       {
         id: "npc-webred", name: "WEB-RED", baseX: 110, baseY: 210, range: 34, speed: 0.8, phase: 0,
@@ -343,12 +320,6 @@
       },
     ];
 
-    // Free 2D wandering state for each NPC — replaces the old fixed sine
-    // side-to-side sway with a gentle random walk inside a bounded radius
-    // of the NPC's base spot: pick a random target point, ease toward it,
-    // occasionally pause, then pick a new target. `speed` (already defined
-    // per-NPC above) controls how quickly they ease toward each target, and
-    // `range` controls how far they can wander from base.
     npcRoster.forEach((n) => {
       n.wanderX = 0;
       n.wanderY = 0;
@@ -363,19 +334,16 @@
       const angle = Math.random() * Math.PI * 2;
       const dist = Math.random() * n.range;
       n.targetX = Math.cos(angle) * dist;
-      n.targetY = Math.sin(angle) * dist * 0.6; // flatten vertical range a bit
-      // occasionally pause in place before moving again, so wandering
-      // doesn't look like constant restless drifting
+      n.targetY = Math.sin(angle) * dist * 0.6;
       const willPause = Math.random() < 0.35;
       n.pauseUntil = willPause ? now + 600 + Math.random() * 1200 : 0;
       n.nextPick = now + 1800 + Math.random() * 2200;
     }
 
-    // ---- Dialogue engine state ----
     let dialogueOpen = false;
     let dialogueNpc = null;
     let dialogueStep = 0;
-    let dialoguePhase = "lines"; // "lines" -> "question" -> "reply"
+    let dialoguePhase = "lines";
     let dialogueChoiceIndex = 0;
 
     function renderDialogue() {
@@ -435,7 +403,6 @@
       } else if (dialoguePhase === "reply") {
         closeDialogue();
       }
-      // "question" phase ignores box clicks — a choice button must be picked.
     }
 
     function selectDialogueChoice(i) {
@@ -463,7 +430,6 @@
         el.style.left = (n.baseX + n.wanderX) + "px";
         el.style.top = (n.baseY + n.wanderY) + "px";
 
-        // flip sprite to face whichever way it's currently walking
         const dx = n.targetX - n.wanderX;
         if (Math.abs(dx) > 1) {
           n.facingScale = dx < 0 ? -1 : 1;
@@ -541,9 +507,6 @@
 
       let dx = 0, dy = 0;
       if (!dialogueOpen) {
-        // Track compass-style facingDir alongside the existing left/right
-        // `facing` flag, so the directional arrow can point in all four
-        // directions instead of only mirroring left/right.
         if (keys["arrowup"] || keys["w"]) { dy -= 1; facingDir = "up"; }
         if (keys["arrowdown"] || keys["s"]) { dy += 1; facingDir = "down"; }
         if (keys["arrowleft"] || keys["a"]) { dx -= 1; facing = -1; facingDir = "left"; }
@@ -573,10 +536,6 @@
       player.style.top = (py - bob) + "px";
       player.classList.toggle("facing-left", facing < 0);
 
-      // Rotate the directional arrow to match facingDir. The CSS reads this
-      // custom property (--arrow-rot) and also counter-mirrors the arrow
-      // when the parent .gw-player has .facing-left applied, so the arrow
-      // always renders right-side-up regardless of sprite mirroring.
       if (playerArrow) {
         playerArrow.style.setProperty("--arrow-rot", ARROW_ROTATION[facingDir] + "deg");
       }
@@ -796,19 +755,12 @@
   function evade() {
     dodgeCount += 1;
 
-    // FIX: previously .dodging (position:fixed) was added AFTER reading
-    // getBoundingClientRect(), so the very first evade() measured the
-    // button's static in-flow position, then switched it to fixed
-    // positioning using those stale coordinates — which could sit outside
-    // the fixed-position containing block for a frame and make the button
-    // appear to vanish on first hover. Now .dodging is applied FIRST, then
-    // we measure and force a reflow before animating to a new spot.
     if (!noBtn.classList.contains("dodging")) {
       noBtn.classList.add("dodging");
       const rect = noBtn.getBoundingClientRect();
       noBtn.style.left = rect.left + "px";
       noBtn.style.top = rect.top + "px";
-      void noBtn.offsetWidth; // force reflow so the start position commits
+      void noBtn.offsetWidth;
       requestAnimationFrame(moveNoBtn);
     } else {
       moveNoBtn();
@@ -821,9 +773,6 @@
   noBtn.addEventListener("click", (e) => { e.preventDefault(); evade(); });
 
   yesBtn.addEventListener("click", () => {
-    // FIX: clicking Yes now fades out the invitation and kicks off the
-    // automated character select. The game world itself only starts once
-    // character select finishes (see finishCharSelect above).
     gate.style.transition = "opacity 0.6s ease";
     gate.style.opacity = "0";
     setTimeout(() => {
@@ -948,12 +897,45 @@
 
   let gwTrackIndex = 0;
 
+  // Spotify embed swap-in — Spotify tracks can't be streamed through a plain
+  // <audio> tag (no public raw-audio URL), so whenever the selected track has
+  // a data-spotify id, this slot swaps to Spotify's own embedded player
+  // instead of loading a local file, and hides the local play/prev/next
+  // controls since the embed has its own.
+  const gwSpotifyEmbed = document.getElementById("gwSpotifyEmbed");
+  const gwSpotifyIframe = document.getElementById("gwSpotifyIframe");
+  const gwPlaylistControls = document.getElementById("gwPlaylistControls");
+
   function gwLoadTrack(index, autoplay) {
-    if (!gwAudio || !gwPlaylistItems.length) return;
+    if (!gwPlaylistItems.length) return;
     gwTrackIndex = (index + gwPlaylistItems.length) % gwPlaylistItems.length;
     const item = gwPlaylistItems[gwTrackIndex];
     gwPlaylistItems.forEach((it) => it.classList.remove("playing"));
     item.classList.add("playing");
+
+    const spotifyId = item.getAttribute("data-spotify");
+
+    if (spotifyId) {
+      if (gwAudio) {
+        gwAudio.pause();
+        gwAudio.removeAttribute("src");
+      }
+      if (gwSpotifyIframe) {
+        gwSpotifyIframe.src =
+          "https://open.spotify.com/embed/track/" + spotifyId +
+          "?utm_source=generator" + (autoplay ? "&autoplay=1" : "");
+      }
+      if (gwSpotifyEmbed) gwSpotifyEmbed.hidden = false;
+      if (gwPlaylistControls) gwPlaylistControls.hidden = true;
+      gwUpdatePlayIcon();
+      return;
+    }
+
+    if (gwSpotifyEmbed) gwSpotifyEmbed.hidden = true;
+    if (gwSpotifyIframe) gwSpotifyIframe.src = "";
+    if (gwPlaylistControls) gwPlaylistControls.hidden = false;
+
+    if (!gwAudio) return;
     gwAudio.src = item.getAttribute("data-src");
     if (autoplay) {
       gwAudio.play().catch(() => {});
@@ -968,6 +950,8 @@
 
   if (playlistPlay && gwAudio) {
     playlistPlay.addEventListener("click", () => {
+      const currentItem = gwPlaylistItems[gwTrackIndex];
+      if (currentItem && currentItem.getAttribute("data-spotify")) return;
       if (!gwAudio.src) gwLoadTrack(gwTrackIndex, false);
       if (gwAudio.paused) {
         gwAudio.play().catch(() => {});
