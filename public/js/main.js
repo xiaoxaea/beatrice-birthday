@@ -1154,6 +1154,23 @@
     });
   });
 
+  // Music room song-letter books — each book corresponds to one track on
+  // the playlist and opens a short letter explaining why that song made
+  // the birthday playlist. Once opened, a book gets a "read" mark so it's
+  // clear at a glance which ones have already been checked.
+  document.querySelectorAll(".gw-book").forEach((book) => {
+    book.addEventListener("click", () => {
+      const songId = book.getAttribute("data-song");
+      if (!songId) return;
+      fetchContent(songId)
+        .then((data) => {
+          openModal("music room", data.title, data.body);
+          book.classList.add("gw-book--read");
+        })
+        .catch(() => openModal("music room", "Hmm", "This letter could not be loaded right now — please try again in a moment."));
+    });
+  });
+
   const gameStage = document.getElementById("gameStage");
   const afterGame = document.getElementById("afterGame");
 
