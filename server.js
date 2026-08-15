@@ -163,6 +163,23 @@ So — happy birthday, Bea. Sana this website, kahit papaano, naging spot mo rin
 
 —eu`;
 
+/* ---------------------------------------------------------
+   Bonus content — unlocked only once every item in the world
+   has been picked up. A little reward for exploring everything,
+   not just the required quest stops.
+--------------------------------------------------------- */
+
+const BONUS_TEXT = `You found everything.
+
+Five little things scattered through five little rooms — a web shooter in the lounge, an old photo in the letter room, a mix record in the music room, an arcade token in the runner room, a hero badge in the tracker room. None of them are an actual prize, pero honestly, the fact that you went through the trouble of running through every single room just to grab all of them? That's kind of the actual prize. Ikaw yun — the type na hindi nagpapabaya ng detail, kahit maliit lang siya.
+
+Each one's basically a small piece of what this whole website's trying to be, if you squint: a lounge to just sit in and breathe, a letter that means every word it says, music we'd probably both play in the background of something good, a dumb little game to laugh at for two minutes, and a way to find you no matter where you've wandered off to.
+
+So — congrats on the full set, Bea. Consider this the "actually explored the whole thing" achievement. Hope finding all of these was at least half as fun as it was mildly annoying for me to hide them hehe.
+
+Happy birthday, again. I think this is the fifth time I've said it somewhere on this site by now, but I mean it exactly as much every single time.
+—eu`;
+
 app.get("/api/content/letter", (req, res) => {
   res.json({ title: "For Beatrice", body: LETTER_TEXT });
 });
@@ -197,6 +214,10 @@ app.get("/api/content/song4", (req, res) => {
 
 app.get("/api/content/song5", (req, res) => {
   res.json({ title: "Track Five — Meet Me At Our Spot", body: SONG_LETTER_5 });
+});
+
+app.get("/api/content/bonus", (req, res) => {
+  res.json({ title: "Full Set", body: BONUS_TEXT });
 });
 
 /* ---------------------------------------------------------
