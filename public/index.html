@@ -473,6 +473,76 @@
   </iframe>
 </div>
 
+<!-- ================= LEFT COLUMN: QUEST LOG + SPIDER-CHIPS =================
+     Fixed stack in the same left-edge column as the Spotify mini player,
+     matched width/spacing/panel design. Desktop-only (see .gw-left-stack
+     in style.css), same breakpoint as the Spotify player. -->
+<div class="gw-left-stack" id="gwLeftStack" hidden>
+
+  <!-- Spider-Chips reward box -->
+  <div class="gw-left-box" id="gwChipsBox">
+    <p class="gw-left-box-eyebrow">reward stash</p>
+    <p class="gw-left-box-title">SPIDER-CHIPS</p>
+    <div class="gw-chips-row">
+      <span class="gw-chip-icon" id="gwChipIcon">
+        <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="22" r="19" fill="#1c2230" stroke="#FFC72C" stroke-width="3"/>
+          <circle cx="22" cy="22" r="19" fill="none" stroke="#0B0E13" stroke-width="3" stroke-dasharray="4 6"/>
+          <path d="M22 8 L26 16 L34 17 L28 23 L30 31 L22 27 L14 31 L16 23 L10 17 L18 16 Z" fill="#FFC72C" stroke="#B0141A" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <div>
+        <p class="gw-chip-total" id="gwChipTotal">0</p>
+        <p class="gw-chip-sub">earned from quests</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quest log -->
+  <div class="gw-left-box" id="gwQuestBox">
+    <p class="gw-left-box-eyebrow">bea-verse log</p>
+    <p class="gw-left-box-title">QUEST LOG</p>
+    <ul class="gw-quest-list" id="gwQuestList">
+      <li class="gw-quest-item" data-quest="letter">
+        <span class="gw-quest-checkbox"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.2 5.6 10.3 11.5 3.8"/></svg></span>
+        <span class="gw-quest-text">Open the envelope in the Letter room</span>
+      </li>
+      <li class="gw-quest-item" data-quest="npc">
+        <span class="gw-quest-checkbox"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.2 5.6 10.3 11.5 3.8"/></svg></span>
+        <span class="gw-quest-text">Talk to a hero hanging around the Lounge</span>
+      </li>
+      <li class="gw-quest-item" data-quest="music">
+        <span class="gw-quest-checkbox"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.2 5.6 10.3 11.5 3.8"/></svg></span>
+        <span class="gw-quest-text">Queue up a track in the Music room</span>
+      </li>
+      <li class="gw-quest-item" data-quest="runner">
+        <span class="gw-quest-checkbox"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.2 5.6 10.3 11.5 3.8"/></svg></span>
+        <span class="gw-quest-text">Play the arcade cabinet in the Runner room</span>
+      </li>
+      <li class="gw-quest-item" data-quest="tracker">
+        <span class="gw-quest-checkbox"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.2 5.6 10.3 11.5 3.8"/></svg></span>
+        <span class="gw-quest-text">Scan the console in the Tracker room</span>
+      </li>
+    </ul>
+    <div class="gw-quest-progress">
+      <div class="gw-quest-progress-track"><div class="gw-quest-progress-fill" id="gwQuestProgressFill"></div></div>
+      <span class="gw-quest-progress-label" id="gwQuestProgressLabel">0/5</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Spider-Chips reward toast — appears near the left stack when a quest completes -->
+<div class="gw-chip-toast" id="gwChipToast">
+  <span class="gw-chip-toast-icon">
+    <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="19" fill="#1c2230" stroke="#FFC72C" stroke-width="3"/>
+      <path d="M22 8 L26 16 L34 17 L28 23 L30 31 L22 27 L14 31 L16 23 L10 17 L18 16 Z" fill="#FFC72C" stroke="#B0141A" stroke-width="1.4" stroke-linejoin="round"/>
+    </svg>
+  </span>
+  <span id="gwChipToastText">Quest complete! <b>+10 Spider-Chips</b></span>
+</div>
+
 <!-- ================= FLYING HERO POSES LAYER ================= -->
 <div class="planes-layer" id="planesLayer" aria-hidden="true">
   <svg width="0" height="0" style="position:absolute">
