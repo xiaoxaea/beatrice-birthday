@@ -277,12 +277,12 @@
     const ARROW_ROTATION = { up: 0, right: 90, down: 180, left: 270 };
 
     // ---- NPCs: the 5 unpicked heroes from character select, plus Eubin,
-    // wandering their rooms with a little side-to-side idle motion. Each has
-    // a short greeting, then a question with reply choices you pick, then a
-    // response tailored to what you picked — like an NPC chat in a Pokémon game.
+    // wandering their rooms. Each has a short greeting, then a question with
+    // reply choices you pick, then a response tailored to what you picked —
+    // like an NPC chat in a Pokémon game.
     const npcRoster = [
       {
-        id: "npc-webred", name: "WEB-RED", baseX: 110, baseY: 210, range: 20, speed: 0.6, phase: 0,
+        id: "npc-webred", name: "WEB-RED", baseX: 110, baseY: 210, range: 34, speed: 0.8, phase: 0,
         lines: ["Yo! Watch the couch, I tripped on it twice already.", "Big day today, huh? Nineteen!"],
         question: "So — favorite way to celebrate a birthday?",
         choices: [
@@ -292,7 +292,7 @@
         ],
       },
       {
-        id: "npc-noir", name: "NOIR", baseX: 480, baseY: 230, range: 20, speed: 0.55, phase: 0.8,
+        id: "npc-noir", name: "NOIR", baseX: 480, baseY: 230, range: 30, speed: 0.7, phase: 0.8,
         lines: ["This room's quiet. Good for reading things twice.", "There's an envelope waiting for you, by the way."],
         question: "Read it now, or save it for later?",
         choices: [
@@ -302,7 +302,7 @@
         ],
       },
       {
-        id: "npc-ironarc", name: "IRON ARC", baseX: 130, baseY: 220, range: 20, speed: 0.65, phase: 2.1,
+        id: "npc-ironarc", name: "IRON ARC", baseX: 130, baseY: 220, range: 36, speed: 0.9, phase: 2.1,
         lines: ["Nice speakers, right? Upgraded the bass myself. Unofficially.", "Every birthday needs a soundtrack."],
         question: "What's the vibe today?",
         choices: [
@@ -312,7 +312,7 @@
         ],
       },
       {
-        id: "npc-venomx", name: "VENOM-X", baseX: 470, baseY: 220, range: 20, speed: 0.6, phase: 1.7,
+        id: "npc-venomx", name: "VENOM-X", baseX: 470, baseY: 220, range: 32, speed: 0.75, phase: 1.7,
         lines: ["Think you can beat the high score? Doubt it.", "This cabinet's rigged with good vibes only. Promise."],
         question: "One round, for birthday luck?",
         choices: [
@@ -322,7 +322,7 @@
         ],
       },
       {
-        id: "npc-goldwing", name: "GOLD-WING", baseX: 470, baseY: 190, range: 20, speed: 0.5, phase: 0.3,
+        id: "npc-goldwing", name: "GOLD-WING", baseX: 470, baseY: 190, range: 28, speed: 0.65, phase: 0.3,
         lines: ["This console's been pinging non-stop.", "Every signal on this map points to one thing: today's your day."],
         question: "Ready to see what it found?",
         choices: [
@@ -332,7 +332,7 @@
         ],
       },
       {
-        id: "npc-eubin", name: "EUBIN", baseX: 480, baseY: 210, range: 20, speed: 0.5, phase: 1.4,
+        id: "npc-eubin", name: "EUBIN", baseX: 480, baseY: 210, range: 32, speed: 0.7, phase: 1.4,
         lines: ["Hii! Welcome to the lounge, make yourself at home!", "Did you know this whole place was made just for you?"],
         question: "So? What do you think so far?",
         choices: [
@@ -342,6 +342,34 @@
         ],
       },
     ];
+
+    // Free 2D wandering state for each NPC — replaces the old fixed sine
+    // side-to-side sway with a gentle random walk inside a bounded radius
+    // of the NPC's base spot: pick a random target point, ease toward it,
+    // occasionally pause, then pick a new target. `speed` (already defined
+    // per-NPC above) controls how quickly they ease toward each target, and
+    // `range` controls how far they can wander from base.
+    npcRoster.forEach((n) => {
+      n.wanderX = 0;
+      n.wanderY = 0;
+      n.targetX = 0;
+      n.targetY = 0;
+      n.pauseUntil = 0;
+      n.nextPick = 0;
+      n.facingScale = 1;
+    });
+
+    function pickNewNpcTarget(n, now) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.random() * n.range;
+      n.targetX = Math.cos(angle) * dist;
+      n.targetY = Math.sin(angle) * dist * 0.6; // flatten vertical range a bit
+      // occasionally pause in place before moving again, so wandering
+      // doesn't look like constant restless drifting
+      const willPause = Math.random() < 0.35;
+      n.pauseUntil = willPause ? now + 600 + Math.random() * 1200 : 0;
+      n.nextPick = now + 1800 + Math.random() * 2200;
+    }
 
     // ---- Dialogue engine state ----
     let dialogueOpen = false;
@@ -419,13 +447,28 @@
     if (dlgBox) dlgBox.addEventListener("click", advanceDialogue);
 
     function updateNpcMovement(now) {
-      const t = (now || performance.now()) / 1000;
+      const t = now || performance.now();
       npcRoster.forEach((n) => {
         const el = document.getElementById(n.id);
         if (!el) return;
-        const dx = Math.sin(t * n.speed + n.phase) * n.range;
-        el.style.left = (n.baseX + dx) + "px";
-        el.style.top = n.baseY + "px";
+
+        if (t >= n.nextPick) pickNewNpcTarget(n, t);
+
+        if (t >= n.pauseUntil) {
+          const ease = 0.02 * n.speed;
+          n.wanderX += (n.targetX - n.wanderX) * ease;
+          n.wanderY += (n.targetY - n.wanderY) * ease;
+        }
+
+        el.style.left = (n.baseX + n.wanderX) + "px";
+        el.style.top = (n.baseY + n.wanderY) + "px";
+
+        // flip sprite to face whichever way it's currently walking
+        const dx = n.targetX - n.wanderX;
+        if (Math.abs(dx) > 1) {
+          n.facingScale = dx < 0 ? -1 : 1;
+        }
+        el.style.transform = "scaleX(" + n.facingScale + ")";
       });
     }
 
@@ -735,14 +778,14 @@
   let dodgeCount = 0;
 
   function randomPosition() {
-  const rect = noBtn.getBoundingClientRect();
-  const margin = 20;
-  const maxX = Math.max(margin, window.innerWidth - rect.width - margin);
-  const maxY = Math.max(margin, window.innerHeight - rect.height - margin);
-  const x = margin + Math.random() * (maxX - margin);
-  const y = margin + Math.random() * (maxY - margin);
-  return { x, y };
-}
+    const rect = noBtn.getBoundingClientRect();
+    const margin = 20;
+    const maxX = Math.max(margin, window.innerWidth - rect.width - margin);
+    const maxY = Math.max(margin, window.innerHeight - rect.height - margin);
+    const x = margin + Math.random() * (maxX - margin);
+    const y = margin + Math.random() * (maxY - margin);
+    return { x, y };
+  }
 
   function moveNoBtn() {
     const { x, y } = randomPosition();
@@ -751,27 +794,27 @@
   }
 
   function evade() {
-  dodgeCount += 1;
+    dodgeCount += 1;
 
-  // FIX: previously .dodging was added AFTER reading getBoundingClientRect(),
-  // so the very first evade() used the button's static (in-flow) position,
-  // which can sit outside the fixed-position containing block once
-  // .dodging (position:fixed) is applied — making the button appear to
-  // vanish for a frame on first hover. Add .dodging FIRST, then measure.
-  if (!noBtn.classList.contains("dodging")) {
-    noBtn.classList.add("dodging");
-    const rect = noBtn.getBoundingClientRect();
-    noBtn.style.left = rect.left + "px";
-    noBtn.style.top = rect.top + "px";
-    // force a reflow so the browser commits the starting position
-    // before we animate it to a new random spot
-    void noBtn.offsetWidth;
-    requestAnimationFrame(moveNoBtn);
-  } else {
-    moveNoBtn();
+    // FIX: previously .dodging (position:fixed) was added AFTER reading
+    // getBoundingClientRect(), so the very first evade() measured the
+    // button's static in-flow position, then switched it to fixed
+    // positioning using those stale coordinates — which could sit outside
+    // the fixed-position containing block for a frame and make the button
+    // appear to vanish on first hover. Now .dodging is applied FIRST, then
+    // we measure and force a reflow before animating to a new spot.
+    if (!noBtn.classList.contains("dodging")) {
+      noBtn.classList.add("dodging");
+      const rect = noBtn.getBoundingClientRect();
+      noBtn.style.left = rect.left + "px";
+      noBtn.style.top = rect.top + "px";
+      void noBtn.offsetWidth; // force reflow so the start position commits
+      requestAnimationFrame(moveNoBtn);
+    } else {
+      moveNoBtn();
+    }
+    gateHint.textContent = hints[Math.min(dodgeCount - 1, hints.length - 1)];
   }
-  gateHint.textContent = hints[Math.min(dodgeCount - 1, hints.length - 1)];
-}
 
   noBtn.addEventListener("pointerenter", evade);
   noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); evade(); }, { passive: false });
