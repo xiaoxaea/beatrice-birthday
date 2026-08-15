@@ -871,6 +871,33 @@ button{ font-family: inherit; cursor: pointer; }
   .gw-pickup{ animation: none; }
 }
 
+/* =========================================================
+   Music-room song-letter books — five interactable books, one
+   per playlist track. Reuses the base .gw-interact square
+   (same size/shadow language as the console/cabinet icons) with
+   a book-specific tint. A small gold corner dot marks a book as
+   read once its letter has been opened, so it's easy to see at a
+   glance which ones are left.
+========================================================= */
+.gw-book{
+  position: relative;
+  background: linear-gradient(160deg, #241a12, #141821);
+  border-color: var(--gold);
+  font-size: 1.3rem;
+}
+.gw-book--read::after{
+  content: "";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--ink);
+  box-shadow: 0 0 6px rgba(255,199,44,0.7);
+}
+
 .gw-player{ position: absolute; width: 22px; height: 30px; z-index: 5; left: 300px; top: 170px; will-change: transform, left, top; }
 .gw-player-head{ display: block; width: 22px; height: 15px; background: var(--gwen-white); border: 2px solid var(--gwen-purple); border-radius: 4px; box-sizing: border-box; }
 .gw-player-body{ display: block; width: 22px; height: 16px; background: var(--gwen-pink); margin-top: 2px; }
