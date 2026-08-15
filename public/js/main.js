@@ -225,6 +225,116 @@
     });
   }
 
+  // ---- Spidey-sense vitals monitor ----
+  // Small self-contained module: draws a live heartbeat-style waveform and a
+  // couple of readouts (PULSE / FOCUS / SIGNAL) in the new side panel next
+  // to the track list. It doesn't own any game state itself — GW feeds it
+  // "energy" (are we moving?) and "signal" (are we near something?) every
+  // frame, and QuestSystem pings it with a spike whenever a quest completes.
+  const VitalsSystem = (function () {
+    const panel = document.getElementById("gwVitalsPanel");
+    const canvas = document.getElementById("gwVitalsCanvas");
+    const ctx = canvas ? canvas.getContext("2d") : null;
+    const pulseEl = document.getElementById("gwVitalsPulse");
+    const focusFill = document.getElementById("gwVitalsFocusFill");
+    const signalWrap = document.getElementById("gwVitalsSignal");
+    const signalBars = signalWrap ? Array.from(signalWrap.children) : [];
+    const spikeLabel = document.getElementById("gwVitalsSpikeLabel");
+
+    if (!panel || !canvas || !ctx) {
+      return { setEnergy() {}, setSignal() {}, spike() {} };
+    }
+
+    const W = canvas.width;
+    const H = canvas.height;
+    const history = new Array(W).fill(0);
+
+    let phase = 0;
+    let energy = 0.22;       // 0..1, smoothed — how "active" the player currently is
+    let spikeEnergy = 0;     // transient boost from quest completions / manual pings
+    let displayedPulse = 72;
+    let signalTarget = 0.08;
+    let signalDisplay = 0.08;
+    let spikeTimer = null;
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      ctx.strokeStyle = "rgba(255,199,44,0.12)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, H / 2);
+      ctx.lineTo(W, H / 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#FFC72C";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i < history.length; i++) {
+        const y = H / 2 - history[i] * (H / 2 - 4);
+        if (i === 0) ctx.moveTo(i, y); else ctx.lineTo(i, y);
+      }
+      ctx.stroke();
+    }
+
+    function tick() {
+      phase += 0.18 + energy * 0.35;
+      spikeEnergy *= 0.93;
+
+      const heartbeat = Math.pow(Math.max(0, Math.sin(phase)), 6) * (0.5 + energy * 0.5 + spikeEnergy);
+      const jitter = (Math.random() - 0.5) * 0.05;
+      const sample = Math.max(-0.15, Math.min(1, heartbeat + jitter));
+      history.shift();
+      history.push(sample);
+      draw();
+
+      const targetPulse = 62 + energy * 55 + spikeEnergy * 60;
+      displayedPulse += (targetPulse - displayedPulse) * 0.06;
+      pulseEl.textContent = String(Math.round(displayedPulse));
+
+      const focusPct = Math.max(6, Math.min(100, Math.round((1 - Math.abs(energy - 0.55)) * 100)));
+      focusFill.style.width = focusPct + "%";
+
+      signalDisplay += (signalTarget - signalDisplay) * 0.15;
+      const activeCount = Math.round(signalDisplay * signalBars.length);
+      signalBars.forEach((bar, i) => bar.classList.toggle("active", i < activeCount));
+
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    function setEnergy(value) {
+      const clamped = Math.max(0, Math.min(1, value));
+      energy += (clamped - energy) * 0.08;
+    }
+
+    function setSignal(strength) {
+      signalTarget = Math.max(0, Math.min(1, strength));
+    }
+
+    function spike(intensity) {
+      spikeEnergy = Math.min(1.4, spikeEnergy + (intensity || 0.8));
+      panel.classList.remove("gw-vitals-spike");
+      void panel.offsetWidth;
+      panel.classList.add("gw-vitals-spike");
+      if (spikeLabel) {
+        spikeLabel.classList.add("show");
+        if (spikeTimer) clearTimeout(spikeTimer);
+        spikeTimer = setTimeout(() => spikeLabel.classList.remove("show"), 700);
+      }
+    }
+
+    panel.addEventListener("click", () => spike(1));
+    panel.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        spike(1);
+      }
+    });
+
+    return { setEnergy, setSignal, spike };
+  })();
+
   // ---- Quest log + Spider-Chips reward system ----
   const QuestSystem = (function () {
     const CHIP_REWARD = 10;
@@ -293,6 +403,7 @@
       updateProgress();
       updateChips();
       showToast(questId);
+      VitalsSystem.spike(1.2);
     }
 
     return { reveal, complete, updateProgress, updateChips };
@@ -319,6 +430,7 @@
 
     const STAGE_W = 640, STAGE_H = 360;
     const PLAYER_W = 22, PLAYER_H = 30;
+    const INTERACT_RANGE = 46;
 
     let px = 300, py = 190;
     let currentRoom = "lounge";
@@ -632,13 +744,18 @@
         const r = getRect(it);
         const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
         const dist = Math.hypot((px + PLAYER_W / 2) - cx, (py + PLAYER_H / 2) - cy);
-        const near = dist < 46;
+        const near = dist < INTERACT_RANGE;
         it.classList.toggle("gw-interact-near", near);
         const hintId = it.getAttribute("data-hint");
         const hint = hintId && document.getElementById(hintId);
         if (hint) hint.classList.toggle("show", near);
         if (near && dist < bestDist) { bestDist = dist; nearestInteract = it; }
       });
+
+      // Feed the vitals monitor: PULSE tracks whether Bea is on the move,
+      // SIGNAL tracks how close she is to whatever's interactable nearby.
+      VitalsSystem.setEnergy(dialogueOpen ? 0.5 : (moving ? 0.62 : 0.22));
+      VitalsSystem.setSignal(nearestInteract ? Math.max(0.15, 1 - bestDist / INTERACT_RANGE) : 0.06);
 
       requestAnimationFrame(loop);
     }
