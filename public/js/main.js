@@ -376,7 +376,7 @@
   // ---- Quest log + Spider-Chips reward system ----
   const QuestSystem = (function () {
     const CHIP_REWARD = 10;
-    const quests = ["letter", "npc", "music", "runner", "tracker"];
+    const quests = ["letter", "npc", "music", "runner", "tracker", "items", "books"];
     const completed = new Set();
 
     const leftStack = document.getElementById("gwLeftStack");
@@ -390,6 +390,7 @@
 
     let chips = 0;
     let toastTimer = null;
+    let celebrated = false;
 
     function reveal() {
       if (leftStack) leftStack.hidden = false;
@@ -426,6 +427,36 @@
       }
     }
 
+    // Confetti burst — fired once, the moment every quest on the log is
+    // checked off. Plain DOM pieces animated with CSS (see .gw-confetti-*
+    // in style.css), skipped entirely under prefers-reduced-motion.
+    function spawnConfetti() {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const colors = ["#FFC72C", "#ED1D24", "#1E5FC2", "#D4537E", "#F4EFE1"];
+      const layer = document.createElement("div");
+      layer.className = "gw-confetti-layer";
+      const pieceCount = 70;
+      for (let i = 0; i < pieceCount; i++) {
+        const piece = document.createElement("span");
+        piece.className = "gw-confetti-piece";
+        piece.style.left = (Math.random() * 100) + "vw";
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = (Math.random() * 0.5).toFixed(2) + "s";
+        piece.style.animationDuration = (2.4 + Math.random() * 1.4).toFixed(2) + "s";
+        piece.style.setProperty("--drift", (Math.random() * 200 - 100).toFixed(0) + "px");
+        piece.style.setProperty("--rot", (Math.random() * 720 - 360).toFixed(0) + "deg");
+        layer.appendChild(piece);
+      }
+      document.body.appendChild(layer);
+      setTimeout(() => layer.remove(), 4200);
+    }
+
+    function maybeCelebrate() {
+      if (celebrated || completed.size < quests.length) return;
+      celebrated = true;
+      spawnConfetti();
+    }
+
     function complete(questId) {
       if (!quests.includes(questId) || completed.has(questId)) return;
       completed.add(questId);
@@ -441,6 +472,7 @@
       updateChips();
       showToast(questId);
       VitalsSystem.spike(1.2);
+      maybeCelebrate();
     }
 
     return { reveal, complete, updateProgress, updateChips };
@@ -518,6 +550,16 @@
       }
       updateCount();
       VitalsSystem.spike(0.9);
+
+      // Full set collected — mark the quest and unlock a short bonus
+      // letter, fetched from the server the same way the other letters
+      // (envelope, poem, prose, song books) are.
+      if (collected.size === order.length) {
+        QuestSystem.complete("items");
+        fetchContent("bonus")
+          .then((data) => openModal("unlocked", data.title, data.body))
+          .catch(() => {});
+      }
     }
 
     function has(itemId) {
@@ -1157,8 +1199,12 @@
   // Music room song-letter books — each book corresponds to one track on
   // the playlist and opens a short letter explaining why that song made
   // the birthday playlist. Once opened, a book gets a "read" mark so it's
-  // clear at a glance which ones have already been checked.
-  document.querySelectorAll(".gw-book").forEach((book) => {
+  // clear at a glance which ones have already been checked. readSongs
+  // tracks distinct books opened so the "read all 5" quest only completes
+  // once, regardless of how many times any single book is re-opened.
+  const gwBooks = document.querySelectorAll(".gw-book");
+  const readSongs = new Set();
+  gwBooks.forEach((book) => {
     book.addEventListener("click", () => {
       const songId = book.getAttribute("data-song");
       if (!songId) return;
@@ -1166,6 +1212,10 @@
         .then((data) => {
           openModal("music room", data.title, data.body);
           book.classList.add("gw-book--read");
+          readSongs.add(songId);
+          if (readSongs.size === gwBooks.length) {
+            QuestSystem.complete("books");
+          }
         })
         .catch(() => openModal("music room", "Hmm", "This letter could not be loaded right now — please try again in a moment."));
     });
