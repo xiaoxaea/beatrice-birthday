@@ -406,7 +406,7 @@
     </div>
   </div>
 
-  <!-- Desktop-only side column: track list + the new vitals monitor, stacked
+  <!-- Desktop-only side column: track list + the vitals monitor, stacked
        together so they read as one matched set. Hidden entirely on mobile
        widths via CSS (see .gw-side-stack in style.css). -->
   <div class="gw-side-stack">
@@ -544,29 +544,13 @@
   </div>
 </div>
 
-<!-- ================= SPOTIFY MINI PLAYER (fixed, bottom-left corner) =================
-     Split out from the desktop side playlist so the track list stays put on
-     the right, while this floats independently — same #ids as before, so
-     main.js's gwLoadTrack() logic works unchanged. Desktop-only, matching
-     the side playlist (hidden below 1180px via CSS). -->
-<div class="gw-spotify-fixed" id="gwSpotifyEmbed" hidden>
-  <iframe
-    id="gwSpotifyIframe"
-    style="border-radius:12px"
-    src=""
-    width="100%"
-    height="152"
-    frameborder="0"
-    allowfullscreen=""
-    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-    loading="lazy">
-  </iframe>
-</div>
-
-<!-- ================= LEFT COLUMN: QUEST LOG + SPIDER-CHIPS =================
-     Fixed stack in the same left-edge column as the Spotify mini player,
-     matched width/spacing/panel design. Desktop-only (see .gw-left-stack
-     in style.css), same breakpoint as the Spotify mini player. -->
+<!-- ================= LEFT COLUMN: QUEST LOG + SPIDER-CHIPS + SPOTIFY =================
+     Sits inside .gw-layout so it scrolls with the page the same way the
+     desktop track list / vitals monitor do, instead of staying pinned to
+     the viewport. Same width/spacing/panel design throughout. Desktop-only
+     (see .gw-left-stack in style.css). The Spotify mini player is the last
+     box in the stack — same #ids as before, so main.js's gwLoadTrack()
+     logic works unchanged. -->
 <div class="gw-left-stack" id="gwLeftStack" hidden>
 
   <!-- Spider-Chips reward box -->
@@ -626,6 +610,26 @@
       <div class="gw-quest-progress-track"><div class="gw-quest-progress-fill" id="gwQuestProgressFill"></div></div>
       <span class="gw-quest-progress-label" id="gwQuestProgressLabel">0/7</span>
     </div>
+  </div>
+
+  <!-- ================= SPOTIFY MINI PLAYER =================
+       Moved here (inside .gw-left-stack) so it scrolls along with the
+       quest log / spider-chips boxes instead of staying pinned to the
+       viewport with position:fixed. Same #ids as before, so
+       main.js's gwLoadTrack() logic works unchanged. Desktop-only,
+       matching the rest of the left stack. -->
+  <div class="gw-spotify-fixed" id="gwSpotifyEmbed" hidden>
+    <iframe
+      id="gwSpotifyIframe"
+      style="border-radius:12px"
+      src=""
+      width="100%"
+      height="152"
+      frameborder="0"
+      allowfullscreen=""
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
   </div>
 
 </div>
