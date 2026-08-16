@@ -912,6 +912,26 @@ button{ font-family: inherit; cursor: pointer; }
   box-shadow: 0 0 6px rgba(255,199,44,0.7);
 }
 
+/* =========================================================
+   Interactive furniture — flavor-only decor scattered around the
+   rooms (vending machine, snack table, chair, wall art, teacup,
+   cooler, snack machine, coffee mug, etc). Reuses the same square
+   .gw-interact frame as the books/console, just a touch smaller so
+   it reads as background dressing rather than a quest object, with
+   a warmer tint to set it apart from the gold-only interactables.
+========================================================= */
+.gw-furniture{
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  background: linear-gradient(160deg, #241a2a, #141821);
+  border-color: var(--gwen-pink);
+  box-shadow: 0 0 10px rgba(212,83,126,0.3);
+}
+.gw-furniture.gw-interact-near{
+  box-shadow: 0 0 18px rgba(212,83,126,0.6);
+}
+
 .gw-player{ position: absolute; width: 22px; height: 30px; z-index: 5; left: 300px; top: 170px; will-change: transform, left, top; }
 .gw-player-head{ display: block; width: 22px; height: 15px; background: var(--gwen-white); border: 2px solid var(--gwen-purple); border-radius: 4px; box-sizing: border-box; }
 .gw-player-body{ display: block; width: 22px; height: 16px; background: var(--gwen-pink); margin-top: 2px; }
