@@ -806,6 +806,20 @@
       });
     });
 
+    // Interactive furniture — flavor-text decor scattered around the rooms
+    // (vending machine, snack table, chair, wall art, etc). Clicking, or
+    // pressing E while near, just pops a short one-off message via the
+    // existing modal. Purely decorative: no quest, chip, or inventory
+    // tie-in, and can be opened again as many times as you like.
+    document.querySelectorAll(".gw-furniture").forEach((el) => {
+      el.addEventListener("click", () => {
+        if (dialogueOpen) return;
+        const title = el.getAttribute("data-title") || "Hm.";
+        const msg = el.getAttribute("data-msg") || "";
+        openModal("found something", title, msg);
+      });
+    });
+
     function scaleStage() {
       if (!viewport || !stage) return;
       const scale = viewport.clientWidth / STAGE_W;
